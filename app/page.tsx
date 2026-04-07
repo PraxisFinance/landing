@@ -39,8 +39,8 @@ export default function Home() {
           transition={{ delay: 0.18, duration: 0.55, ease: "easeOut" }}
           className="mt-6 max-w-2xl text-base leading-7 text-zinc-300 sm:text-lg"
         >
-          Start simple, ship quickly, and scale later. This template gives you a
-          clean foundation for a marketing page without extra complexity.
+          Start simple, ship quickly, and scale later. This template gives you a clean foundation
+          for a marketing page without extra complexity.
         </motion.p>
 
         <motion.div
@@ -66,13 +66,11 @@ export default function Home() {
           },
           {
             title: "Clean stack",
-            description:
-              "Only Next.js, TypeScript, Tailwind, and Framer Motion.",
+            description: "Only Next.js, TypeScript, Tailwind, and Framer Motion.",
           },
           {
             title: "Ready to evolve",
-            description:
-              "Easy to extend with forms, CMS, analytics, and integrations.",
+            description: "Easy to extend with forms, CMS, analytics, and integrations.",
           },
         ].map((item) => (
           <motion.article
@@ -84,9 +82,7 @@ export default function Home() {
             className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-6"
           >
             <h2 className="text-lg font-medium">{item.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-zinc-300">
-              {item.description}
-            </p>
+            <p className="mt-2 text-sm leading-6 text-zinc-300">{item.description}</p>
           </motion.article>
         ))}
       </section>

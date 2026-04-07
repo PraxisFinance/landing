@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
@@ -20,8 +23,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-config-next": "16.2.2",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
+    "typescript-eslint": "^8.46.1",
     "typescript": "^5"
   }
 }
