@@ -1,6 +1,6 @@
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
-import { LandingHero } from "@/components/sections/LandingHero";
+import { JoinSection } from "@/components/sections/JoinSection";
 
 export default function Home() {
   return (
@@ -8,7 +8,7 @@ export default function Home() {
       <LandingHeader />
 
       <main>
-        <LandingHero />
+        <JoinSection />
       </main>
 
       <LandingFooter />
