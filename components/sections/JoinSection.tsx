@@ -1,9 +1,33 @@
+"use client";
+
 import { ArrowRightIcon } from "lucide-react";
 
+import {
+  WaveRevealFadeUp,
+  WaveRevealHeadlineLines,
+  WaveRevealWords,
+  waveRevealTiming,
+} from "@/components/motion/wave-reveal";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const JOIN_BG = "/main/join-section.png";
+
+const HEADLINE_LINES = ["Predict with yield.", "Keep your principal."] as const;
+const SUBHEAD_COPY =
+  "Praxis lets you deposit to a vault, earn yield, and place predictions using yield.";
+
+const headlineWordCount = HEADLINE_LINES.join(" ").trim().split(/\s+/).length;
+const subheadWordCount = SUBHEAD_COPY.trim().split(/\s+/).length;
+
+/** Slight overlap with headline so the “wave” reads as one motion (similar to aave.com hero). */
+const subheadDelayStart =
+  waveRevealTiming.initialDelay + headlineWordCount * waveRevealTiming.wordStagger * 0.42;
+
+const buttonDelay =
+  subheadDelayStart +
+  subheadWordCount * waveRevealTiming.wordStagger +
+  waveRevealTiming.wordDuration * 0.35;
 
 type JoinSectionProps = {
   className?: string;
@@ -38,31 +62,33 @@ export function JoinSection({ className }: JoinSectionProps) {
 
         <div className="relative z-10 flex flex-col items-center px-5 pt-7 text-center sm:px-8 sm:pt-9 md:pt-10 lg:pt-12 pb-16 sm:pb-20 md:pb-24">
           <h1 className="max-w-5xl text-balance font-bold leading-[1.05] tracking-tight text-brand-black">
-            <span className="block text-4xl sm:text-5xl lg:text-6xl xl:text-[3.5rem]">
-              Predict with yield.
-            </span>
-            <span className="mt-1 block text-4xl sm:text-5xl lg:text-6xl xl:text-[3.5rem]">
-              Keep your principal.
-            </span>
+            <WaveRevealHeadlineLines
+              lines={[...HEADLINE_LINES]}
+              lineClassName="text-4xl sm:text-5xl lg:text-6xl xl:text-[3.5rem]"
+            />
           </h1>
 
-          <p className="mt-6 max-w-xl text-pretty text-base leading-snug text-brand-black sm:text-lg md:mt-8">
-            Praxis lets you deposit to a vault, earn yield, and place predictions using yield.
-          </p>
+          <WaveRevealWords
+            text={SUBHEAD_COPY}
+            delayStart={subheadDelayStart}
+            className="mt-6 max-w-xl text-pretty text-base leading-snug text-brand-black sm:text-lg md:mt-8"
+          />
 
-          <Button
-            nativeButton={false}
-            render={<a href="#" />}
-            size="lg"
-            className={cn(
-              "mt-8 h-12 gap-2 rounded-xl px-8 text-base font-semibold shadow-none sm:mt-10",
-              "bg-brand-black text-white hover:bg-brand-black/90",
-              "focus-visible:ring-brand-dark-purple/40"
-            )}
-          >
-            Join Waitlist
-            <ArrowRightIcon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
-          </Button>
+          <WaveRevealFadeUp delay={buttonDelay} className="mt-8 sm:mt-10">
+            <Button
+              nativeButton={false}
+              render={<a href="#" />}
+              size="lg"
+              className={cn(
+                "h-12 gap-2 rounded-xl px-8 text-base font-semibold shadow-none",
+                "bg-brand-black text-white hover:bg-brand-black/90",
+                "focus-visible:ring-brand-dark-purple/40"
+              )}
+            >
+              Join Waitlist
+              <ArrowRightIcon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
+            </Button>
+          </WaveRevealFadeUp>
         </div>
       </div>
     </section>
