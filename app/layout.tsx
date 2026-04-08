@@ -20,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistMono.variable} h-full font-sans antialiased`}>
       <head>
+        {/* eslint-disable-next-line @next/next/no-css-tags -- Helvetica @font-face in public/fonts; link keeps relative url() working */}
         <link rel="stylesheet" href="/fonts/stylesheet.css" />
         <link
           rel="preload"
