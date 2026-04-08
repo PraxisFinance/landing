@@ -4,7 +4,7 @@ import { LandingHero } from "@/components/sections/LandingHero";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 text-zinc-900">
+    <div className="min-h-screen bg-brand-white text-brand-black">
       <LandingHeader />
 
       <main>
