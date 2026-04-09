@@ -1,3 +1,4 @@
+import { FirstPredictionSection } from "@/components/sections/FirstPredictionSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
 import { JoinSection } from "@/components/sections/JoinSection";
@@ -9,6 +10,7 @@ export default function Home() {
 
       <main>
         <JoinSection />
+        <FirstPredictionSection />
       </main>
 
       <LandingFooter />
