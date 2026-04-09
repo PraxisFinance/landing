@@ -2,6 +2,7 @@ import { FirstPredictionSection } from "@/components/sections/FirstPredictionSec
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
 import { JoinSection } from "@/components/sections/JoinSection";
+import { JoinWaitlistSection } from "@/components/sections/JoinWaitlistSection";
 import { UserFlowSection } from "@/components/sections/UserFlowSection";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
         <JoinSection />
         <FirstPredictionSection />
         <UserFlowSection />
+        <JoinWaitlistSection />
       </main>
 
       <LandingFooter />
