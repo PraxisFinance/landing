@@ -89,7 +89,7 @@ export function ProjectRoadmapSection({ className }: ProjectRoadmapSectionProps)
         <WaveRevealHeadlineLines
           lines={[HEADLINE]}
           className="block text-center"
-          lineClassName="text-3xl sm:text-4xl lg:text-5xl"
+          lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
         />
       </h2>
 

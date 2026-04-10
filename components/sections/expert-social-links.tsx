@@ -35,7 +35,7 @@ export function ExpertSocialLinks({ links, className }: ExpertSocialLinksProps) 
             href={href}
             className={cn(
               "inline-flex size-10 shrink-0 items-center justify-center rounded-lg",
-              "bg-brand-light-purple text-white transition hover:bg-brand-light-purple/90",
+              "bg-brand-dark-purple text-white transition hover:bg-brand-dark-purple/90",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/40"
             )}
             aria-label={label}

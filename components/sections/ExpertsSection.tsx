@@ -95,14 +95,17 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
     setActiveIndex((i) => (i + 1) % EXPERTS.length);
   }, []);
 
-  const handleCardActivate = useCallback((index: number) => {
-    if (manualPaused && activeIndex === index) {
-      setManualPaused(false);
-      return;
-    }
-    setManualPaused(true);
-    setActiveIndex(index);
-  }, [manualPaused, activeIndex]);
+  const handleCardActivate = useCallback(
+    (index: number) => {
+      if (manualPaused && activeIndex === index) {
+        setManualPaused(false);
+        return;
+      }
+      setManualPaused(true);
+      setActiveIndex(index);
+    },
+    [manualPaused, activeIndex]
+  );
 
   return (
     <section
@@ -112,41 +115,46 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
         className
       )}
     >
-      <div className="mb-8 flex flex-col gap-6 sm:mb-10 sm:flex-row sm:items-start sm:justify-between lg:mb-12">
-        <h2 className="max-w-3xl font-bold tracking-tight text-brand-black">
-          <WaveRevealHeadlineLines
-            lines={[HEADLINE]}
-            className="block text-left"
-            lineClassName="text-3xl sm:text-4xl lg:text-[2.75rem] lg:leading-tight"
-          />
-        </h2>
+      <div>
+        <div className="relative mx-auto w-full max-w-[min(100%,85rem)] px-2 sm:px-14">
+          <h2 className="pr-24 text-center font-bold tracking-tight text-brand-black sm:pr-28">
+            <WaveRevealHeadlineLines
+              lines={[HEADLINE]}
+              className="block text-center"
+              lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
+            />
+          </h2>
 
-        <WaveRevealFadeUp delay={cardsDelayBase} className="flex shrink-0 gap-2 self-end sm:self-auto">
-          <button
-            type="button"
-            onClick={goPrev}
-            className={cn(
-              "inline-flex size-10 items-center justify-center rounded-xl transition",
-              "bg-brand-light-purple text-brand-dark-purple hover:bg-brand-light-purple/80",
-              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/50"
-            )}
-            aria-label="Previous expert"
+          <WaveRevealFadeUp
+            delay={cardsDelayBase}
+            className="absolute right-2 top-1/2 flex -translate-y-1/2 gap-2 sm:right-4 lg:right-6"
           >
-            <ChevronLeft className="size-5" strokeWidth={2} aria-hidden />
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            className={cn(
-              "inline-flex size-10 items-center justify-center rounded-xl transition",
-              "bg-brand-light-purple text-brand-dark-purple hover:bg-brand-light-purple/80",
+            <button
+              type="button"
+              onClick={goPrev}
+              className={cn(
+                "inline-flex size-10 items-center justify-center rounded-xl transition",
+              "bg-brand-dark-purple text-white hover:bg-brand-dark-purple/85",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/50"
-            )}
-            aria-label="Next expert"
-          >
-            <ChevronRight className="size-5" strokeWidth={2} aria-hidden />
-          </button>
-        </WaveRevealFadeUp>
+              )}
+              aria-label="Previous expert"
+            >
+              <ChevronLeft className="size-5" strokeWidth={2} aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              className={cn(
+                "inline-flex size-10 items-center justify-center rounded-xl transition",
+              "bg-brand-dark-purple text-white hover:bg-brand-dark-purple/85",
+              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/50"
+              )}
+              aria-label="Next expert"
+            >
+              <ChevronRight className="size-5" strokeWidth={2} aria-hidden />
+            </button>
+          </WaveRevealFadeUp>
+        </div>
       </div>
 
       <WaveRevealFadeUp delay={cardsDelayBase + 0.08} className="min-w-0 max-w-full">
