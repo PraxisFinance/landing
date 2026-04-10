@@ -1,4 +1,5 @@
 import { ExpertsSection } from "@/components/sections/ExpertsSection";
+import { FrequencyQuestionsSection } from "@/components/sections/FrequencyQuestionsSection";
 import { FirstPredictionSection } from "@/components/sections/FirstPredictionSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
@@ -19,6 +20,7 @@ export default function Home() {
         <JoinWaitlistSection />
         <ProjectRoadmapSection />
         <ExpertsSection />
+        <FrequencyQuestionsSection />
       </main>
 
       <LandingFooter />
