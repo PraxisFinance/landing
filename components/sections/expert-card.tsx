@@ -72,6 +72,7 @@ export function ExpertCard({
           sizes="(max-width: 380px) 100vw, 345px"
           className="object-cover object-top"
           priority={priority}
+          loading={priority ? "eager" : "lazy"}
         />
       </div>
 

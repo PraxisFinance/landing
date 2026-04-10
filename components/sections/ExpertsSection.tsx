@@ -170,7 +170,7 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
               socials={expert.socials}
               selected={i === activeIndex}
               onSelect={() => handleCardActivate(i)}
-              priority={i <= 1}
+              priority={i < 4}
             />
           ))}
         </ExpertCarouselTrack>
