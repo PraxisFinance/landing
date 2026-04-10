@@ -158,7 +158,7 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
       </div>
 
       <WaveRevealFadeUp delay={cardsDelayBase + 0.08} className="min-w-0 max-w-full">
-        <ExpertCarouselTrack activeIndex={activeIndex} className="max-w-full">
+        <ExpertCarouselTrack className="max-w-full">
           {EXPERTS.map((expert, i) => (
             <ExpertCard
               key={expert.name}
