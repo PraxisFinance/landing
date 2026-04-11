@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
+import { RedditIcon } from "@/components/assets/reddit-icon";
 import { SocialDiscordIcon } from "@/components/assets/social-discord-icon";
 import { SocialTelegramIcon } from "@/components/assets/social-telegram-icon";
 import { SocialXIcon } from "@/components/assets/social-x-icon";
@@ -33,6 +34,7 @@ const communityLinks = [
   { label: "Twitter", href: "#", icon: SocialXIcon },
   { label: "Discord", href: "#", icon: SocialDiscordIcon },
   { label: "Telegram", href: "#", icon: SocialTelegramIcon },
+  { label: "Reddit", href: "#", icon: RedditIcon },
 ] as const;
 
 export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps) {
@@ -177,39 +179,46 @@ export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps)
 
           <article
             className={cn(
-              "relative min-h-[16rem] overflow-hidden rounded-3xl bg-brand-gray p-5 sm:col-span-2 sm:min-h-[20rem] sm:p-6 lg:min-h-[23rem] lg:p-8"
+              "relative w-full min-h-[18rem] justify-self-stretch overflow-hidden rounded-3xl bg-brand-gray sm:col-span-2",
+              "sm:min-h-[20rem] lg:min-h-[24rem]"
             )}
           >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${GET_STARTED_CARDS.community})` }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-brand-gray via-brand-gray/85 to-brand-gray/35" />
+            <div className="grid min-h-0 grid-cols-1 items-stretch gap-8 px-6 py-8 sm:gap-10 sm:px-8 sm:py-10 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-12">
+              <div className="flex h-full min-h-0 min-w-0 flex-col">
+                <h3 className="text-[clamp(1.8rem,4vw,4rem)] font-bold leading-[0.96] tracking-tight text-brand-black">
+                  Join the Praxis community
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-brand-black/75 sm:mt-5 sm:text-base">
+                  Here you will find protocol news, updates on upcoming and live esport events, and
+                  guides on how to yield, earn, and predict efficiently.
+                </p>
 
-            <div className="relative z-10 flex h-full max-w-[31rem] flex-col justify-center">
-              <h3 className="text-[clamp(1.8rem,4vw,4rem)] font-bold leading-[0.96] tracking-tight text-brand-black">
-                Join the Praxis community
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-brand-black/75 sm:text-base">
-                Here you will find protocol news, updates on upcoming and live esport events, and
-                guides on how to yield, earn, and predict efficiently.
-              </p>
+                <div className="mt-6 flex w-full max-w-[288px] flex-wrap gap-2 sm:mt-7">
+                  {communityLinks.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className={cn(
+                        "inline-flex h-10 w-[140px] shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-xs font-semibold",
+                        "bg-brand-dark-purple text-white transition hover:bg-brand-dark-purple/90",
+                        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/40"
+                      )}
+                    >
+                      <item.icon className="size-[1.125rem] shrink-0" aria-hidden />
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-              <div className="mt-5 grid max-w-[16rem] grid-cols-2 gap-2 sm:max-w-[18rem]">
-                {communityLinks.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className={cn(
-                      "inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-white/80 px-3 text-xs font-semibold text-brand-black",
-                      "transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/35"
-                    )}
-                  >
-                    <item.icon className="size-3.5" aria-hidden />
-                    {item.label}
-                  </Link>
-                ))}
+              <div className="relative h-full min-h-[14rem] w-full lg:min-h-[min(20rem,45vh)]">
+                <Image
+                  src={GET_STARTED_CARDS.community}
+                  alt="Discord, Telegram, X, and Reddit"
+                  fill
+                  className="object-contain object-center lg:object-right"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
             </div>
           </article>
