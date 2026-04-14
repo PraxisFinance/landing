@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
@@ -30,10 +31,13 @@ export function WaveRevealHeadlineLines({
   className,
 }: WaveRevealHeadlineLinesProps) {
   const reduced = useReducedMotion();
+  const rootRef = useRef<HTMLSpanElement | null>(null);
+  const inView = useInView(rootRef, { once: true, amount: 0.25 });
+  const shouldAnimate = reduced ? true : inView;
   let wordIndex = 0;
 
   return (
-    <span className={cn(className)}>
+    <span ref={rootRef} className={cn(className)}>
       {lines.map((line, lineIdx) => {
         const words = line.trim().split(/\s+/);
         return (
@@ -45,7 +49,7 @@ export function WaveRevealHeadlineLines({
                   key={`${lineIdx}-${i}`}
                   className="inline-block"
                   initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.36em" }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.36em" }}
                   transition={{
                     duration: WORD_DURATION,
                     delay: INITIAL_DELAY + idx * WORD_STAGGER,
@@ -73,17 +77,20 @@ type WaveRevealWordsProps = {
 
 export function WaveRevealWords({ text, className, delayStart = 0, as = "p" }: WaveRevealWordsProps) {
   const reduced = useReducedMotion();
+  const rootRef = useRef<HTMLElement | null>(null);
+  const inView = useInView(rootRef, { once: true, amount: 0.25 });
+  const shouldAnimate = reduced ? true : inView;
   const words = text.trim().split(/\s+/);
   const MotionTag = as === "p" ? motion.p : motion.span;
 
   return (
-    <MotionTag className={className}>
+    <MotionTag ref={rootRef} className={className}>
       {words.map((word, i) => (
         <motion.span
           key={i}
           className="inline-block"
           initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
           transition={{
             duration: WORD_DURATION,
             delay: delayStart + i * WORD_STAGGER,
@@ -106,12 +113,16 @@ type WaveRevealFadeUpProps = {
 
 export function WaveRevealFadeUp({ children, className, delay = 0 }: WaveRevealFadeUpProps) {
   const reduced = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(rootRef, { once: true, amount: 0.2 });
+  const shouldAnimate = reduced ? true : inView;
 
   return (
     <motion.div
+      ref={rootRef}
       className={cn(className)}
       initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
       transition={{
         duration: 0.55,
         delay,
