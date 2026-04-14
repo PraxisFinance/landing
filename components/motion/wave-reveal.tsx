@@ -77,31 +77,40 @@ type WaveRevealWordsProps = {
 
 export function WaveRevealWords({ text, className, delayStart = 0, as = "p" }: WaveRevealWordsProps) {
   const reduced = useReducedMotion();
-  const rootRef = useRef<HTMLElement | null>(null);
-  const inView = useInView(rootRef, { once: true, amount: 0.25 });
+  const paragraphRef = useRef<HTMLParagraphElement | null>(null);
+  const spanRef = useRef<HTMLSpanElement | null>(null);
+  const inView = useInView(as === "p" ? paragraphRef : spanRef, { once: true, amount: 0.25 });
   const shouldAnimate = reduced ? true : inView;
   const words = text.trim().split(/\s+/);
-  const MotionTag = as === "p" ? motion.p : motion.span;
+  const content = words.map((word, i) => (
+    <motion.span
+      key={i}
+      className="inline-block"
+      initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
+      animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
+      transition={{
+        duration: WORD_DURATION,
+        delay: delayStart + i * WORD_STAGGER,
+        ease: WAVE_EASE,
+      }}
+    >
+      {word}
+      {i < words.length - 1 ? "\u00A0" : null}
+    </motion.span>
+  ));
+
+  if (as === "span") {
+    return (
+      <motion.span ref={spanRef} className={className}>
+        {content}
+      </motion.span>
+    );
+  }
 
   return (
-    <MotionTag ref={rootRef} className={className}>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          className="inline-block"
-          initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
-          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: "0.32em" }}
-          transition={{
-            duration: WORD_DURATION,
-            delay: delayStart + i * WORD_STAGGER,
-            ease: WAVE_EASE,
-          }}
-        >
-          {word}
-          {i < words.length - 1 ? "\u00A0" : null}
-        </motion.span>
-      ))}
-    </MotionTag>
+    <motion.p ref={paragraphRef} className={className}>
+      {content}
+    </motion.p>
   );
 }
 
