@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const GET_STARTED_CARDS = {
   web: "/main/join-web.png",
   mobile: "/main/join-mobile.png",
-  community: "/main/join-get-started-community.png",
+  community: "/main/join-social-media.png",
 } as const;
 
 const WEB_CARD_BG = "#9D94FF";
@@ -216,7 +216,7 @@ export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps)
                   src={GET_STARTED_CARDS.community}
                   alt="Discord, Telegram, X, and Reddit"
                   fill
-                  className="object-contain object-center lg:object-right"
+                  className="object-contain object-center lg:object-left"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
