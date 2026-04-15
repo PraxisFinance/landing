@@ -3,9 +3,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import {
+  EXPERTS_SECTION_AUTO_ADVANCE_MS,
+  EXPERTS_SECTION_HEADLINE,
+  EXPERTS_SECTION_ITEMS,
+} from "@/components/constants/experts-section";
 import { ExpertCarouselTrack } from "@/components/sections/expert-carousel-track";
 import { ExpertCard } from "@/components/sections/expert-card";
-import type { ExpertSocialLink } from "@/components/sections/expert-social-links";
 import {
   WaveRevealFadeUp,
   WaveRevealHeadlineLines,
@@ -13,62 +17,12 @@ import {
 } from "@/components/motion/wave-reveal";
 import { cn } from "@/lib/utils";
 
-const HEADLINE = "Experts in DeFi Product Development" as const;
-
-const headlineWordCount = HEADLINE.trim().split(/\s+/).length;
+const headlineWordCount = EXPERTS_SECTION_HEADLINE.trim().split(/\s+/).length;
 
 const cardsDelayBase =
   waveRevealTiming.initialDelay +
   headlineWordCount * waveRevealTiming.wordStagger +
   waveRevealTiming.wordDuration * 0.3;
-
-type ExpertEntry = {
-  name: string;
-  role: string;
-  image: string;
-  bio: string;
-  socials?: ExpertSocialLink[];
-};
-
-const AUTO_ADVANCE_MS = 3000;
-
-const EXPERTS: ExpertEntry[] = [
-  {
-    name: "Alex Ivlev",
-    role: "Co-founder, CEO",
-    image: "/team/alex-ivlev.png",
-    bio: "Sets product direction and partnerships, bringing years of experience scaling DeFi teams and go-to-market.",
-  },
-  {
-    name: "Mizori Shirouki",
-    role: "Co-founder, CPO",
-    image: "/team/mizori-shirouki.png",
-    bio: "Product, marketing, and design. DeFi and gaming background with focus on UX and growth.",
-    socials: [
-      { label: "X (Twitter)", href: "#", kind: "x" },
-      { label: "Telegram", href: "#", kind: "telegram" },
-      { label: "Discord", href: "#", kind: "discord" },
-    ],
-  },
-  {
-    name: "Alexander Scherbatuk",
-    role: "Backend & Smart Contracts",
-    image: "/team/alex-sherbatuk.png",
-    bio: "Architects on-chain logic and backend services with a focus on security, gas efficiency, and reliability.",
-  },
-  {
-    name: "Anton Solover",
-    role: "Content & Community Lead",
-    image: "/team/anton-solover.png",
-    bio: "Owns narrative, community programs, and ecosystem communications across channels.",
-  },
-  {
-    name: "Ivan Kireev",
-    role: "Frontend Engineer",
-    image: "/team/ivan-kireev.png",
-    bio: "Builds fast, accessible interfaces and design systems for the Praxis web experience.",
-  },
-];
 
 type ExpertsSectionProps = {
   className?: string;
@@ -82,17 +36,19 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
   useEffect(() => {
     if (manualPaused) return;
     const id = window.setInterval(() => {
-      setActiveIndex((i) => (i + 1) % EXPERTS.length);
-    }, AUTO_ADVANCE_MS);
+      setActiveIndex((i) => (i + 1) % EXPERTS_SECTION_ITEMS.length);
+    }, EXPERTS_SECTION_AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
   }, [manualPaused]);
 
   const goPrev = useCallback(() => {
-    setActiveIndex((i) => (i - 1 + EXPERTS.length) % EXPERTS.length);
+    setActiveIndex(
+      (i) => (i - 1 + EXPERTS_SECTION_ITEMS.length) % EXPERTS_SECTION_ITEMS.length
+    );
   }, []);
 
   const goNext = useCallback(() => {
-    setActiveIndex((i) => (i + 1) % EXPERTS.length);
+    setActiveIndex((i) => (i + 1) % EXPERTS_SECTION_ITEMS.length);
   }, []);
 
   const handleCardActivate = useCallback(
@@ -119,7 +75,7 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
         <div className="relative mx-auto w-full max-w-[min(100%,85rem)] px-2 sm:px-14">
           <h2 className="pr-24 text-center font-bold tracking-tight text-brand-black sm:pr-28">
             <WaveRevealHeadlineLines
-              lines={[HEADLINE]}
+              lines={[EXPERTS_SECTION_HEADLINE]}
               className="block text-center"
               lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
             />
@@ -159,7 +115,7 @@ export function ExpertsSection({ className }: ExpertsSectionProps) {
 
       <WaveRevealFadeUp delay={cardsDelayBase + 0.08} className="min-w-0 max-w-full">
         <ExpertCarouselTrack className="max-w-full">
-          {EXPERTS.map((expert, i) => (
+          {EXPERTS_SECTION_ITEMS.map((expert, i) => (
             <ExpertCard
               key={expert.name}
               expertIndex={i}

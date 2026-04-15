@@ -5,40 +5,13 @@ import {
   WaveRevealHeadlineLines,
   waveRevealTiming,
 } from "@/components/motion/wave-reveal";
+import {
+  FIRST_PREDICTION_CARDS,
+  FIRST_PREDICTION_HEADLINE,
+} from "@/components/constants/first-prediction-section";
 import { FirstPredictionCard } from "@/components/sections/FirstPredictionCard";
 import { cn } from "@/lib/utils";
-
-const HEADLINE =
-  "Praxis — the first prediction market where you trade outcomes with yield, not principal" as const;
-
-const CARDS = [
-  {
-    title: "Safer by design",
-    body: "Bet with yield — keep your principal in the vault. You can only lose allocated yield.",
-    backgroundImage: "/main/safer-card.png",
-    fallbackClassName: "bg-brand-gray",
-    titleClassName: "text-brand-black",
-    bodyClassName: "text-brand-black",
-  },
-  {
-    title: "All-in-one dashboard",
-    body: "Deposits, yield, predictions, and events — in one view. Track your vault balance, available yield, open predictions, and upcoming matches.",
-    backgroundImage: "/main/all-in-one-dashboard-card.png",
-    fallbackClassName: "bg-brand-dark-purple",
-    titleClassName: "text-white",
-    bodyClassName: "text-white",
-  },
-  {
-    title: "On-chain security",
-    body: "Transparent markets and payouts. Smart contracts manage positions and settlement on-chain.",
-    backgroundImage: "/main/on-chain-security-card.png",
-    fallbackClassName: "bg-brand-light-green",
-    titleClassName: "text-brand-black",
-    bodyClassName: "text-brand-black",
-  },
-] as const;
-
-const headlineWordCount = HEADLINE.trim().split(/\s+/).length;
+const headlineWordCount = FIRST_PREDICTION_HEADLINE.trim().split(/\s+/).length;
 
 const cardsDelayBase =
   waveRevealTiming.initialDelay +
@@ -64,7 +37,7 @@ export function FirstPredictionSection({ className }: FirstPredictionSectionProp
         <div className="relative z-0 px-1 sm:px-2">
           <h2 className="max-w-[95%] text-balance text-left font-semibold leading-[1.05] tracking-tight text-brand-black sm:max-w-[90%]">
             <WaveRevealHeadlineLines
-              lines={[HEADLINE]}
+              lines={[FIRST_PREDICTION_HEADLINE]}
               lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
             />
           </h2>
@@ -76,7 +49,7 @@ export function FirstPredictionSection({ className }: FirstPredictionSectionProp
             "-mt-16 px-1 sm:-mt-20 sm:px-2 lg:-mt-28"
           )}
         >
-          {CARDS.map((card, i) => (
+          {FIRST_PREDICTION_CARDS.map((card, i) => (
             <WaveRevealFadeUp key={card.title} delay={cardsDelayBase + i * cardStagger}>
               <FirstPredictionCard {...card} />
             </WaveRevealFadeUp>

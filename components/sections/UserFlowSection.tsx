@@ -6,15 +6,24 @@ import Image from "next/image";
 
 import { DepositFoundsIcon } from "@/components/assets/deposit-founds-icon";
 import {
+  USER_FLOW_SECTION_ALLOCATE_COPY,
+  USER_FLOW_SECTION_CENTER_MAX_PX,
+  USER_FLOW_SECTION_CONNECT_WALLET_TEXT,
+  USER_FLOW_SECTION_DEPOSIT_FUNDS_TEXT,
+  USER_FLOW_SECTION_EARN_YIELD_TEXT,
+  USER_FLOW_SECTION_HEADLINE,
+  USER_FLOW_SECTION_IMAGE,
+  USER_FLOW_SECTION_IMAGE_ALT,
+  USER_FLOW_SECTION_YIELD_COPY,
+} from "@/components/constants/user-flow-section";
+import {
   WaveRevealFadeUp,
   WaveRevealHeadlineLines,
   waveRevealTiming,
 } from "@/components/motion/wave-reveal";
 import { cn } from "@/lib/utils";
 
-const HEADLINE = "Praxis User Flow" as const;
-
-const headlineWordCount = HEADLINE.trim().split(/\s+/).length;
+const headlineWordCount = USER_FLOW_SECTION_HEADLINE.trim().split(/\s+/).length;
 
 const flowDelayBase =
   waveRevealTiming.initialDelay +
@@ -22,11 +31,6 @@ const flowDelayBase =
   waveRevealTiming.wordDuration * 0.25;
 
 const flowStagger = 0.1;
-
-const USER_FLOW_IMG = "/main/user-flow.png";
-
-/** Central mockup frame: 2× previous 340px cap */
-const USER_FLOW_CENTER_MAX_PX = 680;
 
 function Pill({ children, className }: { children: ReactNode; className?: string }) {
   return (
@@ -57,7 +61,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
     >
       <h2 className="mb-12 text-center font-bold tracking-tight text-brand-black sm:mb-14 lg:mb-16">
         <WaveRevealHeadlineLines
-          lines={[HEADLINE]}
+          lines={[USER_FLOW_SECTION_HEADLINE]}
           className="block text-center"
           lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
         />
@@ -79,7 +83,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
                 "bg-brand-dark-purple text-white shadow-sm ring-1 ring-black/[0.06]"
               )}
             >
-              <Pill className="text-brand-black">Connect Wallet</Pill>
+              <Pill className="text-brand-black">{USER_FLOW_SECTION_CONNECT_WALLET_TEXT}</Pill>
               <Wallet
                 className="size-8 shrink-0 text-white sm:size-9"
                 strokeWidth={1.5}
@@ -96,9 +100,9 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
               )}
             >
               <p className="text-balance text-lg font-semibold leading-snug sm:text-xl">
-                Yield accumulates in the vault.
+                {USER_FLOW_SECTION_YIELD_COPY}
               </p>
-              <Pill className="self-start text-brand-black">Earn Yield</Pill>
+              <Pill className="self-start text-brand-black">{USER_FLOW_SECTION_EARN_YIELD_TEXT}</Pill>
             </div>
           </WaveRevealFadeUp>
         </div>
@@ -108,7 +112,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
           delay={flowDelayBase + flowStagger * 0.5}
           className={cn(
             "order-1 flex w-full flex-col xl:order-none xl:w-full xl:justify-self-center xl:self-start",
-            `max-w-[min(100%,${USER_FLOW_CENTER_MAX_PX}px)] xl:max-w-[min(100%,${USER_FLOW_CENTER_MAX_PX}px)]`
+            `max-w-[min(100%,${USER_FLOW_SECTION_CENTER_MAX_PX}px)] xl:max-w-[min(100%,${USER_FLOW_SECTION_CENTER_MAX_PX}px)]`
           )}
         >
           <div
@@ -118,8 +122,8 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
           >
             <div className="relative min-h-0 flex-1">
               <Image
-                src={USER_FLOW_IMG}
-                alt="Praxis app: balances, pools, and navigation"
+                src={USER_FLOW_SECTION_IMAGE}
+                alt={USER_FLOW_SECTION_IMAGE_ALT}
                 fill
                 className="object-contain object-center"
                 sizes="(max-width: 1280px) 90vw, 680px"
@@ -138,7 +142,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
                 "bg-brand-light-green text-brand-black shadow-sm ring-1 ring-black/[0.06]"
               )}
             >
-              <Pill className="text-brand-black">Deposit Funds</Pill>
+              <Pill className="text-brand-black">{USER_FLOW_SECTION_DEPOSIT_FUNDS_TEXT}</Pill>
               <span
                 className="flex size-8 shrink-0 items-center justify-center sm:size-9"
                 aria-hidden
@@ -156,7 +160,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
               )}
             >
               <p className="text-pretty text-left text-[clamp(1.125rem,4vw,35px)] font-bold leading-snug">
-                Allocate yield to outcomes across various events.
+                {USER_FLOW_SECTION_ALLOCATE_COPY}
               </p>
             </div>
           </WaveRevealFadeUp>

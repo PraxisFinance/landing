@@ -5,66 +5,15 @@ import {
   WaveRevealHeadlineLines,
   waveRevealTiming,
 } from "@/components/motion/wave-reveal";
+import {
+  PROJECT_ROADMAP_CARD_STAGGER,
+  PROJECT_ROADMAP_HEADLINE,
+  PROJECT_ROADMAP_ITEMS,
+} from "@/components/constants/project-roadmap-section";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-
-const HEADLINE = "Project Roadmap" as const;
-
-const headlineWordCount = HEADLINE.trim().split(/\s+/).length;
-
-const cardStagger = 0.1;
-
-const ROADMAP = [
-  {
-    quarter: "Q1 2026",
-    body: "MVP on BaseApp (Core vault, prediction flow)",
-    value: 100,
-    cardClass: "bg-brand-dark-green",
-    badgeClass: "bg-white text-brand-dark-green",
-    bodyClass: "text-white",
-    progressClass: cn(
-      "[&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:rounded-full [&_[data-slot=progress-track]]:bg-brand-gray/90",
-      "[&_[data-slot=progress-indicator]]:rounded-full [&_[data-slot=progress-indicator]]:bg-brand-dark-green"
-    ),
-  },
-  {
-    quarter: "Q2 2026",
-    body: "MVP launch (vaults, yield games, dashboards)",
-    value: 45,
-    cardClass: "bg-brand-dark-purple",
-    badgeClass: "bg-white text-brand-dark-purple",
-    bodyClass: "text-white",
-    progressClass: cn(
-      "[&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:rounded-full [&_[data-slot=progress-track]]:bg-brand-gray/90",
-      "[&_[data-slot=progress-indicator]]:rounded-full [&_[data-slot=progress-indicator]]:bg-brand-dark-purple"
-    ),
-  },
-  {
-    quarter: "Q3 2026",
-    body: "Prediction markets (sports, esports, finance)",
-    value: 0,
-    cardClass: "bg-brand-light-green",
-    badgeClass: "bg-brand-black text-brand-light-green",
-    bodyClass: "text-brand-black",
-    progressClass: cn(
-      "[&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:rounded-full [&_[data-slot=progress-track]]:bg-brand-gray/90",
-      "[&_[data-slot=progress-indicator]]:rounded-full [&_[data-slot=progress-indicator]]:bg-brand-light-green"
-    ),
-  },
-  {
-    quarter: "Q4 2026",
-    body: "Agent-based systems & ecosystem expansion",
-    value: 0,
-    cardClass: "bg-brand-light-purple",
-    badgeClass: "bg-brand-black text-brand-light-purple",
-    bodyClass: "text-brand-black",
-    progressClass: cn(
-      "[&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:rounded-full [&_[data-slot=progress-track]]:bg-brand-gray/90",
-      "[&_[data-slot=progress-indicator]]:rounded-full [&_[data-slot=progress-indicator]]:bg-brand-light-purple"
-    ),
-  },
-] as const;
+const headlineWordCount = PROJECT_ROADMAP_HEADLINE.trim().split(/\s+/).length;
 
 const cardsDelayBase =
   waveRevealTiming.initialDelay +
@@ -87,17 +36,17 @@ export function ProjectRoadmapSection({ className }: ProjectRoadmapSectionProps)
     >
       <h2 className="mb-8 text-center font-bold tracking-tight text-brand-black sm:mb-10 lg:mb-12">
         <WaveRevealHeadlineLines
-          lines={[HEADLINE]}
+          lines={[PROJECT_ROADMAP_HEADLINE]}
           className="block text-center"
           lineClassName="text-[clamp(1.75rem,6.5vw,110px)] leading-[1.05]"
         />
       </h2>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-4 lg:gap-3">
-        {ROADMAP.map((item, i) => (
+        {PROJECT_ROADMAP_ITEMS.map((item, i) => (
           <WaveRevealFadeUp
             key={item.quarter}
-            delay={cardsDelayBase + i * cardStagger}
+            delay={cardsDelayBase + i * PROJECT_ROADMAP_CARD_STAGGER}
             className="flex min-h-0 flex-col gap-2"
           >
             <div

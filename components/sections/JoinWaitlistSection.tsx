@@ -9,22 +9,22 @@ import {
   WaveRevealWords,
   waveRevealTiming,
 } from "@/components/motion/wave-reveal";
+import {
+  JOIN_WAITLIST_BASEAPP_LABEL,
+  JOIN_WAITLIST_BG_CIRCLE_COUNT,
+  JOIN_WAITLIST_BG_CIRCLE_PX,
+  JOIN_WAITLIST_BUTTON_TEXT,
+  JOIN_WAITLIST_HEADLINE_LINES,
+  JOIN_WAITLIST_HELP_LABEL,
+  JOIN_WAITLIST_IMAGE,
+  JOIN_WAITLIST_INPUT_PLACEHOLDER,
+  JOIN_WAITLIST_SUBTEXT,
+} from "@/components/constants/join-waitlist-section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-
-const HEADLINE_LINES = ["Join Waitlist"] as const;
-const SUBTEXT =
-  "Be among the first to try the new primitive in prediction markets on Base.";
-
-const JOIN_WAITLIST_IMG = "/main/join-waitlist.png";
-
-/** Background pattern: 2×5 circles, 189px diameter each */
-const BG_CIRCLE_PX = 189;
-const BG_CIRCLE_COUNT = 10;
-
-const headlineWordCount = HEADLINE_LINES.join(" ").trim().split(/\s+/).length;
-const subheadWordCount = SUBTEXT.trim().split(/\s+/).length;
+const headlineWordCount = JOIN_WAITLIST_HEADLINE_LINES.join(" ").trim().split(/\s+/).length;
+const subheadWordCount = JOIN_WAITLIST_SUBTEXT.trim().split(/\s+/).length;
 
 const subheadDelayStart =
   waveRevealTiming.initialDelay +
@@ -65,11 +65,11 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
               "max-[1050px]:scale-[0.55] max-sm:scale-[0.32] max-sm:origin-right"
             )}
           >
-            {Array.from({ length: BG_CIRCLE_COUNT }, (_, i) => (
+            {Array.from({ length: JOIN_WAITLIST_BG_CIRCLE_COUNT }, (_, i) => (
               <div
                 key={i}
                 className="shrink-0 rounded-full bg-white opacity-25 sm:opacity-30"
-                style={{ width: BG_CIRCLE_PX, height: BG_CIRCLE_PX }}
+                style={{ width: JOIN_WAITLIST_BG_CIRCLE_PX, height: JOIN_WAITLIST_BG_CIRCLE_PX }}
               />
             ))}
           </div>
@@ -84,13 +84,13 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
           <div className="flex min-w-0 flex-1 flex-col lg:max-w-xl lg:py-1">
             <h2 className="text-balance font-bold leading-[1.08] tracking-tight text-brand-black">
               <WaveRevealHeadlineLines
-                lines={[...HEADLINE_LINES]}
+                lines={[...JOIN_WAITLIST_HEADLINE_LINES]}
                 lineClassName="text-2xl sm:text-3xl lg:text-[2.25rem] xl:text-[2.5rem]"
               />
             </h2>
 
             <WaveRevealWords
-              text={SUBTEXT}
+              text={JOIN_WAITLIST_SUBTEXT}
               delayStart={subheadDelayStart}
               className="mt-3 max-w-lg text-pretty text-base leading-relaxed text-brand-black/70 sm:mt-4 sm:text-lg"
             />
@@ -107,7 +107,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                     type="text"
                     name="baseapp"
                     autoComplete="off"
-                    placeholder="Enter your BaseApp address"
+                    placeholder={JOIN_WAITLIST_INPUT_PLACEHOLDER}
                     className={cn(
                       "h-11 rounded-lg border-0 bg-white px-4 pr-11 text-base shadow-sm ring-1 ring-black/[0.06]",
                       "placeholder:text-brand-black/35",
@@ -121,7 +121,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                       "transition hover:text-brand-black/60",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark-purple/40"
                     )}
-                    aria-label="What is BaseApp address?"
+                    aria-label={JOIN_WAITLIST_HELP_LABEL}
                   >
                     <CircleHelp className="size-5" strokeWidth={1.75} />
                   </button>
@@ -136,7 +136,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                     "focus-visible:ring-brand-dark-purple/40"
                   )}
                 >
-                  Join Waitlist
+                  {JOIN_WAITLIST_BUTTON_TEXT}
                   <ArrowRightIcon className="size-5 shrink-0" strokeWidth={1.75} aria-hidden />
                 </Button>
               </form>
@@ -148,7 +148,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                 aria-hidden
               />
               <span className="text-lg font-bold lowercase tracking-tight text-brand-black">
-                baseapp
+                {JOIN_WAITLIST_BASEAPP_LABEL}
               </span>
             </div>
           </div>
@@ -161,7 +161,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
           >
             <div className="relative h-full w-full min-h-0 flex-1">
               <Image
-                src={JOIN_WAITLIST_IMG}
+                src={JOIN_WAITLIST_IMAGE}
                 alt="Praxis app on a handheld device"
                 fill
                 className="object-contain object-left"

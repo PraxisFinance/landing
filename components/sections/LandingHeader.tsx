@@ -2,6 +2,10 @@ import type { SVGProps } from "react";
 import Link from "next/link";
 
 import { LogoIcon } from "@/components/assets/logo-icon";
+import {
+  LANDING_HEADER_HOME_ARIA_LABEL,
+  LANDING_HEADER_WAITLIST_BUTTON_TEXT,
+} from "@/components/constants/landing-header";
 import { HeaderDesktopNav, HeaderMobileMenuButton } from "@/components/navigation";
 
 function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
@@ -26,7 +30,7 @@ export function LandingHeader() {
           <Link
             href="/"
             className="inline-flex shrink-0 text-brand-black"
-            aria-label="Praxis, home"
+            aria-label={LANDING_HEADER_HOME_ARIA_LABEL}
           >
             <LogoIcon className="h-8 w-auto sm:h-9" aria-hidden />
           </Link>
@@ -38,7 +42,7 @@ export function LandingHeader() {
             type="button"
             className="hidden items-center gap-2 rounded-xl bg-brand-black px-5 py-2.5 text-sm font-medium text-brand-white transition hover:opacity-90 md:inline-flex"
           >
-            Join Waitlist
+            {LANDING_HEADER_WAITLIST_BUTTON_TEXT}
             <ArrowRightIcon className="size-4 shrink-0" />
           </button>
         </div>
