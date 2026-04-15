@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FIRST_PREDICTION_CARDS,
@@ -52,26 +53,97 @@ const headlineLineDuration = (headlineMaxWordsPerLine - 1) * WAVE_STAGGER + WAVE
 const headlineTotalDuration = headlineLineDuration + (headlineLines.length - 1) * 0.32;
 const cardsStartDelay = headlineTotalDuration + 0.12;
 
+type CardTarget = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+type CardStackOffset = {
+  x: number;
+  y: number;
+  scale: number;
+};
+
+type AnimatedCardCustom = {
+  index: number;
+  stackOffset: CardStackOffset;
+};
+
 const cardVariants = {
-  hidden: (index: number) => ({
+  hidden: ({ stackOffset }: AnimatedCardCustom) => ({
     opacity: 1,
-    x: `${21 - 82 * index}%`,
-    y: 0,
-    scale: 1 - index * 0.02,
+    x: stackOffset.x,
+    y: stackOffset.y,
+    scale: stackOffset.scale,
   }),
-  visible: (index: number) => ({
+  visible: ({ index }: AnimatedCardCustom) => ({
     opacity: 1,
     x: 0,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.42,
+      type: "spring" as const,
+      duration: 0.58,
       delay: cardsStartDelay + index * CARD_STAGGER,
+      stiffness: 110,
+      damping: 22,
+      mass: 0.85,
     },
   }),
 };
 
 export function FirstPredictionSection({ className }: FirstPredictionSectionProps) {
+  const measureCardsRef = useRef<Array<HTMLDivElement | null>>([]);
+  const [cardTargets, setCardTargets] = useState<CardTarget[]>([]);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const nodes = measureCardsRef.current.filter(Boolean) as HTMLDivElement[];
+      if (nodes.length !== FIRST_PREDICTION_CARDS.length) return;
+
+      const parentRect = nodes[0].parentElement?.getBoundingClientRect();
+      if (!parentRect) return;
+
+      const nextTargets = nodes.map((node) => {
+        const rect = node.getBoundingClientRect();
+        return {
+          x: rect.left - parentRect.left,
+          y: rect.top - parentRect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+      });
+
+      setCardTargets(nextTargets);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  const stackOffsets: CardStackOffset[] =
+    cardTargets.length === FIRST_PREDICTION_CARDS.length
+      ? (() => {
+          const first = cardTargets[0];
+          const stackAnchorX = first.x + first.width * 0.33;
+          const stackAnchorY = first.y;
+
+          return cardTargets.map((target, index) => ({
+            x: stackAnchorX - target.x + index * 18,
+            y: stackAnchorY - target.y,
+            scale: 1 - index * 0.02,
+          }));
+        })()
+      : [];
+
+  const cardsHeight =
+    cardTargets.length === FIRST_PREDICTION_CARDS.length
+      ? Math.max(...cardTargets.map((target) => target.y + target.height))
+      : 0;
+
   return (
     <section
       id="first-prediction"
@@ -87,26 +159,54 @@ export function FirstPredictionSection({ className }: FirstPredictionSectionProp
           </h2>
         </div>
 
-        <motion.div
+        <div
           className={cn(
-            "relative z-10 flex flex-wrap justify-end gap-4 sm:gap-5",
+            "relative z-10",
             "-mt-16 px-1 sm:-mt-20 sm:px-2 lg:-mt-28"
           )}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.7 }}
         >
-          {FIRST_PREDICTION_CARDS.map((card, index) => (
+          <div className="invisible flex flex-wrap justify-end gap-4 sm:gap-5" aria-hidden>
+            {FIRST_PREDICTION_CARDS.map((card, index) => (
+              <div
+                key={`measure-${card.title}`}
+                ref={(node) => {
+                  measureCardsRef.current[index] = node;
+                }}
+              >
+                <FirstPredictionCard {...card} />
+              </div>
+            ))}
+          </div>
+
+          {cardTargets.length === FIRST_PREDICTION_CARDS.length && (
             <motion.div
-              key={card.title}
-              custom={index}
-              variants={cardVariants}
-              style={{ zIndex: FIRST_PREDICTION_CARDS.length - index }}
+              className="absolute inset-0"
+              style={{ height: cardsHeight }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.7 }}
             >
-              <FirstPredictionCard {...card} />
+              {FIRST_PREDICTION_CARDS.map((card, index) => (
+                <motion.div
+                  key={card.title}
+                  custom={{ index, stackOffset: stackOffsets[index] }}
+                  variants={cardVariants}
+                  className="absolute left-0 top-0"
+                  style={{
+                    width: cardTargets[index].width,
+                    height: cardTargets[index].height,
+                    left: cardTargets[index].x,
+                    top: cardTargets[index].y,
+                    willChange: "transform",
+                    zIndex: FIRST_PREDICTION_CARDS.length - index,
+                  }}
+                >
+                  <FirstPredictionCard {...card} className="!h-full !w-full" />
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
+          )}
+        </div>
       </div>
     </section>
   );
