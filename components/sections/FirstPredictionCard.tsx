@@ -23,7 +23,7 @@ export function FirstPredictionCard({
   return (
     <article
       className={cn(
-        "relative flex h-[400px] w-[345px] max-w-full flex-col overflow-hidden rounded-[1.25rem] sm:rounded-3xl",
+        "relative flex h-[430px] w-[345px] max-w-full flex-col overflow-hidden rounded-[1.25rem] sm:rounded-3xl",
         "shadow-sm ring-1 ring-black/[0.04]",
         fallbackClassName,
         className
@@ -38,17 +38,12 @@ export function FirstPredictionCard({
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
       <div className="relative z-10 flex h-full min-h-0 flex-col justify-between p-6 sm:p-7">
-        <h3
-          className={cn(
-            "max-w-[95%] shrink-0 text-lg font-semibold leading-tight tracking-tight sm:text-xl",
-            titleClassName
-          )}
-        >
+        <h3 className={cn("ui-text-2 max-w-[95%] shrink-0 tracking-tight", titleClassName)}>
           {title}
         </h3>
         <p
           className={cn(
-            "max-h-[52%] min-h-0 w-full overflow-y-auto text-pretty text-sm leading-relaxed sm:text-[0.9375rem]",
+            "ui-text-6 max-h-[52%] min-h-0 w-full overflow-y-auto text-pretty",
             bodyClassName
           )}
         >
