@@ -64,6 +64,13 @@ body {
 }
 
 :root {
+  --font-helvetica-regular: "HelveticaNowDisplay-Regular", "Helvetica Now Display", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-helvetica-medium: "HelveticaNowDisplay-Medium", "Helvetica Now Display", ui-sans-serif,
+    system-ui, sans-serif;
+  --font-helvetica-bold: "HelveticaNowDisplay-Bold", "Helvetica Now Display", ui-sans-serif, system-ui,
+    sans-serif;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -147,88 +154,88 @@ body {
 @layer utilities {
   /* Headline scale */
   .ui-headline-1 {
-    @apply text-[6.875rem] leading-[1.02] font-bold tracking-tight;
+    @apply text-[6.875rem] leading-[1.02] font-bold tracking-tight [font-family:var(--font-helvetica-bold)];
   }
   .ui-headline-2 {
-    @apply text-[5rem] leading-[1.03] font-bold tracking-tight;
+    @apply text-[5rem] leading-[1.03] font-bold tracking-tight [font-family:var(--font-helvetica-bold)];
   }
   .ui-headline-3 {
-    @apply text-[4.375rem] leading-[1.04] font-bold tracking-tight;
+    @apply text-[4.375rem] leading-[1.04] font-bold tracking-tight [font-family:var(--font-helvetica-bold)];
   }
   .ui-headline-4 {
-    @apply text-[1.75rem] leading-[1.15] font-bold;
+    @apply text-[1.75rem] leading-[1.15] font-bold [font-family:var(--font-helvetica-bold)];
   }
   /* Legacy aliases kept for backwards compatibility in sections */
   .ui-headline-5 {
-    @apply text-base leading-[1.3] font-semibold;
+    @apply text-base leading-[1.3] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-headline-6 {
-    @apply text-sm leading-[1.35] font-semibold;
+    @apply text-sm leading-[1.35] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-headline-7 {
-    @apply text-[0.625rem] leading-[1.4] font-semibold;
+    @apply text-[0.625rem] leading-[1.4] font-medium [font-family:var(--font-helvetica-medium)];
   }
 
   /* Numeric scale */
   .ui-number-1 {
-    @apply text-[2.8125rem] leading-[1.05] font-bold tabular-nums;
+    @apply text-[2.8125rem] leading-[1.05] font-bold tabular-nums [font-family:var(--font-helvetica-bold)];
   }
   .ui-number-2 {
-    @apply text-[1.25rem] leading-[1.2] font-semibold tabular-nums;
+    @apply text-[1.25rem] leading-[1.2] font-medium tabular-nums [font-family:var(--font-helvetica-medium)];
   }
   .ui-number-3 {
-    @apply text-sm leading-[1.3] font-semibold tabular-nums;
+    @apply text-sm leading-[1.3] font-medium tabular-nums [font-family:var(--font-helvetica-medium)];
   }
   .ui-number-4 {
-    @apply text-xs leading-[1.3] font-medium tabular-nums;
+    @apply text-xs leading-[1.3] font-medium tabular-nums [font-family:var(--font-helvetica-medium)];
   }
   .ui-number-5 {
-    @apply text-[0.625rem] leading-[1.4] font-medium tabular-nums;
+    @apply text-[0.625rem] leading-[1.4] font-medium tabular-nums [font-family:var(--font-helvetica-medium)];
   }
 
   /* Body text scale */
   .ui-text-1 {
-    @apply text-[2.1875rem] leading-[1.2] font-medium;
+    @apply text-[2.1875rem] leading-[1.2] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-text-2 {
-    @apply text-[1.75rem] leading-[1.25] font-medium;
+    @apply text-[1.75rem] leading-[1.25] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-text-3 {
-    @apply text-[1.75rem] leading-[1.3] font-normal;
+    @apply text-[1.75rem] leading-[1.3] font-normal [font-family:var(--font-helvetica-regular)];
   }
   .ui-text-4 {
-    @apply text-[1.25rem] leading-[1.35] font-medium;
+    @apply text-[1.25rem] leading-[1.35] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-text-5 {
-    @apply text-[1.125rem] leading-[1.4] font-normal;
+    @apply text-[1.125rem] leading-[1.4] font-normal [font-family:var(--font-helvetica-regular)];
   }
   .ui-text-6 {
-    @apply text-[1.125rem] leading-[1.4] font-medium;
+    @apply text-[1.125rem] leading-[1.4] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-text-7 {
-    @apply text-base leading-[1.45] font-normal;
+    @apply text-base leading-[1.45] font-normal [font-family:var(--font-helvetica-regular)];
   }
   .ui-text-8 {
-    @apply text-base leading-[1.35] font-bold;
+    @apply text-base leading-[1.35] font-bold [font-family:var(--font-helvetica-bold)];
   }
   .ui-text-9 {
-    @apply text-sm leading-[1.35] font-bold;
+    @apply text-sm leading-[1.35] font-bold [font-family:var(--font-helvetica-bold)];
   }
   .ui-text-10 {
-    @apply text-sm leading-[1.4] font-medium;
+    @apply text-sm leading-[1.4] font-medium [font-family:var(--font-helvetica-medium)];
   }
   .ui-text-11 {
-    @apply text-xs leading-[1.45] font-normal;
+    @apply text-xs leading-[1.45] font-normal [font-family:var(--font-helvetica-regular)];
   }
   .ui-text-12 {
-    @apply text-xs leading-[1.35] font-bold;
+    @apply text-xs leading-[1.35] font-bold [font-family:var(--font-helvetica-bold)];
   }
 
   /* Button scale */
   .ui-button-1 {
-    @apply text-base leading-none font-bold;
+    @apply text-base leading-none font-bold [font-family:var(--font-helvetica-bold)];
   }
   .ui-button-2 {
-    @apply text-xs leading-none font-bold;
+    @apply text-xs leading-none font-bold [font-family:var(--font-helvetica-bold)];
   }
 }
