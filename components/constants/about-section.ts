@@ -1,7 +1,7 @@
-export const FIRST_PREDICTION_HEADLINE =
+export const ABOUT_SECTION_HEADLINE =
   "Praxis — the first prediction market where you trade outcomes with yield, not principal" as const;
 
-export const FIRST_PREDICTION_CARDS = [
+export const ABOUT_SECTION_CARDS = [
   {
     title: "Safer by design",
     body: "Bet with yield — keep your principal in the vault. You can only lose allocated yield.",

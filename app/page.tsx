@@ -1,9 +1,9 @@
+import { AboutSection } from "@/components/sections/AboutSection";
+import { CoverSection } from "@/components/sections/CoverSection";
 import { ExpertsSection } from "@/components/sections/ExpertsSection";
 import { FrequencyQuestionsSection } from "@/components/sections/FrequencyQuestionsSection";
-import { FirstPredictionSection } from "@/components/sections/FirstPredictionSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
-import { JoinSection } from "@/components/sections/JoinSection";
 import { JoinGetStartedSection } from "@/components/sections/JoinGetStartedSection";
 import { JoinWaitlistSection } from "@/components/sections/JoinWaitlistSection";
 import { ProjectRoadmapSection } from "@/components/sections/ProjectRoadmapSection";
@@ -14,9 +14,9 @@ export default function Home() {
     <div className="min-h-screen bg-brand-white text-brand-black">
       <LandingHeader />
 
-      <main>
-        <JoinSection />
-        <FirstPredictionSection />
+      <main className="flex flex-col gap-[clamp(5rem,10vw,11.25rem)]">
+        <CoverSection />
+        <AboutSection />
         <UserFlowSection />
         <JoinWaitlistSection />
         <ProjectRoadmapSection />

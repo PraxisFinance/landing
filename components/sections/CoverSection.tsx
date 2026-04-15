@@ -4,15 +4,15 @@ import { ArrowRightIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
 import {
-  JOIN_SECTION_BG,
-  JOIN_SECTION_HEADLINE_LINES,
-  JOIN_SECTION_SUBHEAD_COPY,
-  JOIN_SECTION_WAITLIST_BUTTON_TEXT,
-} from "@/components/constants/join-section";
+  COVER_SECTION_BG,
+  COVER_SECTION_HEADLINE_LINES,
+  COVER_SECTION_SUBHEAD_COPY,
+  COVER_SECTION_WAITLIST_BUTTON_TEXT,
+} from "@/components/constants/cover-section";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type JoinSectionProps = {
+type CoverSectionProps = {
   className?: string;
 };
 
@@ -22,11 +22,11 @@ const WAVE_LINE_DELAY = 0.34;
 const HEADLINE_START_DELAY = 0.08;
 
 const headlineMaxWordsPerLine = Math.max(
-  ...JOIN_SECTION_HEADLINE_LINES.map((line) => line.trim().split(/\s+/).length)
+  ...COVER_SECTION_HEADLINE_LINES.map((line) => line.trim().split(/\s+/).length)
 );
 const headlineLineDuration = (headlineMaxWordsPerLine - 1) * WAVE_STAGGER + WAVE_ITEM_DURATION;
 const headlineTotalDuration =
-  headlineLineDuration + (JOIN_SECTION_HEADLINE_LINES.length - 1) * WAVE_LINE_DELAY;
+  headlineLineDuration + (COVER_SECTION_HEADLINE_LINES.length - 1) * WAVE_LINE_DELAY;
 const subheadStartDelay = HEADLINE_START_DELAY + headlineTotalDuration + 0.12;
 
 const backgroundReveal = {
@@ -74,7 +74,7 @@ function WaveText({
   );
 }
 
-export function JoinSection({ className }: JoinSectionProps) {
+export function CoverSection({ className }: CoverSectionProps) {
   return (
     <section
       className={cn(
@@ -90,7 +90,7 @@ export function JoinSection({ className }: JoinSectionProps) {
         <motion.div
           aria-hidden
           className="absolute inset-0 z-0 bg-cover bg-bottom bg-no-repeat pointer-events-none select-none"
-          style={{ backgroundImage: `url(${JOIN_SECTION_BG})` }}
+          style={{ backgroundImage: `url(${COVER_SECTION_BG})` }}
           variants={backgroundReveal}
           initial="hidden"
           animate="visible"
@@ -104,17 +104,17 @@ export function JoinSection({ className }: JoinSectionProps) {
           )}
         />
 
-        <div className="relative z-10 flex flex-col items-center px-5 pt-7 text-center sm:px-8 sm:pt-9 md:pt-10 lg:pt-12 pb-16 sm:pb-20 md:pb-24">
+        <div className="relative z-10 flex flex-col items-center px-5 pb-16 pt-7 text-center sm:px-8 sm:pb-20 sm:pt-9 md:pb-24 md:pt-10 lg:pt-12">
           <h1 className="max-w-5xl text-balance text-brand-black">
             <WaveText
-              text={JOIN_SECTION_HEADLINE_LINES.join("\n")}
+              text={COVER_SECTION_HEADLINE_LINES.join("\n")}
               className="ui-headline-3 whitespace-pre-line"
               startDelay={HEADLINE_START_DELAY}
             />
           </h1>
 
           <WaveText
-            text={JOIN_SECTION_SUBHEAD_COPY}
+            text={COVER_SECTION_SUBHEAD_COPY}
             className="ui-text-3 mt-[15px] max-w-xl whitespace-pre-line text-brand-black"
             startDelay={subheadStartDelay}
           />
@@ -135,7 +135,7 @@ export function JoinSection({ className }: JoinSectionProps) {
                 "focus-visible:ring-brand-dark-purple/40"
               )}
             >
-              {JOIN_SECTION_WAITLIST_BUTTON_TEXT}
+              {COVER_SECTION_WAITLIST_BUTTON_TEXT}
               <ArrowRightIcon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
             </Button>
           </motion.div>
