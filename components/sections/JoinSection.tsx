@@ -1,13 +1,8 @@
 "use client";
 
 import { ArrowRightIcon } from "lucide-react";
+import { motion } from "framer-motion";
 
-import {
-  WaveRevealFadeUp,
-  WaveRevealHeadlineLines,
-  WaveRevealWords,
-  waveRevealTiming,
-} from "@/components/motion/wave-reveal";
 import {
   JOIN_SECTION_BG,
   JOIN_SECTION_HEADLINE_LINES,
@@ -17,21 +12,67 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const headlineWordCount = JOIN_SECTION_HEADLINE_LINES.join(" ").trim().split(/\s+/).length;
-const subheadWordCount = JOIN_SECTION_SUBHEAD_COPY.trim().split(/\s+/).length;
-
-/** Slight overlap with headline so the “wave” reads as one motion (similar to aave.com hero). */
-const subheadDelayStart =
-  waveRevealTiming.initialDelay + headlineWordCount * waveRevealTiming.wordStagger * 0.42;
-
-const buttonDelay =
-  subheadDelayStart +
-  subheadWordCount * waveRevealTiming.wordStagger +
-  waveRevealTiming.wordDuration * 0.35;
-
 type JoinSectionProps = {
   className?: string;
 };
+
+const WAVE_STAGGER = 0.045;
+const WAVE_ITEM_DURATION = 0.48;
+const WAVE_LINE_DELAY = 0.34;
+const HEADLINE_START_DELAY = 0.08;
+
+const headlineMaxWordsPerLine = Math.max(
+  ...JOIN_SECTION_HEADLINE_LINES.map((line) => line.trim().split(/\s+/).length)
+);
+const headlineLineDuration = (headlineMaxWordsPerLine - 1) * WAVE_STAGGER + WAVE_ITEM_DURATION;
+const headlineTotalDuration =
+  headlineLineDuration + (JOIN_SECTION_HEADLINE_LINES.length - 1) * WAVE_LINE_DELAY;
+const subheadStartDelay = HEADLINE_START_DELAY + headlineTotalDuration + 0.12;
+
+const backgroundReveal = {
+  hidden: { opacity: 0, y: 46, scale: 1.04 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.8, delay: 0.55 },
+  },
+};
+
+function WaveText({
+  text,
+  className,
+  startDelay = 0,
+}: {
+  text: string;
+  className: string;
+  startDelay?: number;
+}) {
+  const lines = text.split("\n");
+
+  return (
+    <div className={className}>
+      {lines.map((line, lineIndex) => (
+        <div key={`${line}-${lineIndex}`} className="block">
+          {line.split(" ").map((word, wordIndex) => (
+            <motion.span
+              key={`${word}-${wordIndex}`}
+              className="mr-[0.3em] inline-block"
+              initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{
+                duration: WAVE_ITEM_DURATION,
+                delay: startDelay + lineIndex * WAVE_LINE_DELAY + wordIndex * WAVE_STAGGER,
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function JoinSection({ className }: JoinSectionProps) {
   return (
@@ -46,10 +87,13 @@ export function JoinSection({ className }: JoinSectionProps) {
           "relative min-h-[28rem] overflow-hidden rounded-[2rem] sm:min-h-[32rem] sm:rounded-[2.25rem] md:min-h-[36rem] lg:min-h-[40rem]"
         )}
       >
-        <div
+        <motion.div
           aria-hidden
           className="absolute inset-0 z-0 bg-cover bg-bottom bg-no-repeat pointer-events-none select-none"
           style={{ backgroundImage: `url(${JOIN_SECTION_BG})` }}
+          variants={backgroundReveal}
+          initial="hidden"
+          animate="visible"
         />
 
         <div
@@ -61,20 +105,26 @@ export function JoinSection({ className }: JoinSectionProps) {
         />
 
         <div className="relative z-10 flex flex-col items-center px-5 pt-7 text-center sm:px-8 sm:pt-9 md:pt-10 lg:pt-12 pb-16 sm:pb-20 md:pb-24">
-          <h1 className="max-w-5xl text-balance font-bold leading-[1.05] tracking-tight text-brand-black">
-            <WaveRevealHeadlineLines
-              lines={[...JOIN_SECTION_HEADLINE_LINES]}
-              lineClassName="text-4xl sm:text-5xl lg:text-6xl xl:text-[3.5rem]"
+          <h1 className="max-w-5xl text-balance text-brand-black">
+            <WaveText
+              text={JOIN_SECTION_HEADLINE_LINES.join("\n")}
+              className="ui-headline-3 whitespace-pre-line"
+              startDelay={HEADLINE_START_DELAY}
             />
           </h1>
 
-          <WaveRevealWords
+          <WaveText
             text={JOIN_SECTION_SUBHEAD_COPY}
-            delayStart={subheadDelayStart}
-            className="mt-6 max-w-xl text-pretty text-base leading-snug text-brand-black sm:text-lg md:mt-8"
+            className="ui-text-3 mt-[15px] max-w-xl whitespace-pre-line text-brand-black"
+            startDelay={subheadStartDelay}
           />
 
-          <WaveRevealFadeUp delay={buttonDelay} className="mt-8 sm:mt-10">
+          <motion.div
+            className="mt-[15px]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: subheadStartDelay + 0.35 }}
+          >
             <Button
               nativeButton={false}
               render={<a href="#" />}
@@ -88,7 +138,7 @@ export function JoinSection({ className }: JoinSectionProps) {
               {JOIN_SECTION_WAITLIST_BUTTON_TEXT}
               <ArrowRightIcon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden />
             </Button>
-          </WaveRevealFadeUp>
+          </motion.div>
         </div>
       </div>
     </section>
