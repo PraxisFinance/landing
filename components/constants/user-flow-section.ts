@@ -118,7 +118,7 @@ export const USER_FLOW_SECTION_STEPS: UserFlowStepState[] = [
   },
   {
     id: 5,
-    image: "/user-flow/5.png",
+    image: "/user-flow/4.png",
     cards: {
       "connect-wallet": { visible: true, top: 0, height: USER_FLOW_CARD_COLLAPSED_HEIGHT },
       "earn-yield": { visible: true, top: 76, height: USER_FLOW_CARD_COLLAPSED_HEIGHT },

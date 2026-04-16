@@ -36,14 +36,14 @@ type UserFlowSectionProps = {
 
 export function UserFlowSection({ className }: UserFlowSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const headingRef = useRef<HTMLHeadingElement | null>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const headingInView = useInView(headingRef, { amount: 0.45, once: true });
+  const sectionInView = useInView(sectionRef, { amount: 0.2, once: true });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
+  const shouldShowHeading = sectionInView || scrollProgress > 0.001;
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const clamped = Math.max(0, Math.min(0.9999, latest));
@@ -111,10 +111,9 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
           style={{ height: USER_FLOW_SECTION_HEIGHT }}
         >
           <motion.h2
-            ref={headingRef}
             initial={{ opacity: 0, y: 36 }}
-            animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            animate={shouldShowHeading ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-30 mb-8 text-center text-[clamp(2rem,6vw,6rem)] font-bold leading-[1.02] tracking-tight text-brand-black sm:mb-10"
           >
             {USER_FLOW_SECTION_HEADLINE}
@@ -150,10 +149,10 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={activeStep.image}
-                  initial={{ opacity: 0, y: 22, scale: 0.985 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -20, scale: 0.985 }}
-                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
                   className="relative h-full w-full"
                 >
                   <Image
