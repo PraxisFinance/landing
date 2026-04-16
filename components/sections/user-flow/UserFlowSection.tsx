@@ -17,6 +17,7 @@ const STEP_COUNT = USER_FLOW_SECTION_STEPS.length;
 const STEP_POINTS = USER_FLOW_SECTION_STEPS.map((_, i) => i / (STEP_COUNT - 1));
 const WHEEL_TO_PROGRESS = 0.00125;
 const PROGRESS_EPSILON = 0.0005;
+const VIEWPORT_EPSILON = 1;
 const CARD_PROGRESS_OFFSET: Record<string, number> = {
   "connect-wallet": 0,
   "earn-yield": 0,
@@ -36,6 +37,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const capturedProgressRef = useRef<number | null>(null);
   const releaseDirectionRef = useRef<"up" | "down" | null>(null);
+  const endLockRef = useRef(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const sectionInView = useInView(sectionRef, { amount: 0.2, once: true });
@@ -52,7 +54,13 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
   };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (capturedProgressRef.current !== null || releaseDirectionRef.current !== null) return;
+    if (
+      capturedProgressRef.current !== null ||
+      releaseDirectionRef.current !== null ||
+      endLockRef.current
+    ) {
+      return;
+    }
     const clamped = Math.max(0, Math.min(0.9999, latest));
     setScrollProgress(clamped);
     updateStepFromProgress(clamped);
@@ -66,10 +74,27 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
       const rect = section.getBoundingClientRect();
       const viewportCenter = window.innerHeight / 2;
       const sectionActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
+      const fullyVisible =
+        rect.top >= -VIEWPORT_EPSILON &&
+        rect.bottom <= window.innerHeight + VIEWPORT_EPSILON;
       if (!sectionActive) {
         capturedProgressRef.current = null;
         releaseDirectionRef.current = null;
+        endLockRef.current = false;
         return;
+      }
+
+      if (endLockRef.current) {
+        const direction = Math.sign(event.deltaY);
+        if (direction > 0) {
+          // Keep page scrolling down; never restart animation while locked.
+          return;
+        }
+        if (direction < 0) {
+          // User reversed direction; allow reverse animation.
+          endLockRef.current = false;
+          releaseDirectionRef.current = null;
+        }
       }
 
       // After reaching a boundary (0 or 1), do not re-capture wheel inside the same
@@ -116,6 +141,9 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
         releaseDirectionRef.current = "down";
         setScrollProgress(1);
         updateStepFromProgress(1);
+        if (fullyVisible) {
+          endLockRef.current = true;
+        }
       } else if (snappedProgress === 0 && direction < 0) {
         capturedProgressRef.current = null;
         releaseDirectionRef.current = "up";
