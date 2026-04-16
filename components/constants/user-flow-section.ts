@@ -11,7 +11,11 @@ export const USER_FLOW_CARD_EXPANDED_HEIGHT = 400;
 export const USER_FLOW_CARD_HIDDEN_Y = 620;
 
 export type UserFlowCardTone = "purple" | "green" | "darkGreen";
-export type UserFlowCardIcon = "wallet" | "earn" | "deposit" | "predict";
+export type UserFlowCardIcon =
+  | "wallet"
+  | "deposit"
+  | "earn-yield-custom"
+  | "predict-events-custom";
 
 export type UserFlowCardDefinition = {
   id: string;
@@ -25,6 +29,7 @@ export type UserFlowCardState = {
   visible: boolean;
   top: number;
   height: number;
+  opacity?: number;
   delay?: number;
 };
 
@@ -44,7 +49,7 @@ export const USER_FLOW_CARDS: UserFlowCardDefinition[] = [
   },
   {
     id: "earn-yield",
-    icon: "earn",
+    icon: "earn-yield-custom",
     label: "Earn Yield",
     title: "Yield accumulates in the vault",
     tone: "green",
@@ -58,7 +63,7 @@ export const USER_FLOW_CARDS: UserFlowCardDefinition[] = [
   },
   {
     id: "allocate-yield",
-    icon: "predict",
+    icon: "predict-events-custom",
     label: "Predict Events",
     title: "Allocate yield to outcomes across various events",
     tone: "darkGreen",
@@ -86,7 +91,7 @@ export const USER_FLOW_SECTION_STEPS: UserFlowStepState[] = [
     image: "/user-flow/2.png",
     cards: {
       "connect-wallet": { visible: true, top: 0, height: USER_FLOW_CARD_COLLAPSED_HEIGHT },
-      "earn-yield": { visible: true, top: 150, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
+      "earn-yield": { visible: true, top: 465, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
       "deposit-funds": { visible: true, top: 130, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
       "allocate-yield": { visible: false, top: USER_FLOW_CARD_HIDDEN_Y, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
     },
@@ -98,7 +103,7 @@ export const USER_FLOW_SECTION_STEPS: UserFlowStepState[] = [
       "connect-wallet": { visible: true, top: 0, height: USER_FLOW_CARD_COLLAPSED_HEIGHT },
       "earn-yield": { visible: true, top: 82, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
       "deposit-funds": { visible: true, top: 0, height: USER_FLOW_CARD_COLLAPSED_HEIGHT },
-      "allocate-yield": { visible: true, top: 150, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
+      "allocate-yield": { visible: true, top: 465, height: USER_FLOW_CARD_EXPANDED_HEIGHT },
     },
   },
   {

@@ -1,12 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useInView, useMotionValueEvent, useScroll } from "framer-motion";
 import Image from "next/image";
 
 import {
   USER_FLOW_CARDS,
-  USER_FLOW_CARD_HIDDEN_Y,
   USER_FLOW_SECTION_CENTER_MAX_PX,
   USER_FLOW_SECTION_CONTENT_HEIGHT,
   USER_FLOW_SECTION_HEADLINE,
@@ -19,6 +18,17 @@ import { cn } from "@/lib/utils";
 
 const STEP_COUNT = USER_FLOW_SECTION_STEPS.length;
 const FLOW_SCROLL_MULTIPLIER = 5.4;
+const STEP_POINTS = USER_FLOW_SECTION_STEPS.map((_, i) => i / (STEP_COUNT - 1));
+const CARD_PROGRESS_OFFSET: Record<string, number> = {
+  "connect-wallet": 0,
+  "earn-yield": 0,
+  "deposit-funds": 0.03,
+  "allocate-yield": 0.02,
+};
+
+function lerp(from: number, to: number, t: number) {
+  return from + (to - from) * t;
+}
 
 type UserFlowSectionProps = {
   className?: string;
@@ -26,17 +36,18 @@ type UserFlowSectionProps = {
 
 export function UserFlowSection({ className }: UserFlowSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const headingRef = useRef<HTMLHeadingElement | null>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const headingInView = useInView(headingRef, { amount: 0.45, once: true });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.07, 0.16], [0, 1, 1]);
-  const titleY = useTransform(scrollYProgress, [0, 0.08], [40, 0]);
-
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     const clamped = Math.max(0, Math.min(0.9999, latest));
+    setScrollProgress(clamped);
     const nextIndex = Math.min(STEP_COUNT - 1, Math.floor(clamped * STEP_COUNT));
     setActiveStepIndex((prev) => (prev === nextIndex ? prev : nextIndex));
   });
@@ -46,6 +57,43 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
   const rightCards = USER_FLOW_CARDS.filter(
     (item) => item.id === "deposit-funds" || item.id === "allocate-yield"
   );
+  const getInterpolatedCardState = (cardId: string) => {
+    const offset = CARD_PROGRESS_OFFSET[cardId] ?? 0;
+    const shiftedProgress = Math.max(0, Math.min(1, (scrollProgress - offset) / (1 - offset)));
+
+    if (shiftedProgress <= STEP_POINTS[0]) {
+      const state = USER_FLOW_SECTION_STEPS[0].cards[cardId];
+      return { ...state, opacity: state.visible ? 1 : 0 };
+    }
+
+    if (shiftedProgress >= STEP_POINTS[STEP_POINTS.length - 1]) {
+      const state = USER_FLOW_SECTION_STEPS[STEP_POINTS.length - 1].cards[cardId];
+      return { ...state, opacity: state.visible ? 1 : 0 };
+    }
+
+    let segmentIndex = 0;
+    for (let i = 0; i < STEP_POINTS.length - 1; i += 1) {
+      if (shiftedProgress >= STEP_POINTS[i] && shiftedProgress <= STEP_POINTS[i + 1]) {
+        segmentIndex = i;
+        break;
+      }
+    }
+
+    const startPoint = STEP_POINTS[segmentIndex];
+    const endPoint = STEP_POINTS[segmentIndex + 1];
+    const segmentProgress = (shiftedProgress - startPoint) / (endPoint - startPoint);
+    const fromState = USER_FLOW_SECTION_STEPS[segmentIndex].cards[cardId];
+    const toState = USER_FLOW_SECTION_STEPS[segmentIndex + 1].cards[cardId];
+    const fromOpacity = fromState.visible ? 1 : 0;
+    const toOpacity = toState.visible ? 1 : 0;
+
+    return {
+      visible: lerp(fromOpacity, toOpacity, segmentProgress) > 0.02,
+      opacity: lerp(fromOpacity, toOpacity, segmentProgress),
+      top: lerp(fromState.top, toState.top, segmentProgress),
+      height: lerp(fromState.height, toState.height, segmentProgress),
+    };
+  };
 
   return (
     <section
@@ -63,8 +111,11 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
           style={{ height: USER_FLOW_SECTION_HEIGHT }}
         >
           <motion.h2
-            style={{ opacity: titleOpacity, y: titleY }}
-            className="mb-8 text-center text-[clamp(2rem,6vw,6rem)] font-bold leading-[1.02] tracking-tight text-brand-black sm:mb-10"
+            ref={headingRef}
+            initial={{ opacity: 0, y: 36 }}
+            animate={headingInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="relative z-30 mb-8 text-center text-[clamp(2rem,6vw,6rem)] font-bold leading-[1.02] tracking-tight text-brand-black sm:mb-10"
           >
             {USER_FLOW_SECTION_HEADLINE}
           </motion.h2>
@@ -85,13 +136,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
                 <UserFlowFloatingCard
                   key={card.id}
                   card={card}
-                  state={
-                    activeStep.cards[card.id] ?? {
-                      visible: false,
-                      top: USER_FLOW_CARD_HIDDEN_Y,
-                      height: 0,
-                    }
-                  }
+                  state={getInterpolatedCardState(card.id)}
                 />
               ))}
             </div>
@@ -131,13 +176,7 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
                 <UserFlowFloatingCard
                   key={card.id}
                   card={card}
-                  state={
-                    activeStep.cards[card.id] ?? {
-                      visible: false,
-                      top: USER_FLOW_CARD_HIDDEN_Y,
-                      height: 0,
-                    }
-                  }
+                  state={getInterpolatedCardState(card.id)}
                 />
               ))}
             </div>
