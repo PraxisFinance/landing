@@ -3,64 +3,46 @@
 import { useState } from "react";
 import Image from "next/image";
 
-import { ExpertRoleBadge } from "@/components/sections/expert-role-badge";
-import { ExpertSocialLinks, type ExpertSocialLink } from "@/components/sections/expert-social-links";
+import { TeamRoleBadge } from "@/components/sections/team/team-role-badge";
+import { TeamSocialLinks, type TeamSocialLink } from "@/components/sections/team/team-social-links";
 import { cn } from "@/lib/utils";
 
-type ExpertCardProps = {
-  expertIndex: number;
+type TeamCardProps = {
+  memberIndex: number;
   name: string;
   role: string;
   image: string;
   bio: string;
-  socials?: ExpertSocialLink[];
-  selected: boolean;
-  onSelect: () => void;
+  socials?: TeamSocialLink[];
   priority?: boolean;
   className?: string;
 };
 
-export function ExpertCard({
-  expertIndex,
+export function TeamCard({
+  memberIndex,
   name,
   role,
   image,
   bio,
   socials,
-  selected,
-  onSelect,
   priority,
   className,
-}: ExpertCardProps) {
+}: TeamCardProps) {
   const [hovered, setHovered] = useState(false);
-  const expanded = selected || hovered;
+  const expanded = hovered;
 
   return (
     <div
-      data-expert-index={expertIndex}
-      tabIndex={0}
-      aria-label={`${name}, ${role}${selected ? ", current" : ""}`}
-      onClick={onSelect}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onSelect();
-        }
-      }}
+      data-member-index={memberIndex}
+      aria-label={`${name}, ${role}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onFocus={() => setHovered(true)}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget)) setHovered(false);
-      }}
       className={cn(
-        "relative top-0 shrink-0 snap-center cursor-pointer overflow-hidden rounded-[28px] text-left shadow-md ring-1 ring-black/[0.08]",
-        /* `top` instead of translate: avoids compositor/snap fights that feel like “jumping” */
+        "relative top-0 shrink-0 flex-none snap-center cursor-pointer overflow-hidden rounded-[28px] text-left shadow-md ring-1 ring-black/[0.08]",
         "transition-[top,box-shadow] duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/50",
         !expanded && "hover:shadow-lg",
         expanded ? "-top-12 z-10 shadow-xl" : "z-0",
-        "h-[min(450px,85vh)] w-[min(100%,345px)] max-w-full",
+        "h-[450px] w-[345px]",
         className
       )}
     >
@@ -81,7 +63,7 @@ export function ExpertCard({
         aria-hidden
       />
 
-      <ExpertRoleBadge>{role}</ExpertRoleBadge>
+      <TeamRoleBadge>{role}</TeamRoleBadge>
 
       <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-col justify-end p-4 pt-24">
         <div className="flex flex-col gap-2">
@@ -99,7 +81,7 @@ export function ExpertCard({
               <p className="text-pretty pb-2 text-sm font-normal leading-snug text-white/95">{bio}</p>
               {socials && socials.length > 0 ? (
                 <div onClick={(e) => e.stopPropagation()} className="pt-0.5">
-                  <ExpertSocialLinks links={socials} />
+                  <TeamSocialLinks links={socials} />
                 </div>
               ) : null}
             </div>

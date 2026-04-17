@@ -3,26 +3,26 @@ import { SocialTelegramIcon } from "@/components/assets/social-telegram-icon";
 import { SocialXIcon } from "@/components/assets/social-x-icon";
 import { cn } from "@/lib/utils";
 
-export type ExpertSocialKind = "x" | "telegram" | "discord";
+export type TeamSocialKind = "x" | "telegram" | "discord";
 
-export type ExpertSocialLink = {
+export type TeamSocialLink = {
   label: string;
   href: string;
-  kind: ExpertSocialKind;
+  kind: TeamSocialKind;
 };
 
-const ICONS: Record<ExpertSocialKind, typeof SocialXIcon> = {
+const ICONS: Record<TeamSocialKind, typeof SocialXIcon> = {
   x: SocialXIcon,
   telegram: SocialTelegramIcon,
   discord: SocialDiscordIcon,
 };
 
-type ExpertSocialLinksProps = {
-  links: ExpertSocialLink[];
+type TeamSocialLinksProps = {
+  links: TeamSocialLink[];
   className?: string;
 };
 
-export function ExpertSocialLinks({ links, className }: ExpertSocialLinksProps) {
+export function TeamSocialLinks({ links, className }: TeamSocialLinksProps) {
   if (links.length === 0) return null;
 
   return (

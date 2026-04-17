@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 
-type ExpertRoleBadgeProps = {
+type TeamRoleBadgeProps = {
   children: string;
   className?: string;
 };
 
-export function ExpertRoleBadge({ children, className }: ExpertRoleBadgeProps) {
+export function TeamRoleBadge({ children, className }: TeamRoleBadgeProps) {
   return (
     <span
       className={cn(

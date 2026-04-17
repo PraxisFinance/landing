@@ -1,12 +1,12 @@
 import { AboutSection } from "@/components/sections/about/AboutSection";
 import { CoverSection } from "@/components/sections/cover/CoverSection";
-import { ExpertsSection } from "@/components/sections/ExpertsSection";
 import { FrequencyQuestionsSection } from "@/components/sections/FrequencyQuestionsSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
 import { JoinGetStartedSection } from "@/components/sections/JoinGetStartedSection";
 import { JoinWaitlistSection } from "@/components/sections/join-waitlist/JoinWaitlistSection";
 import { ProjectRoadmapSection } from "@/components/sections/roadmap/ProjectRoadmapSection";
+import { TeamSection } from "@/components/sections/team/TeamSection";
 import { UserFlowSection } from "@/components/sections/user-flow/UserFlowSection";
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
         <UserFlowSection />
         <JoinWaitlistSection />
         <ProjectRoadmapSection />
-        <ExpertsSection />
+        <TeamSection />
         <FrequencyQuestionsSection />
         <JoinGetStartedSection />
       </main>

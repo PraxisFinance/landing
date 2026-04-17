@@ -1,11 +1,11 @@
-import type { ExpertSocialLink } from "@/components/sections/expert-social-links";
+import type { TeamSocialLink } from "@/components/sections/team/team-social-links";
 
 export type ExpertEntry = {
   name: string;
   role: string;
   image: string;
   bio: string;
-  socials?: ExpertSocialLink[];
+  socials?: TeamSocialLink[];
 };
 
 export const EXPERTS_SECTION_HEADLINE = "Experts in DeFi Product Development" as const;
