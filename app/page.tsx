@@ -3,9 +3,9 @@ import { CoverSection } from "@/components/sections/cover/CoverSection";
 import { FAQSection } from "@/components/sections/faq/FAQSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
-import { JoinGetStartedSection } from "@/components/sections/JoinGetStartedSection";
 import { JoinWaitlistSection } from "@/components/sections/join-waitlist/JoinWaitlistSection";
 import { ProjectRoadmapSection } from "@/components/sections/roadmap/ProjectRoadmapSection";
+import { SocialMediaJoinSection } from "@/components/sections/social-media-join/SocialMediaJoinSection";
 import { TeamSection } from "@/components/sections/team/TeamSection";
 import { UserFlowSection } from "@/components/sections/user-flow/UserFlowSection";
 
@@ -22,7 +22,7 @@ export default function Home() {
         <ProjectRoadmapSection />
         <TeamSection />
         <FAQSection />
-        <JoinGetStartedSection />
+        <SocialMediaJoinSection />
       </main>
 
       <LandingFooter />

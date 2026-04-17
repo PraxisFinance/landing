@@ -1,13 +1,12 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { motion, useInView } from "framer-motion";
 
-import {
-  WaveRevealFadeUp,
-  WaveRevealHeadlineLines,
-  WaveRevealWords,
-  waveRevealTiming,
-} from "@/components/motion/wave-reveal";
+import { WaveRevealFadeUp, WaveRevealHeadlineLines, WaveRevealWords, waveRevealTiming } from "@/components/motion/wave-reveal";
 import {
   JOIN_GET_STARTED_CARDS,
   JOIN_GET_STARTED_COMMUNITY_DESCRIPTION,
@@ -31,9 +30,16 @@ import {
 } from "@/components/constants/join-get-started-section";
 import { cn } from "@/lib/utils";
 
-type JoinGetStartedSectionProps = {
+type SocialMediaJoinSectionProps = {
   className?: string;
 };
+
+const WAVE_STAGGER = 0.045;
+const WAVE_ITEM_DURATION = 0.48;
+const WAVE_LINE_DELAY = 0.34;
+const CARD_FLOAT_DURATION = 1.25;
+const CARD_FLOAT_STAGGER = 0.42;
+const CARD_FLOAT_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const webTitleWordCount = JOIN_GET_STARTED_WEB_TITLE.trim().split(/\s+/).length;
 const sectionTitleWordCount = JOIN_GET_STARTED_SECTION_TITLE.trim().split(/\s+/).length;
@@ -41,7 +47,6 @@ const cardsDelayBase =
   waveRevealTiming.initialDelay +
   sectionTitleWordCount * waveRevealTiming.wordStagger +
   waveRevealTiming.wordDuration * 0.25;
-const cardStagger = 0.08;
 
 const webDescriptionDelay =
   waveRevealTiming.initialDelay +
@@ -70,9 +75,48 @@ const communityLinksDelay =
   communityDescriptionWordCount * waveRevealTiming.wordStagger +
   waveRevealTiming.wordDuration * 0.15;
 
-export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps) {
+function WaveText({
+  text,
+  className,
+  start,
+}: {
+  text: string;
+  className: string;
+  start: boolean;
+}) {
+  const lines = text.split("\n");
+
+  return (
+    <div className={className}>
+      {lines.map((line, lineIndex) => (
+        <div key={`${line}-${lineIndex}`} className="block">
+          {line.split(" ").map((word, wordIndex) => (
+            <motion.span
+              key={`${word}-${wordIndex}`}
+              className="mr-[0.3em] inline-block"
+              initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+              animate={start ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
+              transition={{
+                duration: WAVE_ITEM_DURATION,
+                delay: lineIndex * WAVE_LINE_DELAY + wordIndex * WAVE_STAGGER,
+              }}
+            >
+              {word}
+            </motion.span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProps) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
+
   return (
     <section
+      ref={sectionRef}
       id="get-started"
       className={cn(
         "mx-auto w-full max-w-screen-2xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-5 lg:px-10 lg:pb-12 lg:pt-6",
@@ -80,12 +124,25 @@ export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps)
       )}
     >
       <div className="mx-auto w-full max-w-[min(100%,85rem)]">
-        <h2 className="text-center text-[clamp(1.9rem,6.2vw,5.4rem)] font-bold leading-[1.03] tracking-tight text-brand-black">
-          <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_SECTION_TITLE]} />
+        <h2 className="text-center text-brand-black">
+          <WaveText
+            text={JOIN_GET_STARTED_SECTION_TITLE}
+            className="ui-headline-1 block text-center"
+            start={sectionInView}
+          />
         </h2>
 
         <div className="mt-6 grid justify-items-center gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-4 lg:mt-8">
-          <WaveRevealFadeUp delay={cardsDelayBase}>
+          <motion.div
+            className="w-full"
+            initial={{ opacity: 0, y: 48 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : undefined}
+            transition={{
+              duration: CARD_FLOAT_DURATION,
+              delay: cardsDelayBase,
+              ease: CARD_FLOAT_EASE,
+            }}
+          >
             <article
               className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#9D94FF]")}
               style={{ maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W, minHeight: JOIN_GET_STARTED_PRODUCT_CARD_MIN_H }}
@@ -145,88 +202,106 @@ export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps)
                 />
               </div>
             </article>
-          </WaveRevealFadeUp>
+          </motion.div>
 
-          <WaveRevealFadeUp delay={cardsDelayBase + cardStagger}>
+          <motion.div
+            className="w-full"
+            initial={{ opacity: 0, y: 48 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : undefined}
+            transition={{
+              duration: CARD_FLOAT_DURATION,
+              delay: cardsDelayBase + CARD_FLOAT_STAGGER,
+              ease: CARD_FLOAT_EASE,
+            }}
+          >
             <article
               className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#0B5350]")}
               style={{ maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W, minHeight: JOIN_GET_STARTED_PRODUCT_CARD_MIN_H }}
             >
-            <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
-              <div
-                className={cn(
-                  "absolute right-0 top-1/2 grid shrink-0 -translate-y-1/2 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2",
-                  "max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
-                )}
-              >
-                {Array.from({ length: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT }, (_, i) => (
-                  <div
-                    key={i}
-                    className="shrink-0 rounded-full bg-[#00614D]"
-                    style={{ width: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX, height: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX }}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/18 to-transparent" />
-
-            <div className="absolute right-4 top-4 z-20 sm:right-5 sm:top-5">
-              <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[0.6875rem] font-medium leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06] sm:text-xs">
-                <span className="font-normal" style={{ color: JOIN_GET_STARTED_MOBILE_CARD_BG }}>
-                  {JOIN_GET_STARTED_MOBILE_STATUS.label}
-                </span>
-                <span
-                  className="size-1 shrink-0 rounded-full"
-                  style={{ backgroundColor: JOIN_GET_STARTED_MOBILE_CARD_BG }}
-                  aria-hidden
-                />
-                <span style={{ color: JOIN_GET_STARTED_MOBILE_CARD_BG }}>
-                  {JOIN_GET_STARTED_MOBILE_STATUS.text}
-                </span>
-              </span>
-            </div>
-
-            <div className="pointer-events-none absolute bottom-0 right-0 z-[5] h-[14rem] w-[min(100%,40rem)] sm:h-[17rem] sm:w-[min(100%,44rem)] lg:h-[19rem] lg:w-[min(100%,48rem)]">
-              <div className="relative h-full w-full">
-                <Image
-                  src={JOIN_GET_STARTED_CARDS.mobile}
-                  alt={JOIN_GET_STARTED_IMAGE_ALT.mobile}
-                  fill
-                  className="object-contain object-bottom object-right"
-                  sizes="(max-width: 768px) min(100vw, 710px), 480px"
-                />
-              </div>
-            </div>
-
-            <div className="relative z-10 flex max-w-[18rem] flex-col items-start">
-              <div>
-                <h3 className="text-xl font-bold leading-tight text-white sm:text-2xl">
-                  <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_MOBILE_TITLE]} />
-                </h3>
-                <WaveRevealWords
-                  text={JOIN_GET_STARTED_MOBILE_DESCRIPTION}
-                  delayStart={mobileDescriptionDelay}
-                  className="mt-1 text-sm text-white/95 sm:text-base"
-                />
-              </div>
-
-              <WaveRevealFadeUp delay={mobileButtonDelay}>
-                <Link
-                  href="#"
+              <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
+                <div
                   className={cn(
-                    "mt-4 inline-flex h-10 items-center gap-2 rounded-sm bg-white px-4 text-sm font-semibold text-brand-black",
-                    "transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                    "absolute right-0 top-1/2 grid shrink-0 -translate-y-1/2 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2",
+                    "max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
                   )}
                 >
-                  {JOIN_GET_STARTED_MOBILE_BUTTON_TEXT}
-                  <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
-                </Link>
-              </WaveRevealFadeUp>
-            </div>
-            </article>
-          </WaveRevealFadeUp>
+                  {Array.from({ length: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT }, (_, i) => (
+                    <div
+                      key={i}
+                      className="shrink-0 rounded-full bg-[#00614D]"
+                      style={{ width: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX, height: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX }}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/18 to-transparent" />
 
-          <WaveRevealFadeUp delay={cardsDelayBase + cardStagger * 2} className="w-full sm:col-span-2">
+              <div className="absolute right-4 top-4 z-20 sm:right-5 sm:top-5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[0.6875rem] font-medium leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06] sm:text-xs">
+                  <span className="font-normal" style={{ color: JOIN_GET_STARTED_MOBILE_CARD_BG }}>
+                    {JOIN_GET_STARTED_MOBILE_STATUS.label}
+                  </span>
+                  <span
+                    className="size-1 shrink-0 rounded-full"
+                    style={{ backgroundColor: JOIN_GET_STARTED_MOBILE_CARD_BG }}
+                    aria-hidden
+                  />
+                  <span style={{ color: JOIN_GET_STARTED_MOBILE_CARD_BG }}>
+                    {JOIN_GET_STARTED_MOBILE_STATUS.text}
+                  </span>
+                </span>
+              </div>
+
+              <div className="pointer-events-none absolute bottom-0 right-0 z-[5] h-[14rem] w-[min(100%,40rem)] sm:h-[17rem] sm:w-[min(100%,44rem)] lg:h-[19rem] lg:w-[min(100%,48rem)]">
+                <div className="relative h-full w-full">
+                  <Image
+                    src={JOIN_GET_STARTED_CARDS.mobile}
+                    alt={JOIN_GET_STARTED_IMAGE_ALT.mobile}
+                    fill
+                    className="object-contain object-bottom object-right"
+                    sizes="(max-width: 768px) min(100vw, 710px), 480px"
+                  />
+                </div>
+              </div>
+
+              <div className="relative z-10 flex max-w-[18rem] flex-col items-start">
+                <div>
+                  <h3 className="text-xl font-bold leading-tight text-white sm:text-2xl">
+                    <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_MOBILE_TITLE]} />
+                  </h3>
+                  <WaveRevealWords
+                    text={JOIN_GET_STARTED_MOBILE_DESCRIPTION}
+                    delayStart={mobileDescriptionDelay}
+                    className="mt-1 text-sm text-white/95 sm:text-base"
+                  />
+                </div>
+
+                <WaveRevealFadeUp delay={mobileButtonDelay}>
+                  <Link
+                    href="#"
+                    className={cn(
+                      "mt-4 inline-flex h-10 items-center gap-2 rounded-sm bg-white px-4 text-sm font-semibold text-brand-black",
+                      "transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                    )}
+                  >
+                    {JOIN_GET_STARTED_MOBILE_BUTTON_TEXT}
+                    <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
+                  </Link>
+                </WaveRevealFadeUp>
+              </div>
+            </article>
+          </motion.div>
+
+          <motion.div
+            className="w-full sm:col-span-2"
+            initial={{ opacity: 0, y: 48 }}
+            animate={sectionInView ? { opacity: 1, y: 0 } : undefined}
+            transition={{
+              duration: CARD_FLOAT_DURATION,
+              delay: cardsDelayBase + CARD_FLOAT_STAGGER * 2,
+              ease: CARD_FLOAT_EASE,
+            }}
+          >
             <article
               className={cn(
                 "relative w-full min-h-[18rem] justify-self-stretch overflow-hidden rounded-3xl bg-brand-gray",
@@ -276,7 +351,7 @@ export function JoinGetStartedSection({ className }: JoinGetStartedSectionProps)
                 </div>
               </div>
             </article>
-          </WaveRevealFadeUp>
+          </motion.div>
         </div>
       </div>
     </section>
