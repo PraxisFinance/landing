@@ -19,16 +19,16 @@ export function LandingFooter() {
   } as const;
 
   return (
-    <footer className="bg-brand-white pb-5">
+    <footer className="bg-brand-white">
       <div className="mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-10">
         <div
           className={cn(
             "rounded-t-[2rem] bg-brand-gray/90",
-            "p-[50px]",
-            "lg:min-h-[416px]"
+            "p-[50px] pb-[20px]",
+            "lg:flex lg:min-h-[416px] lg:flex-col"
           )}
         >
-          <div className="grid gap-10 lg:h-full lg:grid-cols-[minmax(0,240px)_1fr] lg:gap-12">
+          <div className="grid h-full flex-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr] lg:items-stretch lg:gap-12">
             <div className="space-y-6">
               <Link
                 href="/"
@@ -58,10 +58,10 @@ export function LandingFooter() {
 
             <nav
               aria-label="Footer navigation"
-              className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 sm:gap-x-10 lg:h-full lg:gap-x-12"
+              className="grid h-full auto-rows-fr grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 sm:gap-x-10 lg:gap-x-12"
             >
               {LANDING_FOOTER_GROUPS.map((group) => (
-                <div key={group.title} className="flex min-h-0 flex-col gap-2.5 lg:h-full">
+                <div key={group.title} className="flex h-full min-h-0 flex-col gap-2.5">
                   <h3 className="text-sm font-bold text-brand-black">{group.title}</h3>
                   <ul className="space-y-1 text-sm text-brand-black/75">
                     {group.links.map((link) => (
