@@ -32,25 +32,25 @@ export const navSections: NavSection[] = [
     label: "About",
     items: [
       {
-        href: "#",
+        href: "#about",
         title: "About product",
         description: "What is Praxis and how it work",
         Icon: AboutProjectIcon,
       },
       {
-        href: "#",
+        href: "#team-section",
         title: "Team",
         description: "Experts in DeFi and Gaming in web3",
         Icon: TeamIcon,
       },
       {
-        href: "#",
+        href: "#roadmap-section",
         title: "Roadmap",
         description: "Experts in DeFi and Gaming in web3.",
         Icon: RoadmapIcon,
       },
       {
-        href: "#",
+        href: "#social-media-join",
         title: "Contacts",
         description: "Join the community.",
         Icon: ContactsIcon,
@@ -62,13 +62,13 @@ export const navSections: NavSection[] = [
     label: "Products",
     items: [
       {
-        href: "#",
+        href: "#social-media-join",
         title: "BaseApp",
         description: "Mobile application in BaseApp.",
         Icon: BaseAppIcon,
       },
       {
-        href: "#",
+        href: "#social-media-join",
         title: "Web App (Soon)",
         description: "Full functionality available in your browser.",
         Icon: WebAppIcon,
@@ -80,7 +80,7 @@ export const navSections: NavSection[] = [
     label: "Resources",
     items: [
       {
-        href: "#",
+        href: "#faqSection",
         title: "FAQ",
         description: "Answers to common questions.",
         Icon: FaqIcon,

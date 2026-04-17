@@ -75,6 +75,19 @@ function WaveText({
 }
 
 export function CoverSection({ className }: CoverSectionProps) {
+  const scrollToWaitlist = () => {
+    const waitlistSection = document.getElementById("join-waitlist");
+    if (!waitlistSection) {
+      return;
+    }
+
+    waitlistSection.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
+
   return (
     <section
       className={cn(
@@ -126,8 +139,8 @@ export function CoverSection({ className }: CoverSectionProps) {
             transition={{ duration: 0.5, delay: subheadStartDelay + 0.35 }}
           >
             <Button
-              nativeButton={false}
-              render={<a href="#" />}
+              type="button"
+              onClick={scrollToWaitlist}
               size="lg"
               className={cn(
                 "h-12 gap-2 rounded-xl px-8 text-base font-semibold shadow-none",

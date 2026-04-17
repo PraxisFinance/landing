@@ -1,3 +1,5 @@
+"use client";
+
 import type { SVGProps } from "react";
 import Link from "next/link";
 
@@ -23,6 +25,19 @@ function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 export function LandingHeader() {
+  const handleWaitlistClick = () => {
+    const waitlistSection = document.getElementById("join-waitlist");
+    if (!waitlistSection) {
+      return;
+    }
+
+    waitlistSection.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
+
   return (
     <header className="bg-brand-white">
       <div className="mx-auto grid w-full max-w-screen-2xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 py-4 sm:px-6 lg:px-10">
@@ -41,6 +56,7 @@ export function LandingHeader() {
           <button
             type="button"
             className="hidden items-center gap-2 rounded-xl bg-brand-black px-5 py-2.5 text-sm font-medium text-brand-white transition hover:opacity-90 md:inline-flex"
+            onClick={handleWaitlistClick}
           >
             {LANDING_HEADER_WAITLIST_BUTTON_TEXT}
             <ArrowRightIcon className="size-4 shrink-0" />

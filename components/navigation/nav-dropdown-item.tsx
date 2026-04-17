@@ -1,3 +1,4 @@
+import type { MouseEventHandler } from "react";
 import type { NavDropdownEntry } from "@/components/navigation/nav-data";
 import { NavMenuIconWrapper } from "@/components/navigation/nav-menu-icon-wrapper";
 import { NavigationMenuLink } from "@/components/ui/navigation-menu";
@@ -9,10 +10,33 @@ type NavDropdownItemProps = {
 
 export function NavDropdownItem({ item }: NavDropdownItemProps) {
   const Icon = item.Icon;
+  const handleClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    if (!item.href.startsWith("#")) {
+      return;
+    }
+
+    const targetId = item.href.slice(1);
+    if (!targetId) {
+      return;
+    }
+
+    const targetElement = document.getElementById(targetId);
+    if (!targetElement) {
+      return;
+    }
+
+    event.preventDefault();
+    targetElement.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
 
   return (
     <NavigationMenuLink
       href={item.href}
+      onClick={handleClick}
       closeOnClick
       className={cn(
         "items-start gap-3 rounded-sm border border-brand-gray p-3 shadow-none",

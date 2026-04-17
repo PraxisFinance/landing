@@ -1,3 +1,6 @@
+"use client";
+
+import type { MouseEventHandler } from "react";
 import Link from "next/link";
 
 import { LogoIcon } from "@/components/assets/logo-icon";
@@ -12,6 +15,36 @@ import {
 import { cn } from "@/lib/utils";
 
 export function LandingFooter() {
+  const footerLinkTargets: Record<string, string> = {
+    "About product": "#about",
+    Team: "#team-section",
+    Roadmap: "#roadmap-section",
+    Contacts: "#social-media-join",
+    FAQ: "#faqSection",
+    "Web dApp": "#social-media-join",
+    "Mobile App": "#social-media-join",
+  };
+
+  const handleAnchorClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
+    const href = event.currentTarget.getAttribute("href");
+    if (!href || !href.startsWith("#") || href === "#") {
+      return;
+    }
+
+    const targetId = href.slice(1);
+    const targetElement = document.getElementById(targetId);
+    if (!targetElement) {
+      return;
+    }
+
+    event.preventDefault();
+    targetElement.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
+
   const socialIcons = {
     x: SocialXIcon,
     telegram: SocialTelegramIcon,
@@ -66,7 +99,11 @@ export function LandingFooter() {
                   <ul className="space-y-1 text-sm text-brand-black/75">
                     {group.links.map((link) => (
                       <li key={link}>
-                        <Link href="#" className="transition hover:text-brand-black">
+                        <Link
+                          href={footerLinkTargets[link] ?? "#"}
+                          onClick={handleAnchorClick}
+                          className="transition hover:text-brand-black"
+                        >
                           {link}
                         </Link>
                       </li>

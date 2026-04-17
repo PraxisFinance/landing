@@ -79,7 +79,7 @@ export function FAQSection({
   return (
     <section
       ref={sectionRef}
-      id="faq"
+      id="faqSection"
       className={cn(
         "mx-auto w-full max-w-screen-2xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-16",
         className

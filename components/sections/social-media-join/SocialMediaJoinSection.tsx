@@ -113,11 +113,23 @@ function WaveText({
 export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
+  const scrollToWaitlist = () => {
+    const waitlistSection = document.getElementById("join-waitlist");
+    if (!waitlistSection) {
+      return;
+    }
+
+    waitlistSection.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
 
   return (
     <section
       ref={sectionRef}
-      id="get-started"
+      id="social-media-join"
       className={cn(
         "mx-auto w-full max-w-screen-2xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-5 lg:px-10 lg:pb-12 lg:pt-6",
         className
@@ -279,6 +291,10 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                 <WaveRevealFadeUp delay={mobileButtonDelay}>
                   <Link
                     href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      scrollToWaitlist();
+                    }}
                     className={cn(
                       "mt-4 inline-flex h-10 items-center gap-2 rounded-sm bg-white px-4 text-sm font-semibold text-brand-black",
                       "transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
