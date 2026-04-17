@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 const WAVE_STAGGER = 0.045;
 const WAVE_ITEM_DURATION = 0.48;
 const WAVE_LINE_DELAY = 0.34;
-const STACK_STAGGER = 0.08;
+const STACK_START_DELAY = 0.28;
+const STACK_STAGGER = 0.14;
 const CARD_WIDTH_PX = 345;
 const CARD_GAP_PX = 16;
 const SCROLL_STEP_PX = CARD_WIDTH_PX + CARD_GAP_PX;
@@ -67,6 +68,7 @@ export function TeamSection({ className }: TeamSectionProps) {
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.3 });
   const [scrollPercent, setScrollPercent] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
+  const [hasMeasuredTrack, setHasMeasuredTrack] = useState(false);
   const totalCards = EXPERTS_SECTION_ITEMS.length;
 
   useEffect(() => {
@@ -74,6 +76,7 @@ export function TeamSection({ className }: TeamSectionProps) {
       const node = trackRef.current;
       if (!node) return;
       setTrackWidth(node.clientWidth);
+      setHasMeasuredTrack(true);
     };
 
     measure();
@@ -81,8 +84,16 @@ export function TeamSection({ className }: TeamSectionProps) {
     return () => window.removeEventListener("resize", measure);
   }, []);
 
-  const stackOffsets = useMemo(
-    () => {
+  useEffect(() => {
+    if (!hasMeasuredTrack) return;
+    const node = trackRef.current;
+    if (!node) return;
+    // Ensure stacked initial state is centered relative to section viewport.
+    node.scrollLeft = 0;
+    setScrollPercent(0);
+  }, [hasMeasuredTrack]);
+
+  const stackOffsets = useMemo(() => {
       if (!trackWidth) {
         return EXPERTS_SECTION_ITEMS.map(() => ({ x: 0, scale: 1 }));
       }
@@ -93,13 +104,15 @@ export function TeamSection({ className }: TeamSectionProps) {
         const naturalX = index * (CARD_WIDTH_PX + CARD_GAP_PX);
         const collapseToCenterX = stackCenterX - naturalX;
         return {
-          x: collapseToCenterX + delta * 18,
+          x: collapseToCenterX + delta * 10,
           scale: 1 - Math.abs(delta) * 0.025,
         };
       });
     },
     [totalCards, trackWidth]
   );
+
+  const shouldSpreadCards = sectionInView && hasMeasuredTrack;
 
   const handleTrackScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
     const node = event.currentTarget;
@@ -172,17 +185,19 @@ export function TeamSection({ className }: TeamSectionProps) {
 
       <div className="w-full min-w-0">
         <TeamCarouselTrack ref={trackRef} onScroll={handleTrackScroll} className="max-w-full">
-          {EXPERTS_SECTION_ITEMS.map((expert, i) => (
+          {hasMeasuredTrack
+            ? EXPERTS_SECTION_ITEMS.map((expert, i) => (
             <motion.div
               key={expert.name}
               initial={{ opacity: 1, x: stackOffsets[i].x, scale: stackOffsets[i].scale }}
-              animate={sectionInView ? { opacity: 1, x: 0, scale: 1 } : undefined}
+              animate={shouldSpreadCards ? { opacity: 1, x: 0, scale: 1 } : undefined}
               transition={{
-                duration: 0.8,
-                delay: i * STACK_STAGGER,
+                duration: 1.2,
+                delay: STACK_START_DELAY + i * STACK_STAGGER,
                 ease: [0.22, 1, 0.36, 1],
               }}
               className="shrink-0 will-change-transform"
+              style={{ zIndex: EXPERTS_SECTION_ITEMS.length - i }}
             >
               <TeamCard
                 memberIndex={i}
@@ -194,7 +209,8 @@ export function TeamSection({ className }: TeamSectionProps) {
                 priority={i < 4}
               />
             </motion.div>
-          ))}
+              ))
+            : null}
         </TeamCarouselTrack>
 
         <div className="mt-3 w-full px-1">
