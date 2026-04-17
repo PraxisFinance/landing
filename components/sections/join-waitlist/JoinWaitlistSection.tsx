@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRightIcon, CircleHelp } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -29,6 +29,24 @@ type JoinWaitlistSectionProps = {
 export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
   const [email, setEmail] = useState("");
   const [isEmailAccepted, setIsEmailAccepted] = useState(false);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [shouldAnimateIn, setShouldAnimateIn] = useState(false);
+
+  useEffect(() => {
+    const checkVisibility = () => {
+      const node = cardRef.current;
+      if (!node || shouldAnimateIn) return;
+      const rect = node.getBoundingClientRect();
+      const isVisible = rect.top <= window.innerHeight * 0.78 && rect.bottom >= 0;
+      if (isVisible) {
+        setShouldAnimateIn(true);
+      }
+    };
+
+    checkVisibility();
+    window.addEventListener("scroll", checkVisibility, { passive: true });
+    return () => window.removeEventListener("scroll", checkVisibility);
+  }, [shouldAnimateIn]);
 
   return (
     <section
@@ -39,10 +57,10 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
       )}
     >
       <motion.div
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.35 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        ref={cardRef}
+        initial={{ opacity: 0, y: 46 }}
+        animate={shouldAnimateIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
+        transition={{ delay: 0.34, duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
           "relative flex h-[450px] flex-col overflow-hidden rounded-[1.75rem] sm:rounded-[2rem]",
           "bg-brand-gray shadow-sm ring-1 ring-black/[0.06]"
