@@ -1,6 +1,6 @@
 import { AboutSection } from "@/components/sections/about/AboutSection";
 import { CoverSection } from "@/components/sections/cover/CoverSection";
-import { FrequencyQuestionsSection } from "@/components/sections/FrequencyQuestionsSection";
+import { FAQSection } from "@/components/sections/faq/FAQSection";
 import { LandingFooter } from "@/components/sections/LandingFooter";
 import { LandingHeader } from "@/components/sections/LandingHeader";
 import { JoinGetStartedSection } from "@/components/sections/JoinGetStartedSection";
@@ -21,7 +21,7 @@ export default function Home() {
         <JoinWaitlistSection />
         <ProjectRoadmapSection />
         <TeamSection />
-        <FrequencyQuestionsSection />
+        <FAQSection />
         <JoinGetStartedSection />
       </main>
 
