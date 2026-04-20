@@ -33,6 +33,8 @@ export function TeamSocialLinks({ links, className }: TeamSocialLinksProps) {
           <a
             key={`${kind}-${label}`}
             href={href}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
               "inline-flex size-10 shrink-0 items-center justify-center rounded-lg",
               "bg-brand-dark-purple text-white transition hover:bg-brand-dark-purple/90",
