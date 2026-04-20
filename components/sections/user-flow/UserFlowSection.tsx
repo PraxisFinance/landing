@@ -15,9 +15,8 @@ import { cn } from "@/lib/utils";
 
 const STEP_COUNT = USER_FLOW_SECTION_STEPS.length;
 const STEP_POINTS = USER_FLOW_SECTION_STEPS.map((_, i) => i / (STEP_COUNT - 1));
-const WHEEL_TO_PROGRESS = 0.00125;
-const PROGRESS_EPSILON = 0.0005;
-const VIEWPORT_EPSILON = 1;
+const SCROLL_PROGRESS_MAX = 0.9999;
+const USER_FLOW_SCROLL_LENGTH_MULTIPLIER = 2.35;
 const CARD_PROGRESS_OFFSET: Record<string, number> = {
   "connect-wallet": 0,
   "earn-yield": 0,
@@ -35,16 +34,14 @@ type UserFlowSectionProps = {
 
 export function UserFlowSection({ className }: UserFlowSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const capturedProgressRef = useRef<number | null>(null);
-  const releaseDirectionRef = useRef<"up" | "down" | null>(null);
-  const endLockRef = useRef(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const sectionInView = useInView(sectionRef, { amount: 0.2, once: true });
-  /** Progress 0→1 пока секция проходит мимо viewport: от «верх совпал с верхом» до «низ совпал с верхом» — ровно ~высота секции скролла, без лишней minHeight. */
+  // Keep the visual section size intact and map a longer page scroll range
+  // to the internal card animation progress.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   });
   const shouldShowHeading = sectionInView || scrollProgress > 0.001;
 
@@ -54,107 +51,10 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
   };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (
-      capturedProgressRef.current !== null ||
-      releaseDirectionRef.current !== null ||
-      endLockRef.current
-    ) {
-      return;
-    }
-    const clamped = Math.max(0, Math.min(0.9999, latest));
+    const clamped = Math.max(0, Math.min(SCROLL_PROGRESS_MAX, latest));
     setScrollProgress(clamped);
     updateStepFromProgress(clamped);
   });
-
-  useEffect(() => {
-    const onWheel = (event: WheelEvent) => {
-      const section = sectionRef.current;
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-      const viewportCenter = window.innerHeight / 2;
-      const sectionActive = rect.top <= viewportCenter && rect.bottom >= viewportCenter;
-      const fullyVisible =
-        rect.top >= -VIEWPORT_EPSILON &&
-        rect.bottom <= window.innerHeight + VIEWPORT_EPSILON;
-      if (!sectionActive) {
-        capturedProgressRef.current = null;
-        releaseDirectionRef.current = null;
-        endLockRef.current = false;
-        return;
-      }
-
-      if (endLockRef.current) {
-        const direction = Math.sign(event.deltaY);
-        if (direction > 0) {
-          // Keep page scrolling down; never restart animation while locked.
-          return;
-        }
-        if (direction < 0) {
-          // User reversed direction; allow reverse animation.
-          endLockRef.current = false;
-          releaseDirectionRef.current = null;
-        }
-      }
-
-      // After reaching a boundary (0 or 1), do not re-capture wheel inside the same
-      // viewport pass. Let page scroll naturally until section leaves active zone.
-      if (releaseDirectionRef.current !== null) {
-        return;
-      }
-
-      const currentProgress = capturedProgressRef.current ?? scrollProgress;
-      const direction = Math.sign(event.deltaY);
-      if (direction === 0) return;
-
-      const atStart = currentProgress <= PROGRESS_EPSILON;
-      const atEnd = currentProgress >= 1 - PROGRESS_EPSILON;
-      const leavingUp = atStart && direction < 0;
-      const leavingDown = atEnd && direction > 0;
-
-      if (leavingUp || leavingDown) {
-        capturedProgressRef.current = null;
-        releaseDirectionRef.current = leavingDown ? "down" : "up";
-        const boundaryProgress = leavingDown ? 1 : 0;
-        setScrollProgress(boundaryProgress);
-        updateStepFromProgress(boundaryProgress);
-        return;
-      }
-
-      event.preventDefault();
-      const nextProgress = Math.max(
-        0,
-        Math.min(1, currentProgress + event.deltaY * WHEEL_TO_PROGRESS)
-      );
-      const snappedProgress =
-        nextProgress <= PROGRESS_EPSILON
-          ? 0
-          : nextProgress >= 1 - PROGRESS_EPSILON
-            ? 1
-            : nextProgress;
-      capturedProgressRef.current = snappedProgress;
-      setScrollProgress(snappedProgress);
-      updateStepFromProgress(snappedProgress);
-
-      if (snappedProgress === 1 && direction > 0) {
-        capturedProgressRef.current = null;
-        releaseDirectionRef.current = "down";
-        setScrollProgress(1);
-        updateStepFromProgress(1);
-        if (fullyVisible) {
-          endLockRef.current = true;
-        }
-      } else if (snappedProgress === 0 && direction < 0) {
-        capturedProgressRef.current = null;
-        releaseDirectionRef.current = "up";
-        setScrollProgress(0);
-        updateStepFromProgress(0);
-      }
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: false });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [scrollProgress]);
 
   const activeStep = USER_FLOW_SECTION_STEPS[activeStepIndex];
   const leftCards = USER_FLOW_CARDS.filter((item) => item.id === "connect-wallet" || item.id === "earn-yield");
@@ -203,13 +103,16 @@ export function UserFlowSection({ className }: UserFlowSectionProps) {
     <section
       ref={sectionRef}
       id="user-flow"
-      style={{ height: USER_FLOW_SECTION_HEIGHT }}
+      style={{ height: USER_FLOW_SECTION_HEIGHT * USER_FLOW_SCROLL_LENGTH_MULTIPLIER }}
       className={cn(
-        "relative mx-auto w-full max-w-screen-2xl overflow-hidden bg-brand-white",
+        "relative mx-auto w-full max-w-screen-2xl bg-brand-white",
         className
       )}
     >
-      <div className="flex h-full items-center px-4 sm:px-6 lg:px-10">
+      <div
+        className="sticky top-0 flex items-center overflow-hidden px-4 sm:px-6 lg:px-10"
+        style={{ height: USER_FLOW_SECTION_HEIGHT }}
+      >
         <div
           className="mx-auto flex h-full w-full max-w-[min(100%,90rem)] min-h-0 flex-col"
         >
