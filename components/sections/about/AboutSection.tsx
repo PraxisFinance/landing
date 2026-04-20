@@ -51,7 +51,12 @@ const headlineMaxWordsPerLine = Math.max(
 );
 const headlineLineDuration = (headlineMaxWordsPerLine - 1) * WAVE_STAGGER + WAVE_ITEM_DURATION;
 const headlineTotalDuration = headlineLineDuration + (headlineLines.length - 1) * 0.32;
-const cardsStartDelay = headlineTotalDuration + 0.12;
+/** Pull card start earlier vs headline-end estimate so there is no dead gap after the headline wave. */
+const CARDS_ANIMATION_EARLIER_BY_SEC = 0.52;
+const cardsStartDelay = Math.max(0.04, headlineTotalDuration - CARDS_ANIMATION_EARLIER_BY_SEC);
+
+/** Start spread when the card block first enters the viewport (~10% visible), not when mostly on-screen. */
+const CARDS_IN_VIEW_AMOUNT = 0.1;
 
 type CardTarget = {
   x: number;
@@ -184,7 +189,7 @@ export function AboutSection({ className }: AboutSectionProps) {
               style={{ height: cardsHeight }}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, amount: 0.7 }}
+              viewport={{ once: true, amount: CARDS_IN_VIEW_AMOUNT }}
             >
               {ABOUT_SECTION_CARDS.map((card, index) => (
                 <motion.div
