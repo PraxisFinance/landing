@@ -20,7 +20,7 @@ export const EXPERTS_SECTION_ITEMS: ExpertEntry[] = [
     bio: "Sets product direction and partnerships, bringing years of experience scaling DeFi teams and go-to-market.",
     socials: [
       { label: "X (Twitter)", href: "https://x.com/ivlevspace", kind: "x" },
-      { label: "Telegram", href: "https://t.me/SpaceBanana", kind: "telegram" },
+      { label: "Telegram", href: "https://t.me/SpaceBanan", kind: "telegram" },
     ],
   },
   {
@@ -29,8 +29,8 @@ export const EXPERTS_SECTION_ITEMS: ExpertEntry[] = [
     image: "/team/mizori-shirouki.png",
     bio: "Product, marketing, and design. DeFi and gaming background with focus on UX and growth.",
     socials: [
-      { label: "X (Twitter)", href: "https://x.com/AlexScherbatyuk", kind: "x" },
-      { label: "Telegram", href: "https://t.me/@AlexScherbatyuk", kind: "telegram" },
+      { label: "X (Twitter)", href: "https://x.com/Shirouki_PM", kind: "x" },
+      { label: "Telegram", href: "https://t.me/Mizori_k", kind: "telegram" },
     ],
   },
   {
@@ -39,8 +39,8 @@ export const EXPERTS_SECTION_ITEMS: ExpertEntry[] = [
     image: "/team/alex-sherbatuk.png",
     bio: "Architects on-chain logic and backend services with a focus on security, gas efficiency, and reliability.",
     socials: [
-      { label: "X (Twitter)", href: "https://x.com/Scherbatuk", kind: "x" },
-      { label: "Telegram", href: "https://t.me/Scherbatuk", kind: "telegram" },
+      { label: "X (Twitter)", href: "https://x.com/AlexScherbatyuk", kind: "x" },
+      { label: "Telegram", href: "https://t.me/AlexScherbatyuk", kind: "telegram" },
     ],
   },
   {
@@ -50,7 +50,7 @@ export const EXPERTS_SECTION_ITEMS: ExpertEntry[] = [
     bio: "Owns narrative, community programs, and ecosystem communications across channels.",
     socials: [
       { label: "X (Twitter)", href: "https://x.com/Anthony_Solover", kind: "x" },
-      { label: "Telegram", href: "https://t.me/@FOS085", kind: "telegram" },
+      { label: "Telegram", href: "https://t.me/FOS085", kind: "telegram" },
     ],
   },
   {
