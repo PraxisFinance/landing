@@ -133,7 +133,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
       ref={sectionRef}
       id="social-media-join"
       className={cn(
-        "mx-auto w-full max-w-screen-2xl px-4 pb-8 pt-4 sm:px-6 sm:pb-10 sm:pt-5 lg:px-10 lg:pb-12 lg:pt-6",
+        "mx-auto w-full max-w-screen-2xl px-4 pb-[30px] pt-4 sm:px-6 sm:pb-[30px] sm:pt-5 lg:px-10 lg:pb-[30px] lg:pt-6",
         className
       )}
     >
@@ -339,7 +339,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
 
                   <WaveRevealFadeUp
                     delay={communityLinksDelay}
-                    className="mt-6 flex w-full max-w-[288px] flex-wrap gap-2 sm:mt-7"
+                    className="mt-auto flex w-full max-w-[288px] flex-wrap gap-2 pt-6 sm:pt-7"
                   >
                     {JOIN_GET_STARTED_COMMUNITY_LINKS.map((item) => {
                       const isTwitter = item.label === "Twitter";

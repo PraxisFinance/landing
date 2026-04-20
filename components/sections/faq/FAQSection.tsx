@@ -1,27 +1,23 @@
 "use client";
 
-import { useRef } from "react";
-import { Minus, Plus } from "lucide-react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
 import {
-  FREQUENCY_QUESTIONS_ANSWER_PLACEHOLDER,
   FREQUENCY_QUESTIONS_HEADLINE,
   FREQUENCY_QUESTIONS_ITEMS,
 } from "@/components/constants/frequency-questions-section";
 import type { FaqEntry } from "@/components/constants/frequency-questions-section";
 import { WaveRevealFadeUp, waveRevealTiming } from "@/components/motion/wave-reveal";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { FAQAccordionPanel } from "@/components/sections/faq/FAQAccordionPanel";
+import { Accordion } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const WAVE_STAGGER = 0.045;
 const WAVE_ITEM_DURATION = 0.48;
 const WAVE_LINE_DELAY = 0.34;
+const INITIAL_VISIBLE_FAQ_ITEMS = 6;
 
 const headlineWordCount = FREQUENCY_QUESTIONS_HEADLINE.trim().split(/\s+/).length;
 const contentDelayBase =
@@ -75,6 +71,9 @@ export function FAQSection({
 }: FAQSectionProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
+  const [showAllItems, setShowAllItems] = useState(false);
+  const visibleItems = showAllItems ? items : items.slice(0, INITIAL_VISIBLE_FAQ_ITEMS);
+  const shouldShowMoreButton = !showAllItems && items.length > INITIAL_VISIBLE_FAQ_ITEMS;
 
   return (
     <section
@@ -95,45 +94,23 @@ export function FAQSection({
 
       <WaveRevealFadeUp delay={contentDelayBase} className="mx-auto w-full max-w-3xl">
         <Accordion defaultValue={[]} className="gap-0">
-          {items.map((item) => {
-            const body = item.answer ?? FREQUENCY_QUESTIONS_ANSWER_PLACEHOLDER;
-
-            return (
-              <AccordionItem
-                key={item.id}
-                value={item.id}
-                className="mb-3 overflow-hidden rounded-2xl border-0 !border-b-0 bg-brand-gray/90 shadow-sm ring-1 ring-black/[0.05] last:mb-0"
-              >
-                <AccordionTrigger
-                  className={cn(
-                    "items-center gap-4 px-4 py-4 sm:px-5 sm:py-5",
-                    "text-left text-base font-bold text-brand-black sm:text-lg",
-                    "hover:no-underline",
-                    "[&_[data-slot=accordion-trigger-icon]]:hidden"
-                  )}
-                >
-                  <span className="min-w-0 flex-1">{item.question}</span>
-                  <span
-                    className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-white shadow-sm ring-1 ring-black/[0.06]"
-                    aria-hidden
-                  >
-                    <Plus className="size-4 text-brand-dark-purple group-aria-expanded/accordion-trigger:hidden" />
-                    <Minus className="hidden size-4 text-brand-dark-purple group-aria-expanded/accordion-trigger:inline" />
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent
-                  className={cn(
-                    "px-4 pt-0 pb-4 text-pretty text-sm leading-relaxed text-brand-black/80 sm:px-5 sm:pb-5 sm:text-[0.9375rem]",
-                    "[&_a]:text-brand-dark-purple [&_a]:underline",
-                    "[&_strong]:font-semibold [&_strong]:text-brand-black/90"
-                  )}
-                >
-                  {body}
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+          {visibleItems.map((item) => (
+            <FAQAccordionPanel key={item.id} item={item} />
+          ))}
         </Accordion>
+
+        {shouldShowMoreButton ? (
+          <div className="mt-6 flex justify-center sm:mt-7">
+            <Button
+              type="button"
+              variant="landing-dark-purple"
+              size="landing-sm"
+              onClick={() => setShowAllItems(true)}
+            >
+              Show more
+            </Button>
+          </div>
+        ) : null}
       </WaveRevealFadeUp>
     </section>
   );
