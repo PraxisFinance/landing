@@ -28,6 +28,7 @@ import {
   JOIN_GET_STARTED_WEB_STATUS,
   JOIN_GET_STARTED_WEB_TITLE,
 } from "@/components/constants/join-get-started-section";
+import { SocialMediaCloudPanel } from "@/components/sections/social-media-join/SocialMediaCloudPanel";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -367,17 +368,13 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                       );
                     })}
                   </WaveRevealFadeUp>
+
                 </div>
 
-                <div className="relative h-full min-h-[14rem] w-full lg:min-h-[min(20rem,45vh)]">
-                  <Image
-                    src={JOIN_GET_STARTED_CARDS.community}
-                    alt={JOIN_GET_STARTED_IMAGE_ALT.community}
-                    fill
-                    className="object-contain object-center lg:object-left"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
-                </div>
+                <SocialMediaCloudPanel
+                  links={JOIN_GET_STARTED_COMMUNITY_LINKS}
+                  revealDelay={communityLinksDelay}
+                />
               </div>
             </article>
           </motion.div>
