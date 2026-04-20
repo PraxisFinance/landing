@@ -28,6 +28,7 @@ import {
   JOIN_GET_STARTED_WEB_STATUS,
   JOIN_GET_STARTED_WEB_TITLE,
 } from "@/components/constants/join-get-started-section";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type SocialMediaJoinSectionProps = {
@@ -339,20 +340,32 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                     delay={communityLinksDelay}
                     className="mt-6 flex w-full max-w-[288px] flex-wrap gap-2 sm:mt-7"
                   >
-                    {JOIN_GET_STARTED_COMMUNITY_LINKS.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className={cn(
-                          "inline-flex h-10 w-[140px] shrink-0 items-center justify-center gap-2 rounded-lg px-3 text-xs font-semibold",
-                          "bg-brand-dark-purple text-white transition hover:bg-brand-dark-purple/90",
-                          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-dark-purple/40"
-                        )}
-                      >
-                        <item.icon className="size-[1.125rem] shrink-0" aria-hidden />
-                        <span className="truncate">{item.label}</span>
-                      </Link>
-                    ))}
+                    {JOIN_GET_STARTED_COMMUNITY_LINKS.map((item) => {
+                      const isTwitter = item.label === "Twitter";
+                      return (
+                        <Button
+                          key={item.label}
+                          type="button"
+                          variant="landing-dark-purple"
+                          size="default"
+                          disabled={!isTwitter}
+                          onClick={
+                            isTwitter
+                              ? () => window.open(item.href, "_blank", "noopener,noreferrer")
+                              : undefined
+                          }
+                          className={cn(
+                            "h-10 w-[140px] gap-2 rounded-lg px-3 text-xs font-semibold",
+                            !isTwitter &&
+                              "cursor-not-allowed bg-brand-dark-purple/45 text-white/70 hover:bg-brand-dark-purple/45"
+                          )}
+                          aria-label={item.label}
+                        >
+                          <item.icon className="size-[1.125rem] shrink-0" aria-hidden />
+                          <span className="truncate">{item.label}</span>
+                        </Button>
+                      );
+                    })}
                   </WaveRevealFadeUp>
                 </div>
 
