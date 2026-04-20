@@ -21,21 +21,13 @@ const STACK_STAGGER = 0.14;
 const CARD_WIDTH_PX = 345;
 const CARD_GAP_PX = 16;
 const SCROLL_STEP_PX = CARD_WIDTH_PX + CARD_GAP_PX;
-const SCROLL_EDGE_EPS = 1;
+const SCROLL_EDGE_EPS = 0.1;
 
 type TeamSectionProps = {
   className?: string;
 };
 
-function WaveText({
-  text,
-  className,
-  start,
-}: {
-  text: string;
-  className: string;
-  start: boolean;
-}) {
+function WaveText({ text, className, start }: { text: string; className: string; start: boolean }) {
   const lines = text.split("\n");
 
   return (
@@ -94,23 +86,21 @@ export function TeamSection({ className }: TeamSectionProps) {
   }, [hasMeasuredTrack]);
 
   const stackOffsets = useMemo(() => {
-      if (!trackWidth) {
-        return EXPERTS_SECTION_ITEMS.map(() => ({ x: 0, scale: 1 }));
-      }
-      const stackCenterX = (trackWidth - CARD_WIDTH_PX) / 2;
-      return EXPERTS_SECTION_ITEMS.map((_, index) => {
-        const centerIndex = (totalCards - 1) / 2;
-        const delta = index - centerIndex;
-        const naturalX = index * (CARD_WIDTH_PX + CARD_GAP_PX);
-        const collapseToCenterX = stackCenterX - naturalX;
-        return {
-          x: collapseToCenterX + delta * 10,
-          scale: 1 - Math.abs(delta) * 0.025,
-        };
-      });
-    },
-    [totalCards, trackWidth]
-  );
+    if (!trackWidth) {
+      return EXPERTS_SECTION_ITEMS.map(() => ({ x: 0, scale: 1 }));
+    }
+    const stackCenterX = (trackWidth - CARD_WIDTH_PX) / 2;
+    return EXPERTS_SECTION_ITEMS.map((_, index) => {
+      const centerIndex = (totalCards - 1) / 2;
+      const delta = index - centerIndex;
+      const naturalX = index * (CARD_WIDTH_PX + CARD_GAP_PX);
+      const collapseToCenterX = stackCenterX - naturalX;
+      return {
+        x: collapseToCenterX + delta * 10,
+        scale: 1 - Math.abs(delta) * 0.025,
+      };
+    });
+  }, [totalCards, trackWidth]);
 
   const shouldSpreadCards = sectionInView && hasMeasuredTrack;
 
@@ -126,19 +116,8 @@ export function TeamSection({ className }: TeamSectionProps) {
     node.scrollBy({ left: delta, behavior: "smooth" });
   };
 
-  const handleSliderChange = (value: number) => {
-    const node = trackRef.current;
-    if (!node) return;
-    const max = Math.max(0, node.scrollWidth - node.clientWidth);
-    node.scrollLeft = (value / 100) * max;
-    setScrollPercent(value);
-  };
-
-  const trackNode = trackRef.current;
-  const maxScrollLeft = trackNode ? Math.max(0, trackNode.scrollWidth - trackNode.clientWidth) : 0;
-  const canScrollPrev = !trackNode || trackNode.scrollLeft > SCROLL_EDGE_EPS;
-  const canScrollNext =
-    !trackNode || trackNode.scrollLeft < maxScrollLeft - SCROLL_EDGE_EPS;
+  const canScrollPrev = scrollPercent > SCROLL_EDGE_EPS;
+  const canScrollNext = scrollPercent < 100 - SCROLL_EDGE_EPS;
 
   return (
     <section
@@ -162,9 +141,9 @@ export function TeamSection({ className }: TeamSectionProps) {
             <Button
               onClick={() => scrollTrackBy(-SCROLL_STEP_PX)}
               disabled={!canScrollPrev}
-              variant="landing-light-purple"
+              variant="landing-dark-purple"
               size="landing-icon-sm"
-              className="rounded-xl disabled:cursor-not-allowed"
+              className="w-10 disabled:cursor-not-allowed"
               aria-label="Scroll team cards left"
             >
               <ChevronLeft className="size-5" strokeWidth={2} aria-hidden />
@@ -172,9 +151,9 @@ export function TeamSection({ className }: TeamSectionProps) {
             <Button
               onClick={() => scrollTrackBy(SCROLL_STEP_PX)}
               disabled={!canScrollNext}
-              variant="landing-light-purple"
+              variant="landing-dark-purple"
               size="landing-icon-sm"
-              className="rounded-xl disabled:cursor-not-allowed"
+              className="w-20 justify-end pr-3 disabled:cursor-not-allowed"
               aria-label="Scroll team cards right"
             >
               <ChevronRight className="size-5" strokeWidth={2} aria-hidden />
@@ -187,48 +166,31 @@ export function TeamSection({ className }: TeamSectionProps) {
         <TeamCarouselTrack ref={trackRef} onScroll={handleTrackScroll} className="max-w-full">
           {hasMeasuredTrack
             ? EXPERTS_SECTION_ITEMS.map((expert, i) => (
-            <motion.div
-              key={expert.name}
-              initial={{ opacity: 1, x: stackOffsets[i].x, scale: stackOffsets[i].scale }}
-              animate={shouldSpreadCards ? { opacity: 1, x: 0, scale: 1 } : undefined}
-              transition={{
-                duration: 1.2,
-                delay: STACK_START_DELAY + i * STACK_STAGGER,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="shrink-0 will-change-transform"
-              style={{ zIndex: EXPERTS_SECTION_ITEMS.length - i }}
-            >
-              <TeamCard
-                memberIndex={i}
-                name={expert.name}
-                role={expert.role}
-                image={expert.image}
-                bio={expert.bio}
-                socials={expert.socials}
-                priority={i < 4}
-              />
-            </motion.div>
+                <motion.div
+                  key={expert.name}
+                  initial={{ opacity: 1, x: stackOffsets[i].x, scale: stackOffsets[i].scale }}
+                  animate={shouldSpreadCards ? { opacity: 1, x: 0, scale: 1 } : undefined}
+                  transition={{
+                    duration: 1.2,
+                    delay: STACK_START_DELAY + i * STACK_STAGGER,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="shrink-0 will-change-transform"
+                  style={{ zIndex: EXPERTS_SECTION_ITEMS.length - i }}
+                >
+                  <TeamCard
+                    memberIndex={i}
+                    name={expert.name}
+                    role={expert.role}
+                    image={expert.image}
+                    bio={expert.bio}
+                    socials={expert.socials}
+                    priority={i < 4}
+                  />
+                </motion.div>
               ))
             : null}
         </TeamCarouselTrack>
-
-        <div className="mt-3 w-full px-1">
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={0.1}
-            value={scrollPercent}
-            onChange={(e) => handleSliderChange(Number(e.target.value))}
-            aria-label="Team cards horizontal scroll"
-            className={cn(
-              "h-1.5 w-full cursor-pointer appearance-none rounded-full bg-brand-gray",
-              "[&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-dark-purple",
-              "[&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-10 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-brand-dark-purple"
-            )}
-          />
-        </div>
       </div>
     </section>
   );
