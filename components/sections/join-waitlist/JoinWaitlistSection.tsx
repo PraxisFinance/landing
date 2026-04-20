@@ -27,8 +27,8 @@ type JoinWaitlistSectionProps = {
 };
 
 export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
-  const [email, setEmail] = useState("");
-  const [isEmailAccepted, setIsEmailAccepted] = useState(false);
+  const [walletAddress, setWalletAddress] = useState("");
+  const [isAddressAccepted, setIsAddressAccepted] = useState(false);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [shouldAnimateIn, setShouldAnimateIn] = useState(false);
 
@@ -99,24 +99,24 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
             </p>
 
             <div className="mt-4 w-full max-w-md sm:mt-5">
-              {isEmailAccepted ? (
+              {isAddressAccepted ? (
                 <JoinWaitlistAcceptedState />
               ) : (
                 <form
                   className="flex flex-col gap-2"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    if (!email.trim()) return;
-                    setIsEmailAccepted(true);
+                    if (!walletAddress.trim()) return;
+                    setIsAddressAccepted(true);
                   }}
                 >
                   <div className="relative w-full">
                     <Input
-                      type="email"
-                      name="email"
-                      autoComplete="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      name="walletAddress"
+                      autoComplete="off"
+                      value={walletAddress}
+                      onChange={(e) => setWalletAddress(e.target.value)}
                       placeholder={JOIN_WAITLIST_INPUT_PLACEHOLDER}
                       className={cn(
                         "h-11 rounded-lg border-0 bg-white px-4 pr-11 text-base shadow-sm ring-1 ring-black/[0.06]",
