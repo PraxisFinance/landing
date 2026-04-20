@@ -44,7 +44,7 @@ export function SocialMediaCloudLinkButton({
       animate={{
         x: [0, 5, -3, 0],
         y: [0, -8, 4, 0],
-        rotate: [baseRotateDeg, baseRotateDeg + 2.5, baseRotateDeg - 2, baseRotateDeg],
+        rotate: [baseRotateDeg, baseRotateDeg + 20, baseRotateDeg - 20, baseRotateDeg],
       }}
       whileHover={{ scale: 1.14 }}
       transition={{
@@ -68,13 +68,13 @@ export function SocialMediaCloudLinkButton({
               }
         }
         className={cn(
-          "relative h-[200px] w-[200px] overflow-hidden rounded-full p-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "relative h-[220px] w-[220px] overflow-hidden rounded-full p-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
           "!bg-transparent hover:!bg-transparent",
           disabled && "cursor-not-allowed"
         )}
         aria-label={label}
       >
-        <Image src={imageSrc} alt={label} fill className="object-cover" sizes="200px" />
+        <Image src={imageSrc} alt={label} fill className="object-cover" sizes="220px" />
       </Button>
     </motion.div>
   );

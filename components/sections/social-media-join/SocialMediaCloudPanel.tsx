@@ -26,10 +26,10 @@ const FLOAT_BY_LABEL: Record<string, { rotate: number; duration: number; delay: 
 };
 
 const POSITION_BY_LABEL: Record<string, string> = {
-  Twitter: "left-[14%] top-[2%] z-30",
-  Discord: "right-[14%] top-[1%] z-20",
-  Telegram: "left-[30%] bottom-[0%] z-10",
-  Reddit: "right-[8%] bottom-[1%] z-40",
+  Twitter: "left-[9%] top-[-4%] z-30",
+  Discord: "right-[9%] top-[-5%] z-20",
+  Telegram: "left-[25%] bottom-[-5%] z-10",
+  Reddit: "right-[3%] bottom-[-4%] z-40",
 };
 
 export function SocialMediaCloudPanel({ links, revealDelay }: SocialMediaCloudPanelProps) {
