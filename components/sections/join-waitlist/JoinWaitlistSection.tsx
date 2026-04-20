@@ -124,17 +124,19 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                         "focus-visible:ring-2 focus-visible:ring-brand-dark-purple/35"
                       )}
                     />
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       className={cn(
-                        "absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-brand-black/40",
+                        "absolute right-3 top-1/2 -translate-y-1/2 rounded-full text-brand-black/40",
                         "transition hover:text-brand-black/60",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-dark-purple/40"
                       )}
                       aria-label={JOIN_WAITLIST_HELP_LABEL}
                     >
                       <CircleHelp className="size-5" strokeWidth={1.75} />
-                    </button>
+                    </Button>
                   </div>
 
                   <Button

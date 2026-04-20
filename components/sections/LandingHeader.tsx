@@ -9,6 +9,7 @@ import {
   LANDING_HEADER_WAITLIST_BUTTON_TEXT,
 } from "@/components/constants/landing-header";
 import { HeaderDesktopNav, HeaderMobileMenuButton } from "@/components/navigation";
+import { Button } from "@/components/ui/button";
 
 function ArrowRightIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -53,14 +54,16 @@ export function LandingHeader() {
         <HeaderDesktopNav />
         <div className="flex items-center justify-end gap-2">
           <HeaderMobileMenuButton />
-          <button
+          <Button
             type="button"
-            className="hidden items-center gap-2 rounded-xl bg-brand-black px-5 py-2.5 text-sm font-medium text-brand-white transition hover:opacity-90 md:inline-flex"
+            variant="landing-black"
+            size="landing-sm"
+            className="hidden items-center rounded-xl md:inline-flex"
             onClick={handleWaitlistClick}
           >
             {LANDING_HEADER_WAITLIST_BUTTON_TEXT}
             <ArrowRightIcon className="size-4 shrink-0" />
-          </button>
+          </Button>
         </div>
       </div>
     </header>

@@ -1,10 +1,14 @@
+import { Button } from "@/components/ui/button";
+
 export function HeaderMobileMenuButton() {
   return (
-    <button
+    <Button
       type="button"
-      className="rounded-sm bg-brand-gray px-4 py-2 text-sm font-medium text-brand-black md:hidden"
+      variant="landing-white-dark-text"
+      size="default"
+      className="bg-brand-gray px-4 md:hidden"
     >
       Menu
-    </button>
+    </Button>
   );
 }
