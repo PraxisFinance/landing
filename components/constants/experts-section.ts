@@ -44,7 +44,7 @@ export const EXPERTS_SECTION_ITEMS: ExpertEntry[] = [
     ],
   },
   {
-    name: "Anton Solover",
+    name: "Anthony Solover",
     role: "Content & Community Lead",
     image: "/team/anton-solover.png",
     bio: "Owns narrative, community programs, and ecosystem communications across channels.",
