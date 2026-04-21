@@ -29,6 +29,8 @@ type JoinWaitlistSectionProps = {
 export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
   const [walletAddress, setWalletAddress] = useState("");
   const [isAddressAccepted, setIsAddressAccepted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [shouldAnimateIn, setShouldAnimateIn] = useState(false);
 
@@ -104,10 +106,28 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
               ) : (
                 <form
                   className="flex flex-col gap-2"
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
-                    if (!walletAddress.trim()) return;
-                    setIsAddressAccepted(true);
+                    if (!walletAddress.trim() || isSubmitting) return;
+                    setIsSubmitting(true);
+                    setSubmitError(null);
+                    try {
+                      const res = await fetch("/api/waitlist", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ walletAddress: walletAddress.trim() }),
+                      });
+                      if (!res.ok) {
+                        const data = await res.json().catch(() => ({}));
+                        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+                      } else {
+                        setIsAddressAccepted(true);
+                      }
+                    } catch {
+                      setSubmitError("Network error. Please try again.");
+                    } finally {
+                      setIsSubmitting(false);
+                    }
                   }}
                 >
                   <div className="relative w-full">
@@ -139,13 +159,18 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                     </Button>
                   </div>
 
+                  {submitError && (
+                    <p className="text-sm text-red-500">{submitError}</p>
+                  )}
                   <Button
                     type="submit"
                     size="lg"
+                    disabled={isSubmitting}
                     className={cn(
                       "h-11 w-full gap-2 rounded-lg px-7 text-base font-semibold shadow-none sm:w-auto sm:self-start",
                       "bg-brand-black text-white hover:bg-brand-black/90",
-                      "focus-visible:ring-brand-dark-purple/40"
+                      "focus-visible:ring-brand-dark-purple/40",
+                      "disabled:opacity-60"
                     )}
                   >
                     {JOIN_WAITLIST_BUTTON_TEXT}
