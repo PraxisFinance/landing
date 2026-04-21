@@ -40,13 +40,13 @@ export const navSections: NavSection[] = [
       {
         href: "#team-section",
         title: "Team",
-        description: "Experts in DeFi and Gaming in web3",
+        description: "Experts in DeFi and web3 Gaming.",
         Icon: TeamIcon,
       },
       {
         href: "#roadmap-section",
         title: "Roadmap",
-        description: "Experts in DeFi and Gaming in web3.",
+        description: "Experts in DeFi and web3 Gaming.",
         Icon: RoadmapIcon,
       },
       {
