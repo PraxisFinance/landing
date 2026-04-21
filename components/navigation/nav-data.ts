@@ -26,6 +26,12 @@ export type NavSection = {
   items: NavDropdownEntry[];
 };
 
+export type MobileNavEntry = {
+  href: string;
+  title: string;
+  Icon: ComponentType;
+};
+
 export const navSections: NavSection[] = [
   {
     id: "about",
@@ -122,5 +128,46 @@ export const navSections: NavSection[] = [
         Icon: BugBountyIcon,
       },
     ],
+  },
+];
+
+export const mobileProductNavItems: MobileNavEntry[] = [
+  {
+    href: "#social-media-join",
+    title: "BaseApp",
+    Icon: BaseAppIcon,
+  },
+  {
+    href: "#social-media-join",
+    title: "Web App (Soon)",
+    Icon: WebAppIcon,
+  },
+];
+
+export const mobileSectionNavItems: MobileNavEntry[] = [
+  {
+    href: "#about",
+    title: "About product",
+    Icon: AboutProjectIcon,
+  },
+  {
+    href: "#roadmap-section",
+    title: "Roadmap",
+    Icon: RoadmapIcon,
+  },
+  {
+    href: "#team-section",
+    title: "Team",
+    Icon: TeamIcon,
+  },
+  {
+    href: "#faqSection",
+    title: "FAQ",
+    Icon: FaqIcon,
+  },
+  {
+    href: "#social-media-join",
+    title: "Contacts",
+    Icon: ContactsIcon,
   },
 ];

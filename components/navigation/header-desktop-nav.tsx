@@ -23,7 +23,7 @@ const triggerClassName = cn(
 export function HeaderDesktopNav() {
   return (
     <NavigationMenu
-      className="relative z-50 hidden max-w-none justify-center md:flex"
+      className="relative z-50 hidden max-w-none justify-center lg:flex"
       align="center"
     >
       <NavigationMenuList className="flex-wrap justify-center gap-2">
