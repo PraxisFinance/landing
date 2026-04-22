@@ -8,6 +8,8 @@ import {
   FREQUENCY_QUESTIONS_ITEMS,
 } from "@/components/constants/frequency-questions-section";
 import type { FaqEntry } from "@/components/constants/frequency-questions-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { WaveRevealFadeUp, waveRevealTiming } from "@/components/motion/wave-reveal";
 import { FAQAccordionPanel } from "@/components/sections/faq/FAQAccordionPanel";
 import { Accordion } from "@/components/ui/accordion";
@@ -69,6 +71,12 @@ export function FAQSection({
   className,
   items = FREQUENCY_QUESTIONS_ITEMS,
 }: FAQSectionProps) {
+  const isMobile = useIsMobile();
+  const faqTextSizes = SECTION_TEXT_SIZES.faq;
+  const titleTextClass = isMobile ? faqTextSizes.title.mobile : faqTextSizes.title.desktop;
+  const questionTextClass = isMobile ? faqTextSizes.question.mobile : faqTextSizes.question.desktop;
+  const answerTextClass = isMobile ? faqTextSizes.answer.mobile : faqTextSizes.answer.desktop;
+
   const sectionRef = useRef<HTMLElement | null>(null);
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
   const [showAllItems, setShowAllItems] = useState(false);
@@ -84,10 +92,10 @@ export function FAQSection({
         className
       )}
     >
-      <h2 className="mb-8 text-center text-brand-black sm:mb-10 lg:mb-12">
+      <h2 className="mb-5 text-center text-brand-black md:mb-10 lg:mb-12">
         <WaveText
           text={FREQUENCY_QUESTIONS_HEADLINE}
-          className="ui-headline-1 block text-center"
+          className={cn(titleTextClass, "block text-center")}
           start={sectionInView}
         />
       </h2>
@@ -95,7 +103,12 @@ export function FAQSection({
       <WaveRevealFadeUp delay={contentDelayBase} className="mx-auto w-full max-w-3xl">
         <Accordion defaultValue={[]} className="gap-0">
           {visibleItems.map((item) => (
-            <FAQAccordionPanel key={item.id} item={item} />
+            <FAQAccordionPanel
+              key={item.id}
+              item={item}
+              questionTextClassName={questionTextClass}
+              answerTextClassName={answerTextClass}
+            />
           ))}
         </Accordion>
 

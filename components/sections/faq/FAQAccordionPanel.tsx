@@ -14,22 +14,28 @@ import { cn } from "@/lib/utils";
 
 type FAQAccordionPanelProps = {
   item: FaqEntry;
+  questionTextClassName: string;
+  answerTextClassName: string;
 };
 
 export const FAQAccordionPanel = memo(function FAQAccordionPanel({
   item,
+  questionTextClassName,
+  answerTextClassName,
 }: FAQAccordionPanelProps) {
   const body = item.answer ?? FREQUENCY_QUESTIONS_ANSWER_PLACEHOLDER;
 
   return (
     <AccordionItem
       value={item.id}
-      className="mb-3 overflow-hidden rounded-2xl border-0 !border-b-0 bg-brand-gray/90 shadow-sm ring-1 ring-black/[0.05] last:mb-0"
+      className="mb-3 overflow-hidden rounded-xl border-0 !border-b-0 bg-brand-gray/90 shadow-sm ring-1 ring-black/[0.05] last:mb-0 md:rounded-2xl"
     >
       <AccordionTrigger
         className={cn(
           "items-center gap-4 px-4 py-4 sm:px-5 sm:py-5",
-          "text-left text-base font-bold text-brand-black sm:text-lg",
+          "text-left text-brand-black",
+          questionTextClassName,
+          "font-bold",
           "hover:no-underline",
           "[&_[data-slot=accordion-trigger-icon]]:hidden"
         )}
@@ -45,7 +51,8 @@ export const FAQAccordionPanel = memo(function FAQAccordionPanel({
       </AccordionTrigger>
       <AccordionContent
         className={cn(
-          "px-4 pt-0 pb-4 text-pretty text-sm leading-relaxed text-brand-black/80 sm:px-5 sm:pb-5 sm:text-[0.9375rem]",
+          "px-4 pt-0 pb-4 text-pretty leading-relaxed text-brand-black/80 sm:px-5 sm:pb-5",
+          answerTextClassName,
           "[&_a]:text-brand-dark-purple [&_a]:underline",
           "[&_strong]:font-semibold [&_strong]:text-brand-black/90"
         )}
