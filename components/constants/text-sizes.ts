@@ -19,10 +19,17 @@ type JoinWaitlistSectionTextSizes = {
   description: DeviceTextSize;
 };
 
+type RoadmapSectionTextSizes = {
+  title: DeviceTextSize;
+  cardQuarter: DeviceTextSize;
+  cardBody: DeviceTextSize;
+};
+
 type SectionTextSizes = {
   cover: CoverSectionTextSizes;
   about: AboutSectionTextSizes;
   joinWaitlist: JoinWaitlistSectionTextSizes;
+  roadmap: RoadmapSectionTextSizes;
 };
 
 export const SECTION_TEXT_SIZES: SectionTextSizes = {
@@ -58,6 +65,20 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
     description: {
       mobile: "ui-text-7",
       desktop: "ui-text-3",
+    },
+  },
+  roadmap: {
+    title: {
+      mobile: "ui-headline-4",
+      desktop: "ui-headline-1",
+    },
+    cardQuarter: {
+      mobile: "ui-text-8",
+      desktop: "ui-text-8",
+    },
+    cardBody: {
+      mobile: "ui-text-5",
+      desktop: "ui-text-5",
     },
   },
 };
