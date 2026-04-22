@@ -38,6 +38,16 @@ type FaqSectionTextSizes = {
   answer: DeviceTextSize;
 };
 
+type SocialMediaJoinSectionTextSizes = {
+  sectionTitle: DeviceTextSize;
+  productCardTitle: DeviceTextSize;
+  productCardDescription: DeviceTextSize;
+  statusPill: DeviceTextSize;
+  communityCardTitle: DeviceTextSize;
+  communityCardDescription: DeviceTextSize;
+  productCtaButton: DeviceTextSize;
+};
+
 type SectionTextSizes = {
   cover: CoverSectionTextSizes;
   about: AboutSectionTextSizes;
@@ -45,6 +55,7 @@ type SectionTextSizes = {
   roadmap: RoadmapSectionTextSizes;
   team: TeamSectionTextSizes;
   faq: FaqSectionTextSizes;
+  socialMediaJoin: SocialMediaJoinSectionTextSizes;
 };
 
 export const SECTION_TEXT_SIZES: SectionTextSizes = {
@@ -126,6 +137,36 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
     answer: {
       mobile: "ui-text-7",
       desktop: "ui-text-7",
+    },
+  },
+  socialMediaJoin: {
+    sectionTitle: {
+      mobile: "ui-headline-4",
+      desktop: "ui-headline-1",
+    },
+    productCardTitle: {
+      mobile: "ui-text-4",
+      desktop: "ui-text-2",
+    },
+    productCardDescription: {
+      mobile: "ui-text-10",
+      desktop: "ui-text-7",
+    },
+    statusPill: {
+      mobile: "ui-text-11",
+      desktop: "ui-text-11",
+    },
+    communityCardTitle: {
+      mobile: "ui-headline-4",
+      desktop: "ui-headline-3",
+    },
+    communityCardDescription: {
+      mobile: "ui-text-10",
+      desktop: "ui-text-7",
+    },
+    productCtaButton: {
+      mobile: "ui-text-10",
+      desktop: "ui-text-10",
     },
   },
 };

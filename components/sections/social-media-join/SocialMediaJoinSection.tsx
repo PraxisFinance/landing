@@ -18,8 +18,11 @@ import {
   JOIN_GET_STARTED_MOBILE_DESCRIPTION,
   JOIN_GET_STARTED_MOBILE_STATUS,
   JOIN_GET_STARTED_MOBILE_TITLE,
-  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT,
-  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX,
+  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_DESKTOP,
+  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_MOBILE,
+  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_DESKTOP,
+  JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_MOBILE,
+  JOIN_GET_STARTED_PRODUCT_CARD_HEIGHT_MOBILE_PX,
   JOIN_GET_STARTED_PRODUCT_CARD_MAX_W,
   JOIN_GET_STARTED_PRODUCT_CARD_MIN_H,
   JOIN_GET_STARTED_SECTION_TITLE,
@@ -28,6 +31,8 @@ import {
   JOIN_GET_STARTED_WEB_STATUS,
   JOIN_GET_STARTED_WEB_TITLE,
 } from "@/components/constants/join-get-started-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { SocialMediaCloudPanel } from "@/components/sections/social-media-join/SocialMediaCloudPanel";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -113,6 +118,32 @@ function WaveText({
 }
 
 export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProps) {
+  const isMobile = useIsMobile();
+  const smj = SECTION_TEXT_SIZES.socialMediaJoin;
+  const sectionTitleClass = isMobile ? smj.sectionTitle.mobile : smj.sectionTitle.desktop;
+  const productCardTitleClass = isMobile ? smj.productCardTitle.mobile : smj.productCardTitle.desktop;
+  const productCardDescriptionClass = isMobile
+    ? smj.productCardDescription.mobile
+    : smj.productCardDescription.desktop;
+  const statusPillClass = isMobile ? smj.statusPill.mobile : smj.statusPill.desktop;
+  const communityCardTitleClass = isMobile ? smj.communityCardTitle.mobile : smj.communityCardTitle.desktop;
+  const communityCardDescriptionClass = isMobile
+    ? smj.communityCardDescription.mobile
+    : smj.communityCardDescription.desktop;
+  const productCtaButtonClass = isMobile ? smj.productCtaButton.mobile : smj.productCtaButton.desktop;
+
+  const productCardLayoutStyle = {
+    maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W,
+    minHeight: isMobile ? JOIN_GET_STARTED_PRODUCT_CARD_HEIGHT_MOBILE_PX : JOIN_GET_STARTED_PRODUCT_CARD_MIN_H,
+  } as const;
+
+  const productCircleCount = isMobile
+    ? JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_MOBILE
+    : JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_DESKTOP;
+  const productCirclePx = isMobile
+    ? JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_MOBILE
+    : JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_DESKTOP;
+
   const sectionRef = useRef<HTMLElement | null>(null);
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
   const scrollToWaitlist = () => {
@@ -141,12 +172,12 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
         <h2 className="text-center text-brand-black">
           <WaveText
             text={JOIN_GET_STARTED_SECTION_TITLE}
-            className="ui-headline-1 block text-center"
+            className={cn(sectionTitleClass, "block text-center")}
             start={sectionInView}
           />
         </h2>
 
-        <div className="mt-6 grid justify-items-center gap-3 sm:mt-7 sm:grid-cols-2 sm:gap-4 lg:mt-8">
+        <div className="mt-6 grid grid-cols-1 justify-items-center gap-3 md:mt-7 md:grid-cols-2 md:gap-4 lg:mt-8">
           <motion.div
             className="w-full"
             initial={{ opacity: 0, y: 48 }}
@@ -159,28 +190,36 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           >
             <article
               className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#9D94FF]")}
-              style={{ maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W, minHeight: JOIN_GET_STARTED_PRODUCT_CARD_MIN_H }}
+              style={productCardLayoutStyle}
             >
               <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
                 <div
                   className={cn(
-                    "absolute right-0 top-1/2 grid shrink-0 -translate-y-1/2 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2",
-                    "max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
+                    "absolute top-1/2 grid shrink-0 -translate-y-1/2",
+                    isMobile
+                      ? "left-0 grid-cols-4 grid-rows-2 gap-2"
+                      : "right-0 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2 max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
                   )}
                 >
-                  {Array.from({ length: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT }, (_, i) => (
+                  {Array.from({ length: productCircleCount }, (_, i) => (
                     <div
                       key={i}
                       className="shrink-0 rounded-full bg-brand-light-purple/45 sm:bg-brand-light-purple/50"
-                      style={{ width: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX, height: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX }}
+                      style={{ width: productCirclePx, height: productCirclePx }}
                     />
                   ))}
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-[#7B72E8]/25 to-transparent" />
 
-              <div className="absolute right-4 top-4 z-20 sm:right-5 sm:top-5">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[0.6875rem] font-medium leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06] sm:text-xs">
+              <div className="absolute bottom-4 left-4 z-20 md:bottom-auto md:left-auto md:right-4 md:top-4 lg:right-5 lg:top-5">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06]",
+                    statusPillClass,
+                    "font-medium"
+                  )}
+                >
                   <span className="font-normal" style={{ color: JOIN_GET_STARTED_WEB_CARD_BG }}>
                     {JOIN_GET_STARTED_WEB_STATUS.label}
                   </span>
@@ -206,13 +245,13 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
               </div>
 
               <div className="relative z-10 max-w-[min(18rem,72%)]">
-                <h3 className="text-xl font-bold leading-tight text-white sm:text-2xl">
+                <h3 className={cn(productCardTitleClass, "font-bold leading-tight text-white")}>
                   <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_WEB_TITLE]} />
                 </h3>
                 <WaveRevealWords
                   text={JOIN_GET_STARTED_WEB_DESCRIPTION}
                   delayStart={webDescriptionDelay}
-                  className="mt-1 text-sm text-white/95 sm:text-base"
+                  className={cn("mt-1 text-white/95", productCardDescriptionClass)}
                 />
               </div>
             </article>
@@ -230,28 +269,36 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           >
             <article
               className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#0B5350]")}
-              style={{ maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W, minHeight: JOIN_GET_STARTED_PRODUCT_CARD_MIN_H }}
+              style={productCardLayoutStyle}
             >
               <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
                 <div
                   className={cn(
-                    "absolute right-0 top-1/2 grid shrink-0 -translate-y-1/2 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2",
-                    "max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
+                    "absolute top-1/2 grid shrink-0 -translate-y-1/2",
+                    isMobile
+                      ? "left-0 grid-cols-4 grid-rows-2 gap-2"
+                      : "right-0 grid-cols-3 grid-rows-2 gap-1.5 sm:gap-2 max-[1050px]:scale-[0.55] max-sm:scale-[0.38] max-sm:origin-right"
                   )}
                 >
-                  {Array.from({ length: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT }, (_, i) => (
+                  {Array.from({ length: productCircleCount }, (_, i) => (
                     <div
                       key={i}
                       className="shrink-0 rounded-full bg-[#00614D]"
-                      style={{ width: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX, height: JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX }}
+                      style={{ width: productCirclePx, height: productCirclePx }}
                     />
                   ))}
                 </div>
               </div>
               <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-r from-black/18 to-transparent" />
 
-              <div className="absolute right-4 top-4 z-20 sm:right-5 sm:top-5">
-                <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[0.6875rem] font-medium leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06] sm:text-xs">
+              <div className="absolute bottom-4 left-4 z-20 md:bottom-auto md:left-auto md:right-4 md:top-4 lg:right-5 lg:top-5">
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 leading-none text-brand-black shadow-sm ring-1 ring-black/[0.06]",
+                    statusPillClass,
+                    "font-medium"
+                  )}
+                >
                   <span className="font-normal" style={{ color: JOIN_GET_STARTED_MOBILE_CARD_BG }}>
                     {JOIN_GET_STARTED_MOBILE_STATUS.label}
                   </span>
@@ -267,26 +314,28 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
               </div>
 
               <div className="pointer-events-none absolute bottom-0 right-0 z-[5] h-[14rem] w-[min(100%,40rem)] sm:h-[17rem] sm:w-[min(100%,44rem)] lg:h-[19rem] lg:w-[min(100%,48rem)]">
-                <div className="relative h-full w-full">
-                  <Image
-                    src={JOIN_GET_STARTED_CARDS.mobile}
-                    alt={JOIN_GET_STARTED_IMAGE_ALT.mobile}
-                    fill
-                    className="object-contain object-bottom object-right"
-                    sizes="(max-width: 768px) min(100vw, 710px), 480px"
-                  />
+                <div className="relative h-full w-full max-md:flex max-md:items-end max-md:justify-end">
+                  <div className="relative h-full w-full max-md:h-[98%] max-md:w-[min(96%,21.5rem)] max-md:shrink-0 max-md:-mr-20 max-md:min-w-0">
+                    <Image
+                      src={JOIN_GET_STARTED_CARDS.mobile}
+                      alt={JOIN_GET_STARTED_IMAGE_ALT.mobile}
+                      fill
+                      className="object-contain object-[right_bottom]"
+                      sizes="(max-width: 768px) min(100vw, 710px), 480px"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="relative z-10 flex max-w-[18rem] flex-col items-start">
                 <div>
-                  <h3 className="text-xl font-bold leading-tight text-white sm:text-2xl">
+                  <h3 className={cn(productCardTitleClass, "font-bold leading-tight text-white")}>
                     <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_MOBILE_TITLE]} />
                   </h3>
                   <WaveRevealWords
                     text={JOIN_GET_STARTED_MOBILE_DESCRIPTION}
                     delayStart={mobileDescriptionDelay}
-                    className="mt-1 text-sm text-white/95 sm:text-base"
+                    className={cn("mt-1 text-white/95", productCardDescriptionClass)}
                   />
                 </div>
 
@@ -298,8 +347,9 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                       scrollToWaitlist();
                     }}
                     className={cn(
-                      "mt-4 inline-flex h-10 items-center gap-2 rounded-sm bg-white px-4 text-sm font-semibold text-brand-black",
-                      "transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
+                      "mt-4 inline-flex h-10 items-center gap-2 rounded-sm bg-white px-4 text-brand-black",
+                      productCtaButtonClass,
+                      "font-semibold transition hover:bg-white/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
                     )}
                   >
                     {JOIN_GET_STARTED_MOBILE_BUTTON_TEXT}
@@ -311,7 +361,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           </motion.div>
 
           <motion.div
-            className="w-full sm:col-span-2"
+            className="w-full md:col-span-2"
             initial={{ opacity: 0, y: 48 }}
             animate={sectionInView ? { opacity: 1, y: 0 } : undefined}
             transition={{
@@ -328,13 +378,16 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
             >
               <div className="grid min-h-0 grid-cols-1 items-stretch gap-8 px-6 py-8 sm:gap-10 sm:px-8 sm:py-10 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-12">
                 <div className="flex h-full min-h-0 min-w-0 flex-col">
-                  <h3 className="text-[clamp(1.8rem,4vw,4rem)] font-bold leading-[0.96] tracking-tight text-brand-black">
+                  <h3 className={cn(communityCardTitleClass, "font-bold leading-[0.96] tracking-tight text-brand-black")}>
                     <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_COMMUNITY_TITLE]} />
                   </h3>
                   <WaveRevealWords
                     text={JOIN_GET_STARTED_COMMUNITY_DESCRIPTION}
                     delayStart={communityDescriptionDelay}
-                    className="mt-4 text-sm leading-relaxed text-brand-black/75 sm:mt-5 sm:text-base"
+                    className={cn(
+                      "mt-4 leading-relaxed text-brand-black/75 sm:mt-5",
+                      communityCardDescriptionClass
+                    )}
                   />
 
                   <WaveRevealFadeUp
