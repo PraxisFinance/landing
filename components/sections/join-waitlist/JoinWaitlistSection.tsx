@@ -68,10 +68,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
   return (
     <section
       id="join-waitlist"
-      className={cn(
-        "mx-auto w-full max-w-screen-2xl p-5 md:p-10",
-        className
-      )}
+      className={cn("mx-auto w-full max-w-screen-2xl p-5 md:p-10", className)}
     >
       <motion.div
         ref={cardRef}
@@ -217,13 +214,13 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                 />
               </div>
             ) : (
-              <div className="relative h-full w-full min-h-0 flex-1">
+              <div className="flex h-full w-full min-h-0 flex-1 items-center justify-start">
                 <Image
                   src={JOIN_WAITLIST_IMAGE}
                   alt="Praxis app on a handheld device"
-                  fill
-                  className="object-contain object-left"
-                  sizes="45vw"
+                  width={420}
+                  height={420}
+                  className="h-[420px] w-[420px] max-w-full object-contain"
                   priority={false}
                 />
               </div>
