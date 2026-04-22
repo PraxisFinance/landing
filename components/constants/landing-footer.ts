@@ -21,6 +21,13 @@ export const LANDING_FOOTER_GROUPS = [
   },
 ] as const;
 
+/** Bottom row on mobile only (no Whitepaper); desktop keeps per-column `legal` in groups. */
+export const LANDING_FOOTER_MOBILE_BOTTOM_LEGAL = [
+  "Terms & Conditions",
+  "Privacy Politics",
+  "Risk Management",
+] as const;
+
 export const LANDING_FOOTER_HOME_ARIA_LABEL = "Praxis, home";
 
 export const LANDING_FOOTER_SOCIAL_LINKS = [
