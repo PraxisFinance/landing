@@ -12,7 +12,7 @@ export function HeaderMobileMenuButton({ isOpen, onClick }: HeaderMobileMenuButt
       type="button"
       variant="landing-white-dark-text"
       size="landing-icon-sm"
-      className="bg-brand-gray lg:hidden"
+      className="bg-brand-gray md:hidden"
       onClick={onClick}
       aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
       aria-expanded={isOpen}

@@ -1,2 +1,2 @@
-export const LANDING_MOBILE_MAX_WIDTH_PX = 1023;
+export const LANDING_MOBILE_MAX_WIDTH_PX = 767;
 export const LANDING_MOBILE_MEDIA_QUERY = `(max-width: ${LANDING_MOBILE_MAX_WIDTH_PX}px)`;

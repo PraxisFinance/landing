@@ -23,7 +23,7 @@ export function HeaderMobileNav({
   return (
     <div
       id="landing-mobile-menu"
-      className="absolute top-full right-0 left-0 z-50 rounded-2xl bg-brand-gray p-3 lg:hidden"
+      className="absolute top-full right-0 left-0 z-50 rounded-2xl bg-brand-gray p-3 md:hidden"
     >
       <div className="grid grid-cols-2 gap-2">
         {mobileProductNavItems.map(({ href, title, Icon }) => (

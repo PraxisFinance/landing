@@ -126,14 +126,14 @@ export function CoverSection({ className }: CoverSectionProps) {
           <h1 className="max-w-5xl text-balance text-brand-black">
             <WaveText
               text={COVER_SECTION_HEADLINE_LINES.join("\n")}
-              className="ui-headline-4 whitespace-pre-line"
+              className="ui-headline-3 whitespace-pre-line"
               startDelay={HEADLINE_START_DELAY}
             />
           </h1>
 
           <WaveText
             text={COVER_SECTION_SUBHEAD_COPY}
-            className="ui-text-7 mt-[15px] max-w-xl whitespace-pre-line text-brand-black"
+            className="ui-text-3 mt-[15px] max-w-xl whitespace-pre-line text-brand-black"
             startDelay={subheadStartDelay}
           />
 

@@ -82,7 +82,7 @@ export function LandingHeader() {
   return (
     <header className="bg-brand-white px-5 sm:px-6 lg:px-10">
       <div className="relative z-40 mx-auto w-full max-w-screen-2xl py-4">
-        <div className="flex items-center justify-between gap-3 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+        <div className="flex items-center justify-between gap-3 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <div className="flex min-w-0 items-center">
             <Link
               href="/"
@@ -100,11 +100,11 @@ export function LandingHeader() {
               type="button"
               variant="landing-black"
               size="landing-sm"
-              className="items-center justify-end rounded-md ui-text-8 lg:ui-button-2"
+              className="items-center justify-end rounded-md ui-text-8 md:ui-button-2"
               onClick={handleWaitlistClick}
             >
               {LANDING_HEADER_WAITLIST_BUTTON_TEXT}
-              <ArrowRightIcon className="hidden size-4 shrink-0 lg:block" />
+              <ArrowRightIcon className="hidden size-4 shrink-0 md:block" />
             </Button>
             <HeaderMobileMenuButton
               isOpen={isMobileMenuOpen}

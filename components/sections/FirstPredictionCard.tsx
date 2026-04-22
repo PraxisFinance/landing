@@ -32,7 +32,7 @@ export function FirstPredictionCard({
       <div
         aria-hidden
         className={cn(
-          "absolute inset-0 z-0 bg-cover bg-center bg-no-repeat",
+          "absolute inset-0 z-0 bg-cover bg-right bg-no-repeat sm:bg-center",
           "pointer-events-none select-none"
         )}
         style={{ backgroundImage: `url(${backgroundImage})` }}
