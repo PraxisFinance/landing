@@ -3,12 +3,23 @@ type DeviceTextSize = {
   desktop: string;
 };
 
-type SectionTextSizes = {
+type CoverSectionTextSizes = {
   title: DeviceTextSize;
   description: DeviceTextSize;
 };
 
-export const SECTION_TEXT_SIZES: Record<string, SectionTextSizes> = {
+type AboutSectionTextSizes = {
+  title: DeviceTextSize;
+  cardTitle: DeviceTextSize;
+  cardDescription: DeviceTextSize;
+};
+
+type SectionTextSizes = {
+  cover: CoverSectionTextSizes;
+  about: AboutSectionTextSizes;
+};
+
+export const SECTION_TEXT_SIZES: SectionTextSizes = {
   cover: {
     title: {
       mobile: "ui-headline-4",
@@ -21,12 +32,16 @@ export const SECTION_TEXT_SIZES: Record<string, SectionTextSizes> = {
   },
   about: {
     title: {
-      mobile: "ui-text-2",
+      mobile: "ui-headline-4",
       desktop: "ui-headline-1",
     },
-    description: {
+    cardTitle: {
       mobile: "ui-text-2",
       desktop: "ui-text-2",
+    },
+    cardDescription: {
+      mobile: "ui-text-7",
+      desktop: "ui-text-6",
     },
   },
 };

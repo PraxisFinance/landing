@@ -1,25 +1,29 @@
 import { cn } from "@/lib/utils";
 
-export type FirstPredictionCardProps = {
+export type AboutPredictionCardProps = {
   title: string;
   body: string;
   backgroundImage: string;
   fallbackClassName: string;
   titleClassName: string;
   bodyClassName: string;
+  titleTextSizeClassName?: string;
+  bodyTextSizeClassName?: string;
   className?: string;
 };
 
-/** Portrait card from design: 345×400px */
-export function FirstPredictionCard({
+/** Portrait card from design: 345x400px */
+export function AboutPredictionCard({
   title,
   body,
   backgroundImage,
   fallbackClassName,
   titleClassName,
   bodyClassName,
+  titleTextSizeClassName = "ui-text-2",
+  bodyTextSizeClassName = "ui-text-6",
   className,
-}: FirstPredictionCardProps) {
+}: AboutPredictionCardProps) {
   return (
     <article
       className={cn(
@@ -38,12 +42,19 @@ export function FirstPredictionCard({
         style={{ backgroundImage: `url(${backgroundImage})` }}
       />
       <div className="relative z-10 flex h-full min-h-0 flex-col justify-between p-6 sm:p-7">
-        <h3 className={cn("ui-text-2 max-w-[95%] shrink-0 tracking-tight", titleClassName)}>
+        <h3
+          className={cn(
+            "max-w-[95%] shrink-0 tracking-tight",
+            titleTextSizeClassName,
+            titleClassName
+          )}
+        >
           {title}
         </h3>
         <p
           className={cn(
-            "ui-text-6 max-h-[52%] min-h-0 w-full overflow-y-auto text-pretty",
+            "max-h-[52%] min-h-0 w-full overflow-y-auto text-pretty",
+            bodyTextSizeClassName,
             bodyClassName
           )}
         >
