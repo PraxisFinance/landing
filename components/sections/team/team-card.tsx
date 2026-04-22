@@ -80,7 +80,7 @@ export function TeamCard({
       </div>
 
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[55%] bg-gradient-to-t from-white from-[5%] via-white/95 to-transparent"
         aria-hidden
       />
 
@@ -99,7 +99,7 @@ export function TeamCard({
         <div className="flex flex-col gap-2">
           <p
             className={cn(
-              "font-bold leading-tight tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]",
+              "font-bold leading-tight tracking-tight text-brand-black",
               nameTextClassName ?? "text-xl"
             )}
           >
@@ -115,7 +115,7 @@ export function TeamCard({
             <div className="min-h-0 overflow-hidden">
               <p
                 className={cn(
-                  "text-pretty pb-2 font-normal leading-snug text-white/95",
+                  "text-pretty pb-2 font-normal leading-snug text-brand-black/85",
                   bioTextClassName ?? "text-sm"
                 )}
               >
