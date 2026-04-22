@@ -16,7 +16,12 @@ type SocialMediaCloudLinkButtonProps = {
   floatDurationSec: number;
   floatDelaySec?: number;
   className?: string;
+  /** Mobile: compact circle in a horizontal row (no cloud positions / float loop) */
+  rowLayout?: boolean;
 };
+
+const ROW_BUTTON_PX = 112;
+const CLOUD_BUTTON_PX = 220;
 
 export function SocialMediaCloudLinkButton({
   label,
@@ -27,6 +32,7 @@ export function SocialMediaCloudLinkButton({
   floatDurationSec,
   floatDelaySec = 0,
   className,
+  rowLayout = false,
 }: SocialMediaCloudLinkButtonProps) {
   const floatingTransition = useMemo(
     () => ({
@@ -38,6 +44,46 @@ export function SocialMediaCloudLinkButton({
     }),
     [floatDelaySec, floatDurationSec]
   );
+
+  const buttonBoxClass = rowLayout ? "h-[112px] w-[112px]" : "h-[220px] w-[220px]";
+  const imageSizes = rowLayout ? `${ROW_BUTTON_PX}px` : `${CLOUD_BUTTON_PX}px`;
+
+  const buttonEl = (
+    <Button
+      type="button"
+      variant="ghost"
+      size="default"
+      disabled={disabled}
+      onClick={
+        disabled
+          ? undefined
+          : () => {
+              window.open(href, "_blank", "noopener,noreferrer");
+            }
+      }
+      className={cn(
+        "relative overflow-hidden rounded-full p-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+        buttonBoxClass,
+        "!bg-transparent hover:!bg-transparent",
+        disabled && "cursor-not-allowed"
+      )}
+      aria-label={label}
+    >
+      <Image src={imageSrc} alt={label} fill className="object-cover" sizes={imageSizes} />
+    </Button>
+  );
+
+  if (rowLayout) {
+    return (
+      <motion.div
+        whileHover={{ scale: 1.06 }}
+        transition={{ type: "spring", stiffness: 260, damping: 18, mass: 0.65 }}
+        className="relative shrink-0 transform-gpu"
+      >
+        {buttonEl}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
@@ -55,27 +101,7 @@ export function SocialMediaCloudLinkButton({
       }}
       className={cn("absolute transform-gpu will-change-transform", className)}
     >
-      <Button
-        type="button"
-        variant="ghost"
-        size="default"
-        disabled={disabled}
-        onClick={
-          disabled
-            ? undefined
-            : () => {
-                window.open(href, "_blank", "noopener,noreferrer");
-              }
-        }
-        className={cn(
-          "relative h-[220px] w-[220px] overflow-hidden rounded-full p-0 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-          "!bg-transparent hover:!bg-transparent",
-          disabled && "cursor-not-allowed"
-        )}
-        aria-label={label}
-      >
-        <Image src={imageSrc} alt={label} fill className="object-cover" sizes="220px" />
-      </Button>
+      {buttonEl}
     </motion.div>
   );
 }

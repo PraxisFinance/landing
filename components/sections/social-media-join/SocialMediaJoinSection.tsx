@@ -170,7 +170,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
       ref={sectionRef}
       id="social-media-join"
       className={cn(
-        "mx-auto w-full max-w-screen-2xl px-4 pb-[30px] pt-4 sm:px-6 sm:pb-[30px] sm:pt-5 lg:px-10 lg:pb-[30px] lg:pt-6",
+        "mx-auto w-full max-w-screen-2xl px-4 pt-4 sm:px-6 sm:pt-5 lg:px-10 lg:pt-6",
         className
       )}
     >
@@ -196,7 +196,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           >
             <article
               className={cn(
-                "relative w-full overflow-hidden rounded-3xl p-6 sm:p-8",
+                "relative w-full overflow-hidden rounded-3xl p-[15px] md:p-6 lg:p-8",
                 "bg-[#9D94FF]"
               )}
               style={productCardLayoutStyle}
@@ -278,7 +278,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           >
             <article
               className={cn(
-                "relative w-full overflow-hidden rounded-3xl p-6 sm:p-8",
+                "relative w-full overflow-hidden rounded-3xl p-[15px] md:p-6 lg:p-8",
                 "bg-[#0B5350]"
               )}
               style={productCardLayoutStyle}
@@ -385,15 +385,16 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
             <article
               className={cn(
                 "relative w-full min-h-[18rem] justify-self-stretch overflow-hidden rounded-3xl bg-brand-gray",
+                "max-md:rounded-b-none",
                 "sm:min-h-[20rem] lg:min-h-[24rem]"
               )}
             >
-              <div className="grid min-h-0 grid-cols-1 items-stretch gap-8 px-6 py-8 sm:gap-10 sm:px-8 sm:py-10 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-12">
-                <div className="flex h-full min-h-0 min-w-0 flex-col">
+              <div className="grid min-h-0 grid-cols-1 items-stretch gap-6 p-[15px] max-md:gap-0 md:gap-8 md:px-8 md:py-10 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-12">
+                <div className="flex h-full min-h-0 min-w-0 flex-col max-md:items-center max-md:text-center">
                   <h3
                     className={cn(
                       communityCardTitleClass,
-                      "font-bold leading-[0.96] tracking-tight text-brand-black"
+                      "w-full font-bold leading-[0.96] tracking-tight text-brand-black max-md:text-balance"
                     )}
                   >
                     <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_COMMUNITY_TITLE]} />
@@ -402,14 +403,18 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                     text={JOIN_GET_STARTED_COMMUNITY_DESCRIPTION}
                     delayStart={communityDescriptionDelay}
                     className={cn(
-                      "mt-4 leading-relaxed text-brand-black/75 sm:mt-5",
+                      "mt-4 w-full leading-relaxed text-brand-black/75 sm:mt-5 max-md:text-balance max-md:text-center",
                       communityCardDescriptionClass
                     )}
                   />
 
                   <WaveRevealFadeUp
                     delay={communityLinksDelay}
-                    className="mt-auto flex w-full max-w-[288px] flex-wrap gap-2 pt-6 sm:pt-7"
+                    className={cn(
+                      "flex w-full max-w-[288px] flex-wrap gap-2 max-md:max-w-none",
+                      "max-md:mx-auto max-md:mt-6 max-md:flex-col max-md:items-stretch max-md:pt-0",
+                      "md:mt-6 md:flex-row md:flex-wrap md:items-center md:pt-6 lg:mt-auto lg:pt-7"
+                    )}
                   >
                     {JOIN_GET_STARTED_COMMUNITY_LINKS.map((item) => {
                       const isTwitter = item.label === "Twitter";
@@ -426,7 +431,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                               : undefined
                           }
                           className={cn(
-                            "h-10 w-[140px] gap-2 rounded-lg px-3 text-xs font-semibold",
+                            "h-10 w-full gap-2 rounded-lg px-3 text-xs font-semibold md:w-[140px]",
                             !isTwitter &&
                               "cursor-not-allowed bg-brand-dark-purple/45 text-white/70 hover:bg-brand-dark-purple/45"
                           )}
@@ -443,6 +448,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                 <SocialMediaCloudPanel
                   links={JOIN_GET_STARTED_COMMUNITY_LINKS}
                   revealDelay={communityLinksDelay}
+                  className="max-md:mt-0 max-md:min-w-0 max-md:self-stretch"
                 />
               </div>
             </article>
