@@ -10,6 +10,8 @@ import {
   COVER_SECTION_SUBHEAD_COPY,
   COVER_SECTION_WAITLIST_BUTTON_TEXT,
 } from "@/components/constants/cover-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -76,6 +78,10 @@ function WaveText({
 }
 
 export function CoverSection({ className }: CoverSectionProps) {
+  const isMobile = useIsMobile();
+
+  const coverTextSizes = SECTION_TEXT_SIZES.cover;
+
   const scrollToWaitlist = () => {
     const waitlistSection = document.getElementById("join-waitlist");
     if (!waitlistSection) {
@@ -90,7 +96,7 @@ export function CoverSection({ className }: CoverSectionProps) {
   };
 
   return (
-    <section className={cn("w-full px-0 pb-2 pt-6 sm:pb-3 sm:pt-8 lg:pt-10", className)}>
+    <section id="cover" className={cn("w-full px-0 pb-2 pt-6 sm:pb-3 sm:pt-8 lg:pt-10", className)}>
       <div
         className={cn(
           "relative min-h-[515px] overflow-hidden rounded-[2rem] sm:rounded-[2.25rem] md:min-h-[36rem] lg:min-h-[40rem]"
@@ -126,14 +132,20 @@ export function CoverSection({ className }: CoverSectionProps) {
           <h1 className="max-w-5xl text-balance text-brand-black">
             <WaveText
               text={COVER_SECTION_HEADLINE_LINES.join("\n")}
-              className="ui-headline-4 whitespace-pre-line md:!ui-headline-3"
+              className={cn(
+                "whitespace-pre-line",
+                isMobile ? coverTextSizes.title.mobile : coverTextSizes.title.desktop
+              )}
               startDelay={HEADLINE_START_DELAY}
             />
           </h1>
 
           <WaveText
             text={COVER_SECTION_SUBHEAD_COPY}
-            className="ui-text-7 mt-[15px] max-w-xl whitespace-pre-line text-brand-black md:!ui-text-3"
+            className={cn(
+              "mt-[15px] max-w-xl whitespace-pre-line text-brand-black",
+              isMobile ? coverTextSizes.description.mobile : coverTextSizes.description.desktop
+            )}
             startDelay={subheadStartDelay}
           />
 

@@ -3,6 +3,8 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ABOUT_SECTION_CARDS, ABOUT_SECTION_HEADLINE } from "@/components/constants/about-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { FirstPredictionCard } from "@/components/sections/FirstPredictionCard";
 import { cn } from "@/lib/utils";
 
@@ -99,6 +101,9 @@ const cardVariants = {
 export function AboutSection({ className }: AboutSectionProps) {
   const measureCardsRef = useRef<Array<HTMLDivElement | null>>([]);
   const [cardTargets, setCardTargets] = useState<CardTarget[]>([]);
+  const isMobile = useIsMobile();
+
+  const aboutTextSizes = SECTION_TEXT_SIZES.about;
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -159,7 +164,10 @@ export function AboutSection({ className }: AboutSectionProps) {
           <h2 className="w-full text-left text-brand-black">
             <HeadlineWave
               text={ABOUT_SECTION_HEADLINE}
-              className="ui-headline-1 block w-full"
+              className={cn(
+                "block w-full",
+                isMobile ? aboutTextSizes.title.mobile : aboutTextSizes.title.desktop
+              )}
             />
           </h2>
         </div>
