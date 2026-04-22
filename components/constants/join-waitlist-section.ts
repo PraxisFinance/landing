@@ -5,8 +5,10 @@ export const JOIN_WAITLIST_SUBTEXT =
 
 export const JOIN_WAITLIST_IMAGE = "/main/join-waitlist.png";
 
-export const JOIN_WAITLIST_BG_CIRCLE_PX = 189;
-export const JOIN_WAITLIST_BG_CIRCLE_COUNT = 10;
+export const JOIN_WAITLIST_BG_CIRCLE_PX_MOBILE = 110;
+export const JOIN_WAITLIST_BG_CIRCLE_PX_DESKTOP = 190;
+export const JOIN_WAITLIST_BG_CIRCLE_COUNT_MOBILE = 6;
+export const JOIN_WAITLIST_BG_CIRCLE_COUNT_DESKTOP = 10;
 
 export const JOIN_WAITLIST_INPUT_PLACEHOLDER = "Enter your BaseApp address";
 export const JOIN_WAITLIST_HELP_LABEL = "What is BaseApp address?";

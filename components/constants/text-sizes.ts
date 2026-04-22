@@ -14,9 +14,15 @@ type AboutSectionTextSizes = {
   cardDescription: DeviceTextSize;
 };
 
+type JoinWaitlistSectionTextSizes = {
+  title: DeviceTextSize;
+  description: DeviceTextSize;
+};
+
 type SectionTextSizes = {
   cover: CoverSectionTextSizes;
   about: AboutSectionTextSizes;
+  joinWaitlist: JoinWaitlistSectionTextSizes;
 };
 
 export const SECTION_TEXT_SIZES: SectionTextSizes = {
@@ -42,6 +48,16 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
     cardDescription: {
       mobile: "ui-text-7",
       desktop: "ui-text-6",
+    },
+  },
+  joinWaitlist: {
+    title: {
+      mobile: "ui-headline-4",
+      desktop: "ui-headline-2",
+    },
+    description: {
+      mobile: "ui-text-7",
+      desktop: "ui-text-3",
     },
   },
 };

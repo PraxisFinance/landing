@@ -8,8 +8,10 @@ import Image from "next/image";
 import {
   JOIN_WAITLIST_BASEAPP_APP_TEXT,
   JOIN_WAITLIST_BASEAPP_BASE_TEXT,
-  JOIN_WAITLIST_BG_CIRCLE_COUNT,
-  JOIN_WAITLIST_BG_CIRCLE_PX,
+  JOIN_WAITLIST_BG_CIRCLE_COUNT_DESKTOP,
+  JOIN_WAITLIST_BG_CIRCLE_COUNT_MOBILE,
+  JOIN_WAITLIST_BG_CIRCLE_PX_DESKTOP,
+  JOIN_WAITLIST_BG_CIRCLE_PX_MOBILE,
   JOIN_WAITLIST_BUTTON_TEXT,
   JOIN_WAITLIST_HEADLINE_LINES,
   JOIN_WAITLIST_HELP_LABEL,
@@ -17,6 +19,8 @@ import {
   JOIN_WAITLIST_INPUT_PLACEHOLDER,
   JOIN_WAITLIST_SUBTEXT,
 } from "@/components/constants/join-waitlist-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { JoinWaitlistAcceptedState } from "@/components/sections/join-waitlist/JoinWaitlistAcceptedState";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,8 +33,21 @@ type JoinWaitlistSectionProps = {
 export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
   const [walletAddress, setWalletAddress] = useState("");
   const [isAddressAccepted, setIsAddressAccepted] = useState(false);
+  const isMobile = useIsMobile();
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [shouldAnimateIn, setShouldAnimateIn] = useState(false);
+  const joinWaitlistTextSizes = SECTION_TEXT_SIZES.joinWaitlist;
+  const backgroundCircleCount = isMobile
+    ? JOIN_WAITLIST_BG_CIRCLE_COUNT_MOBILE
+    : JOIN_WAITLIST_BG_CIRCLE_COUNT_DESKTOP;
+  const backgroundCirclePx = isMobile
+    ? JOIN_WAITLIST_BG_CIRCLE_PX_MOBILE
+    : JOIN_WAITLIST_BG_CIRCLE_PX_DESKTOP;
+
+  const handleJoinWaitlist = () => {
+    if (!walletAddress.trim()) return;
+    setIsAddressAccepted(true);
+  };
 
   useEffect(() => {
     const checkVisibility = () => {
@@ -52,7 +69,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
     <section
       id="join-waitlist"
       className={cn(
-        "mx-auto w-full max-w-screen-2xl px-4 pb-5 pt-3 sm:px-6 sm:pb-6 sm:pt-4 lg:px-10 lg:pb-8 lg:pt-5",
+        "mx-auto w-full max-w-screen-2xl p-5 md:p-10",
         className
       )}
     >
@@ -62,43 +79,62 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
         animate={shouldAnimateIn ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 }}
         transition={{ delay: 0.34, duration: 1.25, ease: [0.16, 1, 0.3, 1] }}
         className={cn(
-          "relative flex h-[450px] flex-col overflow-hidden rounded-[1.75rem] sm:rounded-[2rem]",
+          "relative flex min-h-[450px] flex-col overflow-hidden rounded-[1.75rem] sm:rounded-[2rem] md:h-[450px]",
           "bg-brand-gray shadow-sm ring-1 ring-black/[0.06]"
         )}
       >
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
           <div
             className={cn(
-              "absolute right-0 top-1/2 grid shrink-0 -translate-y-1/2 grid-cols-5 grid-rows-2 gap-3 sm:gap-4",
-              "max-[1050px]:scale-[0.55] max-sm:scale-[0.32] max-sm:origin-right"
+              "absolute inset-0 flex",
+              isMobile ? "items-center justify-center" : "items-center justify-end"
             )}
           >
-            {Array.from({ length: JOIN_WAITLIST_BG_CIRCLE_COUNT }, (_, i) => (
-              <div
-                key={i}
-                className="shrink-0 rounded-full bg-white opacity-25 sm:opacity-30"
-                style={{ width: JOIN_WAITLIST_BG_CIRCLE_PX, height: JOIN_WAITLIST_BG_CIRCLE_PX }}
-              />
-            ))}
+            <div
+              className={cn(
+                "grid shrink-0 gap-4 sm:gap-5",
+                isMobile ? "grid-cols-3 grid-rows-2" : "grid-cols-5 grid-rows-2"
+              )}
+            >
+              {Array.from({ length: backgroundCircleCount }, (_, i) => (
+                <div
+                  key={i}
+                  className="shrink-0 rounded-full bg-white opacity-25 sm:opacity-30"
+                  style={{ width: backgroundCirclePx, height: backgroundCirclePx }}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         <div
           className={cn(
-            "relative z-10 flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overflow-x-hidden p-[50px]",
-            "lg:flex-row lg:items-stretch lg:gap-6 lg:overflow-hidden"
+            "relative z-10 flex min-h-0 flex-1 flex-col gap-0 overflow-y-auto overflow-x-hidden px-5 py-6 md:gap-6 md:overflow-hidden md:p-[50px]",
+            "md:flex-row md:items-stretch md:gap-6"
           )}
         >
-          <div className="flex min-w-0 flex-1 flex-col lg:max-w-xl lg:py-1">
-            <h2 className="ui-headline-2 text-balance text-brand-black">
+          <div className="flex min-w-0 flex-col text-center md:max-w-xl md:flex-1 md:py-1 md:text-left">
+            <h2
+              className={cn(
+                "text-balance text-brand-black",
+                isMobile ? joinWaitlistTextSizes.title.mobile : joinWaitlistTextSizes.title.desktop
+              )}
+            >
               {JOIN_WAITLIST_HEADLINE_LINES.join(" ")}
             </h2>
 
-            <p className="ui-text-3 mt-3 max-w-lg text-pretty text-brand-black/70 sm:mt-4">
+            <p
+              className={cn(
+                "mt-3 max-w-lg text-pretty text-brand-black/70 md:mt-4",
+                isMobile
+                  ? joinWaitlistTextSizes.description.mobile
+                  : joinWaitlistTextSizes.description.desktop
+              )}
+            >
               {JOIN_WAITLIST_SUBTEXT}
             </p>
 
-            <div className="mt-4 w-full max-w-md sm:mt-5">
+            <div className="mt-4 mb-2 w-full max-w-md text-left sm:mt-5 md:mb-0">
               {isAddressAccepted ? (
                 <JoinWaitlistAcceptedState />
               ) : (
@@ -106,8 +142,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                   className="flex flex-col gap-2"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    if (!walletAddress.trim()) return;
-                    setIsAddressAccepted(true);
+                    handleJoinWaitlist();
                   }}
                 >
                   <div className="relative w-full">
@@ -143,7 +178,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                     type="submit"
                     size="lg"
                     className={cn(
-                      "h-11 w-full gap-2 rounded-lg px-7 text-base font-semibold shadow-none sm:w-auto sm:self-start",
+                      "hidden h-11 w-full gap-2 rounded-lg px-7 text-base font-semibold shadow-none md:inline-flex md:w-auto md:self-start",
                       "bg-brand-black text-white hover:bg-brand-black/90",
                       "focus-visible:ring-brand-dark-purple/40"
                     )}
@@ -155,7 +190,7 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
               )}
             </div>
 
-            <div className="mt-auto flex items-end gap-2 pt-5 sm:pt-6">
+            <div className="mt-auto hidden items-end gap-2 pt-5 md:flex md:pt-6">
               <span className="size-7 shrink-0 rounded-xs bg-[#0052FF]" aria-hidden />
               <span className="flex flex lowercase tracking-tight text-brand-black leading-none">
                 <span className="ui-text-2">{JOIN_WAITLIST_BASEAPP_BASE_TEXT}</span>
@@ -166,20 +201,57 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
 
           <div
             className={cn(
-              "relative flex min-h-0 w-full flex-1 flex-col",
-              "lg:flex-[1.15] lg:self-stretch"
+              "relative flex min-h-0 w-full flex-col",
+              "md:flex-[1.15] md:self-stretch"
             )}
           >
-            <div className="relative h-full w-full min-h-0 flex-1">
-              <Image
-                src={JOIN_WAITLIST_IMAGE}
-                alt="Praxis app on a handheld device"
-                fill
-                className="object-contain object-left"
-                sizes="(max-width: 1024px) 100vw, 45vw"
-                priority={false}
-              />
-            </div>
+            {isMobile ? (
+              <div className="flex h-[315px] w-full items-center justify-center">
+                <Image
+                  src={JOIN_WAITLIST_IMAGE}
+                  alt="Praxis app on a handheld device"
+                  width={315}
+                  height={315}
+                  className="h-[315px] w-[315px] max-w-full object-contain"
+                  priority={false}
+                />
+              </div>
+            ) : (
+              <div className="relative h-full w-full min-h-0 flex-1">
+                <Image
+                  src={JOIN_WAITLIST_IMAGE}
+                  alt="Praxis app on a handheld device"
+                  fill
+                  className="object-contain object-left"
+                  sizes="45vw"
+                  priority={false}
+                />
+              </div>
+            )}
+          </div>
+
+          {!isAddressAccepted && (
+            <Button
+              type="button"
+              size="lg"
+              className={cn(
+                "h-11 w-full gap-2 rounded-lg px-7 text-base font-semibold shadow-none md:hidden",
+                "bg-brand-black text-white hover:bg-brand-black/90",
+                "focus-visible:ring-brand-dark-purple/40"
+              )}
+              onClick={handleJoinWaitlist}
+            >
+              {JOIN_WAITLIST_BUTTON_TEXT}
+              <ArrowRightIcon className="size-5 shrink-0" strokeWidth={1.75} aria-hidden />
+            </Button>
+          )}
+
+          <div className="flex items-end justify-center gap-2 pt-2 text-center md:hidden">
+            <span className="size-7 shrink-0 rounded-xs bg-[#0052FF]" aria-hidden />
+            <span className="flex flex lowercase leading-none tracking-tight text-brand-black">
+              <span className="ui-text-2">{JOIN_WAITLIST_BASEAPP_BASE_TEXT}</span>
+              <span className="ui-text-3">{JOIN_WAITLIST_BASEAPP_APP_TEXT}</span>
+            </span>
           </div>
         </div>
       </motion.div>
