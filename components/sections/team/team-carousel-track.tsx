@@ -18,7 +18,7 @@ export const TeamCarouselTrack = forwardRef<HTMLDivElement, TeamCarouselTrackPro
         onScroll={onScroll}
         className={cn(
           "flex w-full min-w-0 gap-4",
-          "pt-14 pb-5",
+          "pb-5 pt-2 md:pt-14",
           "snap-x snap-mandatory overflow-x-auto overscroll-x-contain",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
           className

@@ -25,11 +25,19 @@ type RoadmapSectionTextSizes = {
   cardBody: DeviceTextSize;
 };
 
+type TeamSectionTextSizes = {
+  title: DeviceTextSize;
+  cardName: DeviceTextSize;
+  cardBio: DeviceTextSize;
+  roleBadge: DeviceTextSize;
+};
+
 type SectionTextSizes = {
   cover: CoverSectionTextSizes;
   about: AboutSectionTextSizes;
   joinWaitlist: JoinWaitlistSectionTextSizes;
   roadmap: RoadmapSectionTextSizes;
+  team: TeamSectionTextSizes;
 };
 
 export const SECTION_TEXT_SIZES: SectionTextSizes = {
@@ -79,6 +87,24 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
     cardBody: {
       mobile: "ui-text-5",
       desktop: "ui-text-5",
+    },
+  },
+  team: {
+    title: {
+      mobile: "ui-headline-4",
+      desktop: "ui-headline-1",
+    },
+    cardName: {
+      mobile: "ui-text-6",
+      desktop: "ui-text-2",
+    },
+    cardBio: {
+      mobile: "ui-text-10",
+      desktop: "ui-text-5",
+    },
+    roleBadge: {
+      mobile: "ui-text-10",
+      desktop: "ui-text-10",
     },
   },
 };
