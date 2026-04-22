@@ -6,7 +6,12 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { motion, useInView } from "framer-motion";
 
-import { WaveRevealFadeUp, WaveRevealHeadlineLines, WaveRevealWords, waveRevealTiming } from "@/components/motion/wave-reveal";
+import {
+  WaveRevealFadeUp,
+  WaveRevealHeadlineLines,
+  WaveRevealWords,
+  waveRevealTiming,
+} from "@/components/motion/wave-reveal";
 import {
   JOIN_GET_STARTED_CARDS,
   JOIN_GET_STARTED_COMMUNITY_DESCRIPTION,
@@ -72,7 +77,8 @@ const mobileButtonDelay =
   waveRevealTiming.wordDuration * 0.2;
 
 const communityTitleWordCount = JOIN_GET_STARTED_COMMUNITY_TITLE.trim().split(/\s+/).length;
-const communityDescriptionWordCount = JOIN_GET_STARTED_COMMUNITY_DESCRIPTION.trim().split(/\s+/).length;
+const communityDescriptionWordCount =
+  JOIN_GET_STARTED_COMMUNITY_DESCRIPTION.trim().split(/\s+/).length;
 const communityDescriptionDelay =
   waveRevealTiming.initialDelay +
   communityTitleWordCount * waveRevealTiming.wordStagger +
@@ -82,15 +88,7 @@ const communityLinksDelay =
   communityDescriptionWordCount * waveRevealTiming.wordStagger +
   waveRevealTiming.wordDuration * 0.15;
 
-function WaveText({
-  text,
-  className,
-  start,
-}: {
-  text: string;
-  className: string;
-  start: boolean;
-}) {
+function WaveText({ text, className, start }: { text: string; className: string; start: boolean }) {
   const lines = text.split("\n");
 
   return (
@@ -121,20 +119,28 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
   const isMobile = useIsMobile();
   const smj = SECTION_TEXT_SIZES.socialMediaJoin;
   const sectionTitleClass = isMobile ? smj.sectionTitle.mobile : smj.sectionTitle.desktop;
-  const productCardTitleClass = isMobile ? smj.productCardTitle.mobile : smj.productCardTitle.desktop;
+  const productCardTitleClass = isMobile
+    ? smj.productCardTitle.mobile
+    : smj.productCardTitle.desktop;
   const productCardDescriptionClass = isMobile
     ? smj.productCardDescription.mobile
     : smj.productCardDescription.desktop;
   const statusPillClass = isMobile ? smj.statusPill.mobile : smj.statusPill.desktop;
-  const communityCardTitleClass = isMobile ? smj.communityCardTitle.mobile : smj.communityCardTitle.desktop;
+  const communityCardTitleClass = isMobile
+    ? smj.communityCardTitle.mobile
+    : smj.communityCardTitle.desktop;
   const communityCardDescriptionClass = isMobile
     ? smj.communityCardDescription.mobile
     : smj.communityCardDescription.desktop;
-  const productCtaButtonClass = isMobile ? smj.productCtaButton.mobile : smj.productCtaButton.desktop;
+  const productCtaButtonClass = isMobile
+    ? smj.productCtaButton.mobile
+    : smj.productCtaButton.desktop;
 
   const productCardLayoutStyle = {
     maxWidth: JOIN_GET_STARTED_PRODUCT_CARD_MAX_W,
-    minHeight: isMobile ? JOIN_GET_STARTED_PRODUCT_CARD_HEIGHT_MOBILE_PX : JOIN_GET_STARTED_PRODUCT_CARD_MIN_H,
+    minHeight: isMobile
+      ? JOIN_GET_STARTED_PRODUCT_CARD_HEIGHT_MOBILE_PX
+      : JOIN_GET_STARTED_PRODUCT_CARD_MIN_H,
   } as const;
 
   const productCircleCount = isMobile
@@ -177,7 +183,7 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
           />
         </h2>
 
-        <div className="mt-6 grid grid-cols-1 justify-items-center gap-3 md:mt-7 md:grid-cols-2 md:gap-4 lg:mt-8">
+        <div className="mt-4 grid grid-cols-1 justify-items-center gap-3 md:mt-7 md:grid-cols-2 md:gap-4 lg:mt-8">
           <motion.div
             className="w-full"
             initial={{ opacity: 0, y: 48 }}
@@ -189,7 +195,10 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
             }}
           >
             <article
-              className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#9D94FF]")}
+              className={cn(
+                "relative w-full overflow-hidden rounded-3xl p-6 sm:p-8",
+                "bg-[#9D94FF]"
+              )}
               style={productCardLayoutStyle}
             >
               <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
@@ -268,7 +277,10 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
             }}
           >
             <article
-              className={cn("relative w-full overflow-hidden rounded-3xl p-6 sm:p-8", "bg-[#0B5350]")}
+              className={cn(
+                "relative w-full overflow-hidden rounded-3xl p-6 sm:p-8",
+                "bg-[#0B5350]"
+              )}
               style={productCardLayoutStyle}
             >
               <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
@@ -378,7 +390,12 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
             >
               <div className="grid min-h-0 grid-cols-1 items-stretch gap-8 px-6 py-8 sm:gap-10 sm:px-8 sm:py-10 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-12">
                 <div className="flex h-full min-h-0 min-w-0 flex-col">
-                  <h3 className={cn(communityCardTitleClass, "font-bold leading-[0.96] tracking-tight text-brand-black")}>
+                  <h3
+                    className={cn(
+                      communityCardTitleClass,
+                      "font-bold leading-[0.96] tracking-tight text-brand-black"
+                    )}
+                  >
                     <WaveRevealHeadlineLines lines={[JOIN_GET_STARTED_COMMUNITY_TITLE]} />
                   </h3>
                   <WaveRevealWords
@@ -421,7 +438,6 @@ export function SocialMediaJoinSection({ className }: SocialMediaJoinSectionProp
                       );
                     })}
                   </WaveRevealFadeUp>
-
                 </div>
 
                 <SocialMediaCloudPanel
