@@ -14,9 +14,13 @@ import {
   USER_FLOW_SECTION_IMAGE_ALT,
 } from "@/components/constants/user-flow-section";
 import { UserFlowFloatingCard } from "@/components/sections/user-flow/UserFlowFloatingCard";
+import { UserFlowMobileCardsStage } from "@/components/sections/user-flow/UserFlowMobileCardsStage";
 import { cn } from "@/lib/utils";
 
 type UserFlowCardsStageProps = {
+  isMobile: boolean;
+  shouldRevealMobileCards?: boolean;
+  mobileFlowStepIndex?: number;
   activeStep: UserFlowStepState;
   activeStepIndex: number;
   leftCards: UserFlowCardDefinition[];
@@ -25,6 +29,9 @@ type UserFlowCardsStageProps = {
 };
 
 export function UserFlowCardsStage({
+  isMobile,
+  shouldRevealMobileCards = true,
+  mobileFlowStepIndex,
   activeStep,
   activeStepIndex,
   leftCards,
@@ -34,11 +41,12 @@ export function UserFlowCardsStage({
   return (
     <div
       className={cn(
-        "grid min-h-0 items-start gap-4",
+        "grid min-h-0 items-start",
+        isMobile ? "gap-2" : "gap-4",
         "grid-cols-1 lg:grid-cols-[345px_minmax(0,1fr)_345px]",
         "xl:gap-6 2xl:gap-8"
       )}
-      style={{ height: USER_FLOW_SECTION_CONTENT_HEIGHT }}
+      style={{ height: isMobile ? "auto" : USER_FLOW_SECTION_CONTENT_HEIGHT }}
     >
       <div
         className="order-2 relative mx-auto hidden w-full lg:order-none lg:block"
@@ -56,7 +64,8 @@ export function UserFlowCardsStage({
       <div
         style={{ maxWidth: `${USER_FLOW_SECTION_CENTER_MAX_PX}px` }}
         className={cn(
-          "order-1 relative aspect-square w-full justify-self-center rounded-2xl bg-brand-gray/45 p-4 sm:p-5 lg:order-none"
+          "order-1 relative aspect-square w-full justify-self-center rounded-2xl p-4 sm:p-5 lg:order-none",
+          isMobile ? "bg-brand-gray" : "bg-brand-gray/45"
         )}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -78,6 +87,14 @@ export function UserFlowCardsStage({
             />
           </motion.div>
         </AnimatePresence>
+      </div>
+
+      <div className="order-2">
+        <UserFlowMobileCardsStage
+          activeStepIndex={mobileFlowStepIndex ?? activeStepIndex}
+          cards={[...leftCards, ...rightCards]}
+          shouldReveal={shouldRevealMobileCards}
+        />
       </div>
 
       <div

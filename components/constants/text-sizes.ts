@@ -48,6 +48,12 @@ type SocialMediaJoinSectionTextSizes = {
   productCtaButton: DeviceTextSize;
 };
 
+type UserFlowSectionTextSizes = {
+  heading: DeviceTextSize;
+  cardLabel: DeviceTextSize;
+  cardTitle: DeviceTextSize;
+};
+
 type SectionTextSizes = {
   cover: CoverSectionTextSizes;
   about: AboutSectionTextSizes;
@@ -56,6 +62,7 @@ type SectionTextSizes = {
   team: TeamSectionTextSizes;
   faq: FaqSectionTextSizes;
   socialMediaJoin: SocialMediaJoinSectionTextSizes;
+  userFlow: UserFlowSectionTextSizes;
 };
 
 export const SECTION_TEXT_SIZES: SectionTextSizes = {
@@ -167,6 +174,20 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
     productCtaButton: {
       mobile: "ui-text-10",
       desktop: "ui-text-10",
+    },
+  },
+  userFlow: {
+    heading: {
+      mobile: "ui-text-1",
+      desktop: "ui-headline-1",
+    },
+    cardLabel: {
+      mobile: "ui-text-11",
+      desktop: "ui-text-11",
+    },
+    cardTitle: {
+      mobile: "ui-text-1",
+      desktop: "ui-text-2",
     },
   },
 };
