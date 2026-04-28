@@ -80,7 +80,7 @@ export function TeamCard({
       </div>
 
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[55%] bg-gradient-to-t from-white from-[5%] via-white/95 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[52%] bg-gradient-to-t from-white/95 via-white/72 via-45% to-transparent"
         aria-hidden
       />
 
