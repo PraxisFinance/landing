@@ -98,17 +98,26 @@ export function LandingFooter() {
                 <div key={group.title} className="flex h-full min-h-0 flex-col gap-2.5">
                   <h3 className="text-sm font-bold text-brand-black">{group.title}</h3>
                   <ul className="space-y-1 text-sm text-brand-black/75">
-                    {group.links.map((link) => (
-                      <li key={link}>
-                        <Link
-                          href={footerLinkTargets[link] ?? "#"}
-                          onClick={handleAnchorClick}
-                          className="transition hover:text-brand-black"
-                        >
-                          {link}
-                        </Link>
-                      </li>
-                    ))}
+                    {group.links.map((link) => {
+                      const targetHref = footerLinkTargets[link];
+                      const isLinkActive = Boolean(targetHref && targetHref !== "#");
+
+                      return (
+                        <li key={link}>
+                          {isLinkActive ? (
+                            <Link
+                              href={targetHref}
+                              onClick={handleAnchorClick}
+                              className="transition hover:text-brand-black"
+                            >
+                              {link}
+                            </Link>
+                          ) : (
+                            <span className="cursor-default opacity-50">{link}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                   <div className="mt-auto hidden border-t border-brand-gray/80 pt-4 md:block">
                     <Link
