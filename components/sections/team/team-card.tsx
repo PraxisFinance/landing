@@ -86,15 +86,6 @@ export function TeamCard({
 
       <TeamRoleBadge textClassName={roleBadgeTextClassName}>{role}</TeamRoleBadge>
 
-      {compact && mobileOpen && socials && socials.length > 0 ? (
-        <div
-          className="absolute right-4 top-4 z-20 flex justify-end pt-0.5"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <TeamSocialLinks links={socials} compact className="justify-end" />
-        </div>
-      ) : null}
-
       <div className="absolute inset-x-0 bottom-0 z-[2] flex flex-col justify-end p-4 pt-24">
         <div className="flex flex-col gap-2">
           <p
@@ -121,9 +112,9 @@ export function TeamCard({
               >
                 {bio}
               </p>
-              {!compact && socials && socials.length > 0 ? (
+              {showDetails && socials && socials.length > 0 ? (
                 <div onClick={(e) => e.stopPropagation()} className="pt-0.5">
-                  <TeamSocialLinks links={socials} />
+                  <TeamSocialLinks links={socials} compact={compact} />
                 </div>
               ) : null}
             </div>
