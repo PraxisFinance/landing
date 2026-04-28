@@ -52,7 +52,7 @@ export const navSections: NavSection[] = [
       {
         href: "#roadmap-section",
         title: "Roadmap",
-        description: "Experts in DeFi and web3 Gaming.",
+        description: "Progress&Future plans.",
         Icon: RoadmapIcon,
       },
       {
