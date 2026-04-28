@@ -198,13 +198,13 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
 
           {isMobile && (
             <div className="relative flex min-h-0 w-full flex-col">
-              <div className="flex h-[315px] w-full items-center justify-center">
+              <div className="flex h-[clamp(248px,62vw,315px)] w-full items-end justify-center">
                 <Image
                   src={JOIN_WAITLIST_IMAGE}
                   alt="Praxis app on a handheld device"
                   width={315}
                   height={315}
-                  className="h-[315px] w-[315px] max-w-full object-contain"
+                  className="h-full w-auto max-w-full object-contain object-bottom"
                   priority={false}
                 />
               </div>
