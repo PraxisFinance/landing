@@ -196,13 +196,8 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
             </div>
           </div>
 
-          <div
-            className={cn(
-              "relative flex min-h-0 w-full flex-col",
-              "md:flex-[1.15] md:self-stretch"
-            )}
-          >
-            {isMobile ? (
+          {isMobile && (
+            <div className="relative flex min-h-0 w-full flex-col">
               <div className="flex h-[315px] w-full items-center justify-center">
                 <Image
                   src={JOIN_WAITLIST_IMAGE}
@@ -213,19 +208,8 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
                   priority={false}
                 />
               </div>
-            ) : (
-              <div className="flex h-full w-full min-h-0 flex-1 items-center justify-start">
-                <Image
-                  src={JOIN_WAITLIST_IMAGE}
-                  alt="Praxis app on a handheld device"
-                  width={420}
-                  height={420}
-                  className="h-[420px] w-[420px] max-w-full object-contain"
-                  priority={false}
-                />
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {!isAddressAccepted && (
             <Button
@@ -251,6 +235,19 @@ export function JoinWaitlistSection({ className }: JoinWaitlistSectionProps) {
             </span>
           </div>
         </div>
+
+        {!isMobile && (
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-[5] flex w-[54%] items-end justify-start">
+            <Image
+              src={JOIN_WAITLIST_IMAGE}
+              alt="Praxis app on a handheld device"
+              width={560}
+              height={560}
+              className="h-[92%] w-auto max-w-none object-contain object-bottom object-left translate-x-[3%]"
+              priority={false}
+            />
+          </div>
+        )}
       </motion.div>
     </section>
   );
