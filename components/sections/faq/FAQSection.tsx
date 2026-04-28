@@ -81,7 +81,7 @@ export function FAQSection({
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.35 });
   const [showAllItems, setShowAllItems] = useState(false);
   const visibleItems = showAllItems ? items : items.slice(0, INITIAL_VISIBLE_FAQ_ITEMS);
-  const shouldShowMoreButton = !showAllItems && items.length > INITIAL_VISIBLE_FAQ_ITEMS;
+  const shouldShowToggleButton = items.length > INITIAL_VISIBLE_FAQ_ITEMS;
 
   return (
     <section
@@ -112,15 +112,15 @@ export function FAQSection({
           ))}
         </Accordion>
 
-        {shouldShowMoreButton ? (
+        {shouldShowToggleButton ? (
           <div className="mt-6 flex justify-center sm:mt-7">
             <Button
               type="button"
               variant="landing-dark-purple"
               size="landing-sm"
-              onClick={() => setShowAllItems(true)}
+              onClick={() => setShowAllItems((prev) => !prev)}
             >
-              Show more
+              {showAllItems ? "Show less" : "Show more"}
             </Button>
           </div>
         ) : null}
