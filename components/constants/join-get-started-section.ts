@@ -14,11 +14,16 @@ export const JOIN_GET_STARTED_CARDS = {
 export const JOIN_GET_STARTED_WEB_CARD_BG = "#9D94FF";
 export const JOIN_GET_STARTED_MOBILE_CARD_BG = "#0B5350";
 
-export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX = 145;
-export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT = 6;
+export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_DESKTOP = 145;
+export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_DESKTOP = 6;
+/** Praxis Web / Mobile cards: `useIsMobile()` — left-aligned grid, may clip on the right */
+export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_PX_MOBILE = 90;
+export const JOIN_GET_STARTED_PRODUCT_BG_CIRCLE_COUNT_MOBILE = 8;
 
 export const JOIN_GET_STARTED_PRODUCT_CARD_MAX_W = 710;
 export const JOIN_GET_STARTED_PRODUCT_CARD_MIN_H = 310;
+/** Praxis Web / Praxis Mobile cards below `md` */
+export const JOIN_GET_STARTED_PRODUCT_CARD_HEIGHT_MOBILE_PX = 245;
 
 export const JOIN_GET_STARTED_SECTION_TITLE = "Join Praxis to get started";
 export const JOIN_GET_STARTED_WEB_TITLE = "Praxis Web";

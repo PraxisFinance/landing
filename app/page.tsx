@@ -14,7 +14,7 @@ export default function Home() {
     <div className="min-h-screen bg-brand-white text-brand-black">
       <LandingHeader />
 
-      <main className="flex flex-col gap-[clamp(5rem,10vw,11.25rem)]">
+      <main className="mb-[100px] flex flex-col gap-[100px] md:mb-[180px] md:gap-[180px] px-5 sm:px-6 lg:px-10">
         <CoverSection />
         <AboutSection />
         <UserFlowSection />

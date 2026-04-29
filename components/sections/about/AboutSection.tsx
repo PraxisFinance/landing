@@ -2,11 +2,10 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ABOUT_SECTION_CARDS,
-  ABOUT_SECTION_HEADLINE,
-} from "@/components/constants/about-section";
-import { FirstPredictionCard } from "@/components/sections/FirstPredictionCard";
+import { ABOUT_SECTION_CARDS, ABOUT_SECTION_HEADLINE } from "@/components/constants/about-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
+import { AboutPredictionCard } from "@/components/sections/about/AboutPredictionCard";
 import { cn } from "@/lib/utils";
 
 type AboutSectionProps = {
@@ -102,6 +101,15 @@ const cardVariants = {
 export function AboutSection({ className }: AboutSectionProps) {
   const measureCardsRef = useRef<Array<HTMLDivElement | null>>([]);
   const [cardTargets, setCardTargets] = useState<CardTarget[]>([]);
+  const isMobile = useIsMobile();
+
+  const aboutTextSizes = SECTION_TEXT_SIZES.about;
+  const cardTitleTextSizeClassName = isMobile
+    ? aboutTextSizes.cardTitle.mobile
+    : aboutTextSizes.cardTitle.desktop;
+  const cardDescriptionTextSizeClassName = isMobile
+    ? aboutTextSizes.cardDescription.mobile
+    : aboutTextSizes.cardDescription.desktop;
 
   useLayoutEffect(() => {
     const measure = () => {
@@ -157,20 +165,36 @@ export function AboutSection({ className }: AboutSectionProps) {
         className
       )}
     >
-      <div className="relative isolate flex flex-col gap-12 sm:gap-16 lg:gap-20">
+      <div className="relative isolate flex flex-col gap-2 sm:gap-4 lg:gap-20">
         <div className="relative z-0 w-full px-1 sm:px-2">
           <h2 className="w-full text-left text-brand-black">
-            <HeadlineWave text={ABOUT_SECTION_HEADLINE} className="ui-headline-1 block w-full" />
+            <HeadlineWave
+              text={ABOUT_SECTION_HEADLINE}
+              className={cn(
+                "block w-full",
+                isMobile ? aboutTextSizes.title.mobile : aboutTextSizes.title.desktop
+              )}
+            />
           </h2>
         </div>
 
-        <div
-          className={cn(
-            "relative z-10",
-            "-mt-16 px-1 sm:-mt-20 sm:px-2 lg:-mt-28"
-          )}
-        >
-          <div className="invisible flex flex-wrap justify-end gap-4 sm:gap-5" aria-hidden>
+        <div className={cn("relative z-10", "mt-0 px-1 sm:-mt-20 sm:px-2 lg:-mt-28")}>
+          <div className="flex flex-col gap-3 sm:hidden">
+            {ABOUT_SECTION_CARDS.map((card) => (
+              <AboutPredictionCard
+                key={`mobile-${card.title}`}
+                {...card}
+                titleTextSizeClassName={cardTitleTextSizeClassName}
+                bodyTextSizeClassName={cardDescriptionTextSizeClassName}
+                className="!h-[150px] !w-full"
+              />
+            ))}
+          </div>
+
+          <div
+            className="invisible hidden flex-wrap justify-end gap-4 sm:flex sm:gap-5"
+            aria-hidden
+          >
             {ABOUT_SECTION_CARDS.map((card, index) => (
               <div
                 key={`measure-${card.title}`}
@@ -178,14 +202,18 @@ export function AboutSection({ className }: AboutSectionProps) {
                   measureCardsRef.current[index] = node;
                 }}
               >
-                <FirstPredictionCard {...card} />
+                <AboutPredictionCard
+                  {...card}
+                  titleTextSizeClassName={cardTitleTextSizeClassName}
+                  bodyTextSizeClassName={cardDescriptionTextSizeClassName}
+                />
               </div>
             ))}
           </div>
 
           {cardTargets.length === ABOUT_SECTION_CARDS.length && (
             <motion.div
-              className="absolute inset-0"
+              className="absolute inset-0 hidden sm:block"
               style={{ height: cardsHeight }}
               initial="hidden"
               whileInView="visible"
@@ -206,7 +234,12 @@ export function AboutSection({ className }: AboutSectionProps) {
                     zIndex: ABOUT_SECTION_CARDS.length - index,
                   }}
                 >
-                  <FirstPredictionCard {...card} className="!h-full !w-full" />
+                  <AboutPredictionCard
+                    {...card}
+                    titleTextSizeClassName={cardTitleTextSizeClassName}
+                    bodyTextSizeClassName={cardDescriptionTextSizeClassName}
+                    className="!h-full !w-full"
+                  />
                 </motion.div>
               ))}
             </motion.div>

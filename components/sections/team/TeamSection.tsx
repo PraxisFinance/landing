@@ -8,6 +8,8 @@ import {
   EXPERTS_SECTION_HEADLINE,
   EXPERTS_SECTION_ITEMS,
 } from "@/components/constants/experts-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { TeamCarouselTrack } from "@/components/sections/team/team-carousel-track";
 import { TeamCard } from "@/components/sections/team/team-card";
 import { Button } from "@/components/ui/button";
@@ -18,9 +20,10 @@ const WAVE_ITEM_DURATION = 0.48;
 const WAVE_LINE_DELAY = 0.34;
 const STACK_START_DELAY = 0.28;
 const STACK_STAGGER = 0.14;
-const CARD_WIDTH_PX = 345;
+const TEAM_CARD_WIDTH_DESKTOP_PX = 345;
+const TEAM_CARD_WIDTH_MOBILE_PX = 260;
 const CARD_GAP_PX = 16;
-const SCROLL_STEP_PX = CARD_WIDTH_PX + CARD_GAP_PX;
+const SCROLL_STEP_PX = TEAM_CARD_WIDTH_DESKTOP_PX + CARD_GAP_PX;
 const SCROLL_EDGE_EPS = 0.1;
 
 type TeamSectionProps = {
@@ -55,6 +58,13 @@ function WaveText({ text, className, start }: { text: string; className: string;
 }
 
 export function TeamSection({ className }: TeamSectionProps) {
+  const isMobile = useIsMobile();
+  const teamTextSizes = SECTION_TEXT_SIZES.team;
+  const titleTextClass = isMobile ? teamTextSizes.title.mobile : teamTextSizes.title.desktop;
+  const cardNameTextClass = isMobile ? teamTextSizes.cardName.mobile : teamTextSizes.cardName.desktop;
+  const cardBioTextClass = isMobile ? teamTextSizes.cardBio.mobile : teamTextSizes.cardBio.desktop;
+  const roleBadgeTextClass = isMobile ? teamTextSizes.roleBadge.mobile : teamTextSizes.roleBadge.desktop;
+
   const sectionRef = useRef<HTMLElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const sectionInView = useInView(sectionRef, { once: true, amount: 0.3 });
@@ -83,24 +93,26 @@ export function TeamSection({ className }: TeamSectionProps) {
     // Ensure stacked initial state is centered relative to section viewport.
     node.scrollLeft = 0;
     setScrollPercent(0);
-  }, [hasMeasuredTrack]);
+  }, [hasMeasuredTrack, isMobile]);
+
+  const cardWidthPx = isMobile ? TEAM_CARD_WIDTH_MOBILE_PX : TEAM_CARD_WIDTH_DESKTOP_PX;
 
   const stackOffsets = useMemo(() => {
     if (!trackWidth) {
       return EXPERTS_SECTION_ITEMS.map(() => ({ x: 0, scale: 1 }));
     }
-    const stackCenterX = (trackWidth - CARD_WIDTH_PX) / 2;
+    const stackCenterX = (trackWidth - cardWidthPx) / 2;
     return EXPERTS_SECTION_ITEMS.map((_, index) => {
       const centerIndex = (totalCards - 1) / 2;
       const delta = index - centerIndex;
-      const naturalX = index * (CARD_WIDTH_PX + CARD_GAP_PX);
+      const naturalX = index * (cardWidthPx + CARD_GAP_PX);
       const collapseToCenterX = stackCenterX - naturalX;
       return {
         x: collapseToCenterX + delta * 10,
         scale: 1 - Math.abs(delta) * 0.025,
       };
     });
-  }, [totalCards, trackWidth]);
+  }, [totalCards, trackWidth, cardWidthPx]);
 
   const shouldSpreadCards = sectionInView && hasMeasuredTrack;
 
@@ -133,32 +145,34 @@ export function TeamSection({ className }: TeamSectionProps) {
           <h2 className="text-center font-bold tracking-tight text-brand-black">
             <WaveText
               text={EXPERTS_SECTION_HEADLINE}
-              className="ui-headline-1 block text-center"
+              className={cn(titleTextClass, "block text-center")}
               start={sectionInView}
             />
           </h2>
-          <div className="mt-4 flex justify-end gap-2">
-            <Button
-              onClick={() => scrollTrackBy(-SCROLL_STEP_PX)}
-              disabled={!canScrollPrev}
-              variant="landing-dark-purple"
-              size="landing-icon-sm"
-              className="w-10 disabled:cursor-not-allowed"
-              aria-label="Scroll team cards left"
-            >
-              <ChevronLeft className="size-5" strokeWidth={2} aria-hidden />
-            </Button>
-            <Button
-              onClick={() => scrollTrackBy(SCROLL_STEP_PX)}
-              disabled={!canScrollNext}
-              variant="landing-dark-purple"
-              size="landing-icon-sm"
-              className="w-20 justify-end pr-3 disabled:cursor-not-allowed"
-              aria-label="Scroll team cards right"
-            >
-              <ChevronRight className="size-5" strokeWidth={2} aria-hidden />
-            </Button>
-          </div>
+          {!isMobile ? (
+            <div className="mt-4 flex justify-end gap-2">
+              <Button
+                onClick={() => scrollTrackBy(-SCROLL_STEP_PX)}
+                disabled={!canScrollPrev}
+                variant="landing-dark-purple"
+                size="landing-icon-sm"
+                className="w-10 disabled:cursor-not-allowed"
+                aria-label="Scroll team cards left"
+              >
+                <ChevronLeft className="size-5" strokeWidth={2} aria-hidden />
+              </Button>
+              <Button
+                onClick={() => scrollTrackBy(SCROLL_STEP_PX)}
+                disabled={!canScrollNext}
+                variant="landing-dark-purple"
+                size="landing-icon-sm"
+                className="w-20 justify-end pr-3 disabled:cursor-not-allowed"
+                aria-label="Scroll team cards right"
+              >
+                <ChevronRight className="size-5" strokeWidth={2} aria-hidden />
+              </Button>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -186,6 +200,10 @@ export function TeamSection({ className }: TeamSectionProps) {
                     bio={expert.bio}
                     socials={expert.socials}
                     priority={i < 4}
+                    compact={isMobile}
+                    nameTextClassName={cardNameTextClass}
+                    bioTextClassName={cardBioTextClass}
+                    roleBadgeTextClassName={roleBadgeTextClass}
                   />
                 </motion.div>
               ))

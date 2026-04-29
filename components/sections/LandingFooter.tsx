@@ -10,6 +10,7 @@ import { SocialXIcon } from "@/components/assets/social-x-icon";
 import {
   LANDING_FOOTER_GROUPS,
   LANDING_FOOTER_HOME_ARIA_LABEL,
+  LANDING_FOOTER_MOBILE_BOTTOM_LEGAL,
   LANDING_FOOTER_SOCIAL_LINKS,
 } from "@/components/constants/landing-footer";
 import { cn } from "@/lib/utils";
@@ -53,16 +54,16 @@ export function LandingFooter() {
 
   return (
     <footer className="bg-brand-white">
-      <div className="mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto w-full max-w-screen-2xl px-[20px] sm:px-6 lg:px-10">
         <div
           className={cn(
             "rounded-t-[2rem] bg-brand-gray/90",
-            "p-[50px] pb-[20px]",
+            "p-[20px] md:p-[50px] md:pb-[20px]",
             "lg:flex lg:min-h-[416px] lg:flex-col"
           )}
         >
-          <div className="grid h-full flex-1 gap-10 lg:grid-cols-[minmax(0,240px)_1fr] lg:items-stretch lg:gap-12">
-            <div className="space-y-6">
+          <div className="grid h-full flex-1 max-md:gap-0 gap-10 lg:grid-cols-[minmax(0,240px)_1fr] lg:items-stretch lg:gap-12">
+            <div className="space-y-6 max-md:space-y-[30px]">
               <Link
                 href="/"
                 className="inline-flex text-brand-black"
@@ -91,25 +92,34 @@ export function LandingFooter() {
 
             <nav
               aria-label="Footer navigation"
-              className="grid h-full auto-rows-fr grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-4 sm:gap-x-10 lg:gap-x-12"
+              className="grid h-full auto-rows-fr grid-cols-2 gap-x-8 gap-y-10 max-md:mt-[30px] max-md:gap-y-[30px] sm:grid-cols-4 sm:gap-x-10 lg:gap-x-12"
             >
               {LANDING_FOOTER_GROUPS.map((group) => (
                 <div key={group.title} className="flex h-full min-h-0 flex-col gap-2.5">
                   <h3 className="text-sm font-bold text-brand-black">{group.title}</h3>
                   <ul className="space-y-1 text-sm text-brand-black/75">
-                    {group.links.map((link) => (
-                      <li key={link}>
-                        <Link
-                          href={footerLinkTargets[link] ?? "#"}
-                          onClick={handleAnchorClick}
-                          className="transition hover:text-brand-black"
-                        >
-                          {link}
-                        </Link>
-                      </li>
-                    ))}
+                    {group.links.map((link) => {
+                      const targetHref = footerLinkTargets[link];
+                      const isLinkActive = Boolean(targetHref && targetHref !== "#");
+
+                      return (
+                        <li key={link}>
+                          {isLinkActive ? (
+                            <Link
+                              href={targetHref}
+                              onClick={handleAnchorClick}
+                              className="transition hover:text-brand-black"
+                            >
+                              {link}
+                            </Link>
+                          ) : (
+                            <span className="cursor-default opacity-50">{link}</span>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
-                  <div className="mt-auto border-t border-brand-gray/80 pt-4">
+                  <div className="mt-auto hidden border-t border-brand-gray/80 pt-4 md:block">
                     <Link
                       href="#"
                       className="text-xs font-medium text-brand-black/75 transition hover:text-brand-black"
@@ -120,6 +130,23 @@ export function LandingFooter() {
                 </div>
               ))}
             </nav>
+
+            <div
+              className={cn(
+                "flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-brand-gray/80 pt-5",
+                "max-md:mt-[50px] md:hidden"
+              )}
+            >
+              {LANDING_FOOTER_MOBILE_BOTTOM_LEGAL.map((label) => (
+                <Link
+                  key={label}
+                  href="#"
+                  className="text-xs font-medium text-brand-black/75 transition hover:text-brand-black"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>

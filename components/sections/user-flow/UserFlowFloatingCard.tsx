@@ -14,6 +14,8 @@ import {
   USER_FLOW_CARD_COLLAPSED_HEIGHT,
   USER_FLOW_CARD_WIDTH,
 } from "@/components/constants/user-flow-section";
+import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { cn } from "@/lib/utils";
 
 function UserFlowCardIcon({ icon }: { icon: UserFlowCardDefinition["icon"] }) {
@@ -39,6 +41,15 @@ export function UserFlowFloatingCard({
   card: UserFlowCardDefinition;
   state: UserFlowCardState;
 }) {
+  const isMobile = useIsMobile();
+  const userFlowTextSizes = SECTION_TEXT_SIZES.userFlow;
+  const cardLabelTextSizeClassName = isMobile
+    ? userFlowTextSizes.cardLabel.mobile
+    : userFlowTextSizes.cardLabel.desktop;
+  const cardTitleTextSizeClassName = isMobile
+    ? userFlowTextSizes.cardTitle.mobile
+    : userFlowTextSizes.cardTitle.desktop;
+
   const toneClassName =
     card.tone === "purple"
       ? "bg-brand-light-purple text-brand-black"
@@ -47,6 +58,7 @@ export function UserFlowFloatingCard({
         : "bg-brand-light-green text-brand-black";
 
   const compact = state.height <= USER_FLOW_CARD_COLLAPSED_HEIGHT + 4;
+  const isMobileExpanded = isMobile && !compact;
 
   return (
     <motion.article
@@ -67,20 +79,48 @@ export function UserFlowFloatingCard({
       )}
       style={{ maxWidth: USER_FLOW_CARD_WIDTH }}
     >
-      <div className={cn("flex items-center justify-between gap-3", compact ? "mb-0" : "mb-4")}>
-        <span className="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-[11px] font-medium leading-none text-brand-black sm:text-xs">
-          {card.label}
-        </span>
-        <span className="inline-flex size-6 items-center justify-center sm:size-7">
-          <UserFlowCardIcon icon={card.icon} />
-        </span>
-      </div>
+      {isMobileExpanded ? (
+        <div className="flex h-full flex-col justify-between gap-4">
+          <p className={cn("text-pretty font-semibold leading-[1.02]", cardTitleTextSizeClassName)}>
+            {card.title}
+          </p>
+          <div className="flex items-center justify-between gap-3">
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full bg-white px-3 py-1.5 font-medium leading-none text-brand-black",
+                cardLabelTextSizeClassName
+              )}
+            >
+              {card.label}
+            </span>
+            <span className="inline-flex size-6 items-center justify-center sm:size-7">
+              <UserFlowCardIcon icon={card.icon} />
+            </span>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className={cn("flex items-center justify-between gap-3", compact ? "mb-0" : "mb-4")}>
+            <span
+              className={cn(
+                "inline-flex items-center rounded-full bg-white px-3 py-1.5 font-medium leading-none text-brand-black",
+                cardLabelTextSizeClassName
+              )}
+            >
+              {card.label}
+            </span>
+            <span className="inline-flex size-6 items-center justify-center sm:size-7">
+              <UserFlowCardIcon icon={card.icon} />
+            </span>
+          </div>
 
-      {!compact && card.title ? (
-        <p className="text-pretty text-[clamp(1.45rem,2.2vw,2.2rem)] font-semibold leading-[1.02]">
-          {card.title}
-        </p>
-      ) : null}
+          {!compact && card.title ? (
+            <p className={cn("text-pretty font-semibold leading-[1.02]", cardTitleTextSizeClassName)}>
+              {card.title}
+            </p>
+          ) : null}
+        </>
+      )}
     </motion.article>
   );
 }
