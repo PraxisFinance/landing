@@ -7,9 +7,8 @@ import {
   USER_FLOW_CARDS,
   USER_FLOW_SECTION_HEADLINE,
   USER_FLOW_SECTION_STEPS,
-  type UserFlowCardState,
 } from "@/components/constants/user-flow-section";
-import { UserFlowCardsStage } from "@/components/sections/user-flow/UserFlowCardsStage";
+import { UserFlowCardsStageMobile } from "@/components/sections/user-flow/UserFlowCardsStageMobile";
 import { UserFlowSectionHeading } from "@/components/sections/user-flow/UserFlowSectionHeading";
 import { cn } from "@/lib/utils";
 
@@ -17,17 +16,11 @@ const STEP_COUNT = USER_FLOW_SECTION_STEPS.length;
 const MOBILE_FLOW_STEP_COUNT = STEP_COUNT + 1;
 const SCROLL_PROGRESS_MAX = 0.9999;
 const SCROLL_STEP_SENSITIVITY = 520;
-const MOBILE_ANIMATION_START_TOP_PX = 110;
+/** Section top must be at or above this (px) before wheel/touch drives step progress. */
+const MOBILE_ANIMATION_START_TOP_PX = 160;
 
 type UserFlowSectionMobileProps = {
   className?: string;
-};
-
-const hiddenCardState: UserFlowCardState = {
-  visible: false,
-  opacity: 0,
-  top: 0,
-  height: 0,
 };
 
 export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps) {
@@ -36,9 +29,9 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   const touchStartYRef = useRef<number | null>(null);
   const progressRef = useRef(0);
   const inViewRef = useRef(false);
-  const hasEnteredViewportRef = useRef(false);
+  /** Reveal card stack when the section enters view (works for page scroll; not only wheel on the section). */
+  const sectionInViewForCards = useInView(sectionRef, { amount: 0.08, once: true, margin: "0px 0px -12% 0px" });
   const sectionInView = useInView(sectionRef, { amount: 0.2 });
-  const [hasEnteredViewport, setHasEnteredViewport] = useState(false);
   const mobileFlowStepIndex = Math.min(
     MOBILE_FLOW_STEP_COUNT - 1,
     Math.round(scrollProgress * (MOBILE_FLOW_STEP_COUNT - 1))
@@ -47,7 +40,6 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
 
   progressRef.current = scrollProgress;
   inViewRef.current = sectionInView;
-  hasEnteredViewportRef.current = hasEnteredViewport;
 
   const isAnimationStartPointReached = () => {
     if (!inViewRef.current) {
@@ -61,12 +53,6 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
 
     const rect = section.getBoundingClientRect();
     return rect.top <= MOBILE_ANIMATION_START_TOP_PX;
-  };
-
-  const markViewportEntered = () => {
-    if (!hasEnteredViewportRef.current && isAnimationStartPointReached()) {
-      setHasEnteredViewport(true);
-    }
   };
 
   const updateProgressByDelta = (delta: number) => {
@@ -93,8 +79,6 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   };
 
   const handleWheel = (event: WheelEvent) => {
-    markViewportEntered();
-
     if (!shouldCaptureScroll(event.deltaY)) {
       return;
     }
@@ -108,8 +92,6 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   };
 
   const handleTouchMove = (event: TouchEvent) => {
-    markViewportEntered();
-
     const currentY = event.touches[0]?.clientY;
     const previousY = touchStartYRef.current;
 
@@ -165,16 +147,18 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     >
       <div className="px-4 sm:px-6 lg:px-10">
         <div className="mx-auto flex w-full max-w-[min(100%,90rem)] flex-col gap-2">
-          <UserFlowSectionHeading title={USER_FLOW_SECTION_HEADLINE} show={sectionInView} />
-          <UserFlowCardsStage
-            isMobile
-            shouldRevealMobileCards={hasEnteredViewport}
+          <UserFlowSectionHeading
+            title={USER_FLOW_SECTION_HEADLINE}
+            show={sectionInView}
+            textSizeVariant="mobile"
+          />
+          <UserFlowCardsStageMobile
+            shouldRevealMobileCards={sectionInViewForCards}
             mobileFlowStepIndex={mobileFlowStepIndex}
             activeStep={activeStep}
             activeStepIndex={activeStepIndex}
             leftCards={leftCards}
             rightCards={rightCards}
-            getInterpolatedCardState={() => hiddenCardState}
           />
         </div>
       </div>
