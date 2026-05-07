@@ -15,7 +15,7 @@ export function AboutSectionCardsMobile({
   const cards = MOBILE_CARD_ORDER.map((index) => ABOUT_SECTION_CARDS[index]);
 
   return (
-    <div className="flex flex-col gap-3 sm:hidden">
+    <div className="flex flex-col gap-3">
       {cards.map((card) => (
         <AboutPredictionCardMobile
           key={`mobile-${card.title}`}

@@ -113,7 +113,7 @@ export function AboutSectionCardsDesktop({
 
   return (
     <>
-      <div className="invisible hidden flex-wrap justify-end gap-4 sm:flex sm:gap-5" aria-hidden>
+      <div className="invisible flex flex-wrap justify-end gap-4 sm:gap-5" aria-hidden>
         {ABOUT_SECTION_CARDS.map((card, index) => (
           <div
             key={`measure-${card.title}`}
@@ -132,7 +132,7 @@ export function AboutSectionCardsDesktop({
 
       {cardTargets.length === ABOUT_SECTION_CARDS.length && (
         <motion.div
-          className="absolute inset-0 hidden sm:block"
+          className="absolute inset-0"
           style={{ height: cardsHeight }}
           initial="hidden"
           whileInView="visible"
