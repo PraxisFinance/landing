@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 
 import { MobileProvider } from "@/components/providers/mobile-context";
+import { getSiteUrl } from "@/lib/site-url";
 
 import "./globals.css";
 
@@ -11,6 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: "Praxis",
   description:
     "Praxis is the first prediction market where users trade outcomes with yield, not principal.",
