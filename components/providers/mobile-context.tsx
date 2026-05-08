@@ -16,11 +16,11 @@ type MobileProviderProps = {
 };
 
 /**
- * Viewport flag for **section branching** (different mobile/desktop trees). SSR and the first client
- * render use `isMobile === false`, then a microtask syncs `matchMedia`.
+ * Viewport flag for **branching** mobile vs desktop trees (`useIsMobile`).
+ * SSR and the first client render use `isMobile === false`, then a microtask syncs `matchMedia`.
  *
- * **Shell chrome** (header/footer) should prefer Tailwind `md:` / `max-md:` in a single component tree
- * so layout does not flash before this context updates.
+ * Prefer this hook over Tailwind `md:` / `max-md:` when the project intentionally renders a single
+ * layout variant (card stacks, section shells). Header/footer follow this pattern via responsive wrappers.
  */
 export function MobileProvider({ children }: MobileProviderProps) {
   const [isMobile, setIsMobile] = useState(false);
