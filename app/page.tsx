@@ -45,7 +45,7 @@ const LandingFooter = dynamic(
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-brand-white text-brand-black">
+    <div className="flex min-h-screen flex-col bg-brand-white text-brand-black">
       <LandingHeader />
       <PrefetchBelowFoldChunks />
 

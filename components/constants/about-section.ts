@@ -33,3 +33,5 @@ export const ABOUT_SECTION_CARDS = [
     bodyClassName: "text-brand-black",
   },
 ] as const;
+
+export type AboutSectionCard = (typeof ABOUT_SECTION_CARDS)[number];

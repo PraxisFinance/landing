@@ -3,7 +3,6 @@
 import { useIsMobile } from "@/components/providers/mobile-context";
 import { CoverSectionDesktop } from "@/components/sections/cover/CoverSectionDesktop";
 import { CoverSectionMobile } from "@/components/sections/cover/CoverSectionMobile";
-import { cn } from "@/lib/utils";
 
 export type CoverSectionProps = {
   className?: string;

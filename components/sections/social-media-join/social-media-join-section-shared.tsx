@@ -8,7 +8,6 @@ import {
   JOIN_GET_STARTED_MOBILE_DESCRIPTION,
   JOIN_GET_STARTED_MOBILE_TITLE,
   JOIN_GET_STARTED_SECTION_TITLE,
-  JOIN_GET_STARTED_WEB_DESCRIPTION,
   JOIN_GET_STARTED_WEB_TITLE,
 } from "@/components/constants/join-get-started-section";
 import { waveRevealTiming } from "@/components/motion/wave-reveal";

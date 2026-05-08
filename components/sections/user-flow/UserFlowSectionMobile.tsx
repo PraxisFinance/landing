@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
 import {
@@ -27,8 +27,8 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   const sectionRef = useRef<HTMLElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const touchStartYRef = useRef<number | null>(null);
-  const progressRef = useRef(0);
-  const inViewRef = useRef(false);
+  const scrollProgressRef = useRef(0);
+  const sectionInViewRef = useRef(false);
   /** Reveal card stack when the section enters view (works for page scroll; not only wheel on the section). */
   const sectionInViewForCards = useInView(sectionRef, { amount: 0.08, once: true, margin: "0px 0px -12% 0px" });
   const sectionInView = useInView(sectionRef, { amount: 0.2 });
@@ -38,11 +38,12 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   );
   const activeStepIndex = Math.max(0, Math.min(STEP_COUNT - 1, mobileFlowStepIndex - 1));
 
-  progressRef.current = scrollProgress;
-  inViewRef.current = sectionInView;
+  useEffect(() => {
+    sectionInViewRef.current = sectionInView;
+  }, [sectionInView]);
 
   const isAnimationStartPointReached = () => {
-    if (!inViewRef.current) {
+    if (!sectionInViewRef.current) {
       return false;
     }
 
@@ -58,6 +59,7 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   const updateProgressByDelta = (delta: number) => {
     setScrollProgress((prev) => {
       const next = Math.max(0, Math.min(SCROLL_PROGRESS_MAX, prev + delta / SCROLL_STEP_SENSITIVITY));
+      scrollProgressRef.current = next;
       return next;
     });
   };
@@ -68,11 +70,11 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     }
 
     if (delta > 0) {
-      return progressRef.current < SCROLL_PROGRESS_MAX;
+      return scrollProgressRef.current < SCROLL_PROGRESS_MAX;
     }
 
     if (delta < 0) {
-      return progressRef.current > 0;
+      return scrollProgressRef.current > 0;
     }
 
     return false;
@@ -114,22 +116,45 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     touchStartYRef.current = null;
   };
 
+  const interactionHandlersRef = useRef({
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+  });
+
+  useLayoutEffect(() => {
+    interactionHandlersRef.current = {
+      handleWheel,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+    };
+  });
+
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) {
       return;
     }
 
-    section.addEventListener("wheel", handleWheel, { passive: false });
-    section.addEventListener("touchstart", handleTouchStart, { passive: true });
-    section.addEventListener("touchmove", handleTouchMove, { passive: false });
-    section.addEventListener("touchend", handleTouchEnd, { passive: true });
+    const onWheel = (event: WheelEvent) => interactionHandlersRef.current.handleWheel(event);
+    const onTouchStart = (event: TouchEvent) =>
+      interactionHandlersRef.current.handleTouchStart(event);
+    const onTouchMove = (event: TouchEvent) =>
+      interactionHandlersRef.current.handleTouchMove(event);
+    const onTouchEnd = () => interactionHandlersRef.current.handleTouchEnd();
+
+    section.addEventListener("wheel", onWheel, { passive: false });
+    section.addEventListener("touchstart", onTouchStart, { passive: true });
+    section.addEventListener("touchmove", onTouchMove, { passive: false });
+    section.addEventListener("touchend", onTouchEnd, { passive: true });
 
     return () => {
-      section.removeEventListener("wheel", handleWheel);
-      section.removeEventListener("touchstart", handleTouchStart);
-      section.removeEventListener("touchmove", handleTouchMove);
-      section.removeEventListener("touchend", handleTouchEnd);
+      section.removeEventListener("wheel", onWheel);
+      section.removeEventListener("touchstart", onTouchStart);
+      section.removeEventListener("touchmove", onTouchMove);
+      section.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 

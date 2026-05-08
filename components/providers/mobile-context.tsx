@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { LANDING_MOBILE_MEDIA_QUERY } from "@/components/constants/responsive";
 
 type MobileContextValue = {
+  /** `true` when viewport width is at most 767px (below Tailwind `md`, 768px). */
   isMobile: boolean;
 };
 
@@ -14,20 +15,24 @@ type MobileProviderProps = {
   children: ReactNode;
 };
 
+/**
+ * Viewport flag for **section branching** (different mobile/desktop trees). SSR and the first client
+ * render use `isMobile === false`, then a microtask syncs `matchMedia`.
+ *
+ * **Shell chrome** (header/footer) should prefer Tailwind `md:` / `max-md:` in a single component tree
+ * so layout does not flash before this context updates.
+ */
 export function MobileProvider({ children }: MobileProviderProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const mediaQueryList = window.matchMedia(LANDING_MOBILE_MEDIA_QUERY);
 
-    setIsMobile(mediaQueryList.matches);
+    const syncMatches = () => setIsMobile(mediaQueryList.matches);
+    queueMicrotask(syncMatches);
 
-    const handleViewportChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
-    };
-
-    mediaQueryList.addEventListener("change", handleViewportChange);
-    return () => mediaQueryList.removeEventListener("change", handleViewportChange);
+    mediaQueryList.addEventListener("change", syncMatches);
+    return () => mediaQueryList.removeEventListener("change", syncMatches);
   }, []);
 
   const value = useMemo(() => ({ isMobile }), [isMobile]);

@@ -30,8 +30,10 @@ export function useTeamCarousel(isMobile: boolean) {
 
   useEffect(() => {
     if (isMobile) {
-      setTrackWidth(0);
-      setHasMeasuredTrack(false);
+      queueMicrotask(() => {
+        setTrackWidth(0);
+        setHasMeasuredTrack(false);
+      });
       return;
     }
 
