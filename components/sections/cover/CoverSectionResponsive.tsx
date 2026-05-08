@@ -1,16 +1,21 @@
 "use client";
 
-import { useIsMobile } from "@/components/providers/mobile-context";
+import { useMobileViewport } from "@/components/providers/mobile-context";
 import { CoverSectionDesktop } from "@/components/sections/cover/CoverSectionDesktop";
 import { CoverSectionMobile } from "@/components/sections/cover/CoverSectionMobile";
+import { CoverSectionViewportSkeleton } from "@/components/viewport/viewport-skeletons";
 
 export type CoverSectionProps = {
   className?: string;
 };
 
-/** Picks mobile or desktop cover layout from global viewport (single tree branch). Threshold matches `LANDING_MOBILE_MEDIA_QUERY` (767px), aligned with `next/image` sizes helpers and Tailwind below `md` (768px). */
+/** After viewport snapshot (`matchMedia`), mounts exactly one cover branch (767px threshold). */
 export function CoverSectionResponsive({ className }: CoverSectionProps) {
-  const isMobile = useIsMobile();
+  const { isMobile, isViewportReady } = useMobileViewport();
+
+  if (!isViewportReady) {
+    return <CoverSectionViewportSkeleton className={className} />;
+  }
 
   return isMobile ? (
     <CoverSectionMobile className={className} />

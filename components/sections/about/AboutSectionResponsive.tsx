@@ -1,16 +1,21 @@
 "use client";
 
-import { useIsMobile } from "@/components/providers/mobile-context";
+import { useMobileViewport } from "@/components/providers/mobile-context";
 import { AboutSectionDesktop } from "@/components/sections/about/AboutSectionDesktop";
 import { AboutSectionMobile } from "@/components/sections/about/AboutSectionMobile";
+import { SectionViewportPlaceholder } from "@/components/viewport/viewport-skeletons";
 
 export type AboutSectionProps = {
   className?: string;
 };
 
-/** Picks mobile or desktop About layout from global viewport (single tree branch). */
+/** About branches after viewport snapshot. */
 export function AboutSectionResponsive({ className }: AboutSectionProps) {
-  const isMobile = useIsMobile();
+  const { isMobile, isViewportReady } = useMobileViewport();
+
+  if (!isViewportReady) {
+    return <SectionViewportPlaceholder className={className} minHeightClass="min-h-[520px]" />;
+  }
 
   return isMobile ? (
     <AboutSectionMobile className={className} />

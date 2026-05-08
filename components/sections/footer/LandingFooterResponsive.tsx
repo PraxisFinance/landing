@@ -1,12 +1,17 @@
 "use client";
 
-import { useIsMobile } from "@/components/providers/mobile-context";
+import { useMobileViewport } from "@/components/providers/mobile-context";
 import { LandingFooterDesktop } from "@/components/sections/footer/LandingFooterDesktop";
 import { LandingFooterMobile } from "@/components/sections/footer/LandingFooterMobile";
+import { LandingFooterViewportSkeleton } from "@/components/viewport/viewport-skeletons";
 
-/** Mobile vs desktop footer from centralized viewport (`useIsMobile`). Outer shell keeps page flex height behavior on large screens. */
+/** Footer branches after viewport snapshot; skeleton preserves flex height shell. */
 export function LandingFooterResponsive() {
-  const isMobile = useIsMobile();
+  const { isMobile, isViewportReady } = useMobileViewport();
+
+  if (!isViewportReady) {
+    return <LandingFooterViewportSkeleton />;
+  }
 
   return (
     <footer className="mt-auto flex flex-col bg-brand-white lg:min-h-0 lg:flex-1">
