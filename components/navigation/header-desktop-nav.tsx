@@ -20,10 +20,18 @@ const triggerClassName = cn(
   "[&_svg]:ml-0.5 [&_svg]:text-brand-black/55 data-open:[&_svg]:text-white data-popup-open:[&_svg]:text-white"
 );
 
-export function HeaderDesktopNav() {
+type HeaderDesktopNavProps = {
+  /** When the header mounts only on desktop (`md+`), show nav without the `md:flex` breakpoint gate. */
+  forceVisible?: boolean;
+};
+
+export function HeaderDesktopNav({ forceVisible = false }: HeaderDesktopNavProps = {}) {
   return (
     <NavigationMenu
-      className="relative z-50 hidden max-w-none justify-center md:flex"
+      className={cn(
+        "relative z-50 max-w-none justify-center",
+        forceVisible ? "flex" : "hidden md:flex"
+      )}
       align="center"
     >
       <NavigationMenuList className="flex-wrap justify-center gap-2">
