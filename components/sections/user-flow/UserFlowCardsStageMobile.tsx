@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
+import { NEXT_IMAGE_SIZES_USER_FLOW_STEP } from "@/components/constants/next-image-sizes";
 import type { UserFlowCardDefinition, UserFlowStepState } from "@/components/constants/user-flow-section";
 import {
   USER_FLOW_SECTION_CENTER_MAX_PX,
@@ -51,7 +52,7 @@ export function UserFlowCardsStageMobile({
               alt={USER_FLOW_SECTION_IMAGE_ALT}
               fill
               className="object-contain object-center"
-              sizes="(max-width: 1280px) 80vw, 720px"
+              sizes={NEXT_IMAGE_SIZES_USER_FLOW_STEP}
               priority={activeStepIndex <= 1}
             />
           </motion.div>

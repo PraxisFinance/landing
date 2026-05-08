@@ -4,6 +4,7 @@ import { ArrowRightIcon, CircleHelp } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import { NEXT_IMAGE_SIZES_JOIN_WAITLIST_MOBILE } from "@/components/constants/next-image-sizes";
 import {
   JOIN_WAITLIST_BASEAPP_APP_TEXT,
   JOIN_WAITLIST_BASEAPP_BASE_TEXT,
@@ -163,6 +164,7 @@ export function JoinWaitlistSectionMobile({
                 alt="Praxis app on a handheld device"
                 width={315}
                 height={315}
+                sizes={NEXT_IMAGE_SIZES_JOIN_WAITLIST_MOBILE}
                 className="h-full w-auto max-w-full object-contain object-bottom"
                 priority={false}
               />

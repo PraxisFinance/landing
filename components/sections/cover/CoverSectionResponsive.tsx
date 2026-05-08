@@ -8,7 +8,7 @@ export type CoverSectionProps = {
   className?: string;
 };
 
-/** Picks mobile or desktop cover layout from global viewport (single tree branch). */
+/** Picks mobile or desktop cover layout from global viewport (single tree branch). Threshold matches `LANDING_MOBILE_MEDIA_QUERY` (767px), aligned with `next/image` sizes helpers and Tailwind below `md` (768px). */
 export function CoverSectionResponsive({ className }: CoverSectionProps) {
   const isMobile = useIsMobile();
 

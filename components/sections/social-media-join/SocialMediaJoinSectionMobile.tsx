@@ -11,6 +11,10 @@ import {
   WaveRevealWords,
 } from "@/components/motion/wave-reveal";
 import {
+  NEXT_IMAGE_SIZES_SMJ_MOBILE_CARD,
+  NEXT_IMAGE_SIZES_SMJ_WEB_CARD,
+} from "@/components/constants/next-image-sizes";
+import {
   JOIN_GET_STARTED_CARDS,
   JOIN_GET_STARTED_COMMUNITY_DESCRIPTION,
   JOIN_GET_STARTED_COMMUNITY_LINKS,
@@ -154,7 +158,7 @@ export function SocialMediaJoinSectionMobile({
                   alt={JOIN_GET_STARTED_IMAGE_ALT.web}
                   fill
                   className="object-contain object-right object-bottom"
-                  sizes="(max-width: 768px) min(100vw, 710px), 420px"
+                  sizes={NEXT_IMAGE_SIZES_SMJ_WEB_CARD}
                 />
               </div>
 
@@ -231,7 +235,7 @@ export function SocialMediaJoinSectionMobile({
                       alt={JOIN_GET_STARTED_IMAGE_ALT.mobile}
                       fill
                       className="object-contain object-[right_bottom]"
-                      sizes="(max-width: 768px) min(100vw, 710px), 480px"
+                      sizes={NEXT_IMAGE_SIZES_SMJ_MOBILE_CARD}
                     />
                   </div>
                 </div>
