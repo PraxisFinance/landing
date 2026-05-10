@@ -86,9 +86,14 @@ export function UserFlowMobileCardsStage({
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[345px] lg:hidden" style={{ height: effectiveStageHeight }}>
+    <div className="relative mx-auto w-full max-w-[345px]" style={{ height: effectiveStageHeight }}>
       {cards.map((card) => (
-        <UserFlowFloatingCard key={`mobile-${card.id}`} card={card} state={getMobileCardState(card.id)} />
+        <UserFlowFloatingCard
+          key={`mobile-${card.id}`}
+          card={card}
+          state={getMobileCardState(card.id)}
+          useMobileChrome
+        />
       ))}
     </div>
   );

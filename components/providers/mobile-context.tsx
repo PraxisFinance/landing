@@ -5,7 +5,10 @@ import { createContext, useContext, useEffect, useMemo, useState, type ReactNode
 import { LANDING_MOBILE_MEDIA_QUERY } from "@/components/constants/responsive";
 
 type MobileContextValue = {
+  /** Reliable after `isViewportReady` is true (matches `LANDING_MOBILE_MEDIA_QUERY`). */
   isMobile: boolean;
+  /** False during SSR and until the first client `matchMedia` read (same microtask batch). */
+  isViewportReady: boolean;
 };
 
 const MobileContext = createContext<MobileContextValue | undefined>(undefined);
@@ -14,33 +17,49 @@ type MobileProviderProps = {
   children: ReactNode;
 };
 
+/**
+ * Central viewport store for mobile vs desktop branches. Consumers that render **different trees**
+ * should wait for `isViewportReady` (see `useMobileViewport`) and show a skeleton/placeholder until
+ * then—otherwise the first paint assumes desktop (`isMobile === false`) before sync.
+ */
 export function MobileProvider({ children }: MobileProviderProps) {
   const [isMobile, setIsMobile] = useState(false);
+  const [isViewportReady, setViewportReady] = useState(false);
 
   useEffect(() => {
-    const mediaQueryList = window.matchMedia(LANDING_MOBILE_MEDIA_QUERY);
+    const mq = window.matchMedia(LANDING_MOBILE_MEDIA_QUERY);
 
-    setIsMobile(mediaQueryList.matches);
-
-    const handleViewportChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
+    const applyInitialViewport = () => {
+      setIsMobile(mq.matches);
+      setViewportReady(true);
     };
 
-    mediaQueryList.addEventListener("change", handleViewportChange);
-    return () => mediaQueryList.removeEventListener("change", handleViewportChange);
+    queueMicrotask(applyInitialViewport);
+
+    const onChange = () => {
+      setIsMobile(mq.matches);
+    };
+
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const value = useMemo(() => ({ isMobile }), [isMobile]);
+  const value = useMemo(() => ({ isMobile, isViewportReady }), [isMobile, isViewportReady]);
 
   return <MobileContext.Provider value={value}>{children}</MobileContext.Provider>;
 }
 
-export function useIsMobile() {
+export function useMobileViewport(): MobileContextValue {
   const context = useContext(MobileContext);
 
   if (!context) {
-    throw new Error("useIsMobile must be used within MobileProvider");
+    throw new Error("useMobileViewport must be used within MobileProvider");
   }
 
-  return context.isMobile;
+  return context;
+}
+
+/** Current mobile flag; safe once ancestors gated on `isViewportReady` before branching. */
+export function useIsMobile(): boolean {
+  return useMobileViewport().isMobile;
 }

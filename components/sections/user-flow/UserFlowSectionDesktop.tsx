@@ -9,7 +9,7 @@ import {
   USER_FLOW_SECTION_HEIGHT,
   USER_FLOW_SECTION_STEPS,
 } from "@/components/constants/user-flow-section";
-import { UserFlowCardsStage } from "@/components/sections/user-flow/UserFlowCardsStage";
+import { UserFlowCardsStageDesktop } from "@/components/sections/user-flow/UserFlowCardsStageDesktop";
 import { UserFlowSectionHeading } from "@/components/sections/user-flow/UserFlowSectionHeading";
 import { cn } from "@/lib/utils";
 
@@ -110,11 +110,14 @@ export function UserFlowSectionDesktop({ className }: UserFlowSectionDesktopProp
       >
         <div className="mx-auto flex h-full w-full max-w-[min(100%,90rem)] min-h-0 flex-col">
           <div className="shrink-0">
-            <UserFlowSectionHeading title={USER_FLOW_SECTION_HEADLINE} show={shouldShowHeading} />
+            <UserFlowSectionHeading
+              title={USER_FLOW_SECTION_HEADLINE}
+              show={shouldShowHeading}
+              textSizeVariant="desktop"
+            />
           </div>
           <div className="min-h-0 flex-1">
-            <UserFlowCardsStage
-              isMobile={false}
+            <UserFlowCardsStageDesktop
               activeStep={activeStep}
               activeStepIndex={activeStepIndex}
               leftCards={leftCards}

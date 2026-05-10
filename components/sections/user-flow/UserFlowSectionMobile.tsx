@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
 import {
   USER_FLOW_CARDS,
   USER_FLOW_SECTION_HEADLINE,
   USER_FLOW_SECTION_STEPS,
-  type UserFlowCardState,
 } from "@/components/constants/user-flow-section";
-import { UserFlowCardsStage } from "@/components/sections/user-flow/UserFlowCardsStage";
+import { UserFlowCardsStageMobile } from "@/components/sections/user-flow/UserFlowCardsStageMobile";
 import { UserFlowSectionHeading } from "@/components/sections/user-flow/UserFlowSectionHeading";
 import { cn } from "@/lib/utils";
 
@@ -17,40 +16,34 @@ const STEP_COUNT = USER_FLOW_SECTION_STEPS.length;
 const MOBILE_FLOW_STEP_COUNT = STEP_COUNT + 1;
 const SCROLL_PROGRESS_MAX = 0.9999;
 const SCROLL_STEP_SENSITIVITY = 520;
-const MOBILE_ANIMATION_START_TOP_PX = 110;
+/** Section top must be at or above this (px) before wheel/touch drives step progress. */
+const MOBILE_ANIMATION_START_TOP_PX = 160;
 
 type UserFlowSectionMobileProps = {
   className?: string;
-};
-
-const hiddenCardState: UserFlowCardState = {
-  visible: false,
-  opacity: 0,
-  top: 0,
-  height: 0,
 };
 
 export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const touchStartYRef = useRef<number | null>(null);
-  const progressRef = useRef(0);
-  const inViewRef = useRef(false);
-  const hasEnteredViewportRef = useRef(false);
+  const scrollProgressRef = useRef(0);
+  const sectionInViewRef = useRef(false);
+  /** Reveal card stack when the section enters view (works for page scroll; not only wheel on the section). */
+  const sectionInViewForCards = useInView(sectionRef, { amount: 0.08, once: true, margin: "0px 0px -12% 0px" });
   const sectionInView = useInView(sectionRef, { amount: 0.2 });
-  const [hasEnteredViewport, setHasEnteredViewport] = useState(false);
   const mobileFlowStepIndex = Math.min(
     MOBILE_FLOW_STEP_COUNT - 1,
     Math.round(scrollProgress * (MOBILE_FLOW_STEP_COUNT - 1))
   );
   const activeStepIndex = Math.max(0, Math.min(STEP_COUNT - 1, mobileFlowStepIndex - 1));
 
-  progressRef.current = scrollProgress;
-  inViewRef.current = sectionInView;
-  hasEnteredViewportRef.current = hasEnteredViewport;
+  useEffect(() => {
+    sectionInViewRef.current = sectionInView;
+  }, [sectionInView]);
 
   const isAnimationStartPointReached = () => {
-    if (!inViewRef.current) {
+    if (!sectionInViewRef.current) {
       return false;
     }
 
@@ -63,15 +56,10 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     return rect.top <= MOBILE_ANIMATION_START_TOP_PX;
   };
 
-  const markViewportEntered = () => {
-    if (!hasEnteredViewportRef.current && isAnimationStartPointReached()) {
-      setHasEnteredViewport(true);
-    }
-  };
-
   const updateProgressByDelta = (delta: number) => {
     setScrollProgress((prev) => {
       const next = Math.max(0, Math.min(SCROLL_PROGRESS_MAX, prev + delta / SCROLL_STEP_SENSITIVITY));
+      scrollProgressRef.current = next;
       return next;
     });
   };
@@ -82,19 +70,17 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     }
 
     if (delta > 0) {
-      return progressRef.current < SCROLL_PROGRESS_MAX;
+      return scrollProgressRef.current < SCROLL_PROGRESS_MAX;
     }
 
     if (delta < 0) {
-      return progressRef.current > 0;
+      return scrollProgressRef.current > 0;
     }
 
     return false;
   };
 
   const handleWheel = (event: WheelEvent) => {
-    markViewportEntered();
-
     if (!shouldCaptureScroll(event.deltaY)) {
       return;
     }
@@ -108,8 +94,6 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   };
 
   const handleTouchMove = (event: TouchEvent) => {
-    markViewportEntered();
-
     const currentY = event.touches[0]?.clientY;
     const previousY = touchStartYRef.current;
 
@@ -132,22 +116,45 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     touchStartYRef.current = null;
   };
 
+  const interactionHandlersRef = useRef({
+    handleWheel,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+  });
+
+  useLayoutEffect(() => {
+    interactionHandlersRef.current = {
+      handleWheel,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+    };
+  });
+
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) {
       return;
     }
 
-    section.addEventListener("wheel", handleWheel, { passive: false });
-    section.addEventListener("touchstart", handleTouchStart, { passive: true });
-    section.addEventListener("touchmove", handleTouchMove, { passive: false });
-    section.addEventListener("touchend", handleTouchEnd, { passive: true });
+    const onWheel = (event: WheelEvent) => interactionHandlersRef.current.handleWheel(event);
+    const onTouchStart = (event: TouchEvent) =>
+      interactionHandlersRef.current.handleTouchStart(event);
+    const onTouchMove = (event: TouchEvent) =>
+      interactionHandlersRef.current.handleTouchMove(event);
+    const onTouchEnd = () => interactionHandlersRef.current.handleTouchEnd();
+
+    section.addEventListener("wheel", onWheel, { passive: false });
+    section.addEventListener("touchstart", onTouchStart, { passive: true });
+    section.addEventListener("touchmove", onTouchMove, { passive: false });
+    section.addEventListener("touchend", onTouchEnd, { passive: true });
 
     return () => {
-      section.removeEventListener("wheel", handleWheel);
-      section.removeEventListener("touchstart", handleTouchStart);
-      section.removeEventListener("touchmove", handleTouchMove);
-      section.removeEventListener("touchend", handleTouchEnd);
+      section.removeEventListener("wheel", onWheel);
+      section.removeEventListener("touchstart", onTouchStart);
+      section.removeEventListener("touchmove", onTouchMove);
+      section.removeEventListener("touchend", onTouchEnd);
     };
   }, []);
 
@@ -165,16 +172,18 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
     >
       <div className="px-4 sm:px-6 lg:px-10">
         <div className="mx-auto flex w-full max-w-[min(100%,90rem)] flex-col gap-2">
-          <UserFlowSectionHeading title={USER_FLOW_SECTION_HEADLINE} show={sectionInView} />
-          <UserFlowCardsStage
-            isMobile
-            shouldRevealMobileCards={hasEnteredViewport}
+          <UserFlowSectionHeading
+            title={USER_FLOW_SECTION_HEADLINE}
+            show={sectionInView}
+            textSizeVariant="mobile"
+          />
+          <UserFlowCardsStageMobile
+            shouldRevealMobileCards={sectionInViewForCards}
             mobileFlowStepIndex={mobileFlowStepIndex}
             activeStep={activeStep}
             activeStepIndex={activeStepIndex}
             leftCards={leftCards}
             rightCards={rightCards}
-            getInterpolatedCardState={() => hiddenCardState}
           />
         </div>
       </div>

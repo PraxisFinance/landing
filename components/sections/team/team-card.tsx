@@ -41,7 +41,9 @@ export function TeamCard({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (!compact) setMobileOpen(false);
+    if (!compact) {
+      queueMicrotask(() => setMobileOpen(false));
+    }
   }, [compact]);
 
   const showDetails = compact ? mobileOpen : hovered;

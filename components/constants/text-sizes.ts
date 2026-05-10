@@ -82,7 +82,7 @@ export const SECTION_TEXT_SIZES: SectionTextSizes = {
       desktop: "ui-headline-1",
     },
     cardTitle: {
-      mobile: "ui-text-2",
+      mobile: "ui-text-3",
       desktop: "ui-text-2",
     },
     cardDescription: {

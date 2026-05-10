@@ -1,3 +1,8 @@
+/**
+ * Cover layout variant (`CoverSectionMobile` vs `CoverSectionDesktop`) follows `useIsMobile`
+ * (`LANDING_MOBILE_MEDIA_QUERY`, viewport ≤767px). Tailwind `sm:` classes inside `CoverSectionMobile`
+ * only refine spacing within that branch (default 640px breakpoint).
+ */
 export const COVER_SECTION_BG_MOBILE = "/main/cover-section-mobile.png";
 export const COVER_SECTION_BG_DESKTOP = "/main/join-section.png";
 

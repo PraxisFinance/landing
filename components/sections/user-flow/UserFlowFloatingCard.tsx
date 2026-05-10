@@ -18,6 +18,13 @@ import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
 import { useIsMobile } from "@/components/providers/mobile-context";
 import { cn } from "@/lib/utils";
 
+type UserFlowFloatingCardProps = {
+  card: UserFlowCardDefinition;
+  state: UserFlowCardState;
+  /** Mobile-only stack: use mobile typography/expanded chrome without relying on viewport context (avoids wrong layout before hydration). */
+  useMobileChrome?: boolean;
+};
+
 function UserFlowCardIcon({ icon }: { icon: UserFlowCardDefinition["icon"] }) {
   if (icon === "wallet") {
     return <Wallet className="size-4 text-white sm:size-5" strokeWidth={1.8} aria-hidden />;
@@ -34,19 +41,14 @@ function UserFlowCardIcon({ icon }: { icon: UserFlowCardDefinition["icon"] }) {
   return <DepositFoundsIcon />;
 }
 
-export function UserFlowFloatingCard({
-  card,
-  state,
-}: {
-  card: UserFlowCardDefinition;
-  state: UserFlowCardState;
-}) {
-  const isMobile = useIsMobile();
+export function UserFlowFloatingCard({ card, state, useMobileChrome }: UserFlowFloatingCardProps) {
+  const isMobileFromContext = useIsMobile();
+  const isMobileLayout = useMobileChrome ?? isMobileFromContext;
   const userFlowTextSizes = SECTION_TEXT_SIZES.userFlow;
-  const cardLabelTextSizeClassName = isMobile
+  const cardLabelTextSizeClassName = isMobileLayout
     ? userFlowTextSizes.cardLabel.mobile
     : userFlowTextSizes.cardLabel.desktop;
-  const cardTitleTextSizeClassName = isMobile
+  const cardTitleTextSizeClassName = isMobileLayout
     ? userFlowTextSizes.cardTitle.mobile
     : userFlowTextSizes.cardTitle.desktop;
 
@@ -58,7 +60,7 @@ export function UserFlowFloatingCard({
         : "bg-brand-light-green text-brand-black";
 
   const compact = state.height <= USER_FLOW_CARD_COLLAPSED_HEIGHT + 4;
-  const isMobileExpanded = isMobile && !compact;
+  const isMobileExpanded = isMobileLayout && !compact;
 
   return (
     <motion.article

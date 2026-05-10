@@ -4,12 +4,16 @@ import { prisma } from "@/lib/prisma";
 // This covers both without importing a heavy validation lib.
 const WALLET_REGEX = /^(0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{32,44})$/;
 
+type WaitlistRequestBody = {
+  walletAddress?: unknown;
+};
+
 export async function POST(request: Request) {
   let walletAddress: string;
 
   try {
-    const body = await request.json();
-    walletAddress = typeof body?.walletAddress === "string" ? body.walletAddress.trim() : "";
+    const body = (await request.json()) as WaitlistRequestBody;
+    walletAddress = typeof body.walletAddress === "string" ? body.walletAddress.trim() : "";
   } catch {
     return Response.json({ error: "Invalid request body." }, { status: 400 });
   }
