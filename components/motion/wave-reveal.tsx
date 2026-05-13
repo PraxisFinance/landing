@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 
+import { landingLenientInViewOnce } from "@/components/motion/lenient-in-view";
 import { cn } from "@/lib/utils";
 
 /** Aave-like hero easing: quick settle, soft overshoot feel */
@@ -32,7 +33,7 @@ export function WaveRevealHeadlineLines({
 }: WaveRevealHeadlineLinesProps) {
   const reduced = useReducedMotion();
   const rootRef = useRef<HTMLSpanElement | null>(null);
-  const inView = useInView(rootRef, { once: true, amount: 0.25 });
+  const inView = useInView(rootRef, landingLenientInViewOnce);
   const shouldAnimate = reduced ? true : inView;
   let wordIndex = 0;
 
@@ -79,7 +80,7 @@ export function WaveRevealWords({ text, className, delayStart = 0, as = "p" }: W
   const reduced = useReducedMotion();
   const paragraphRef = useRef<HTMLParagraphElement | null>(null);
   const spanRef = useRef<HTMLSpanElement | null>(null);
-  const inView = useInView(as === "p" ? paragraphRef : spanRef, { once: true, amount: 0.25 });
+  const inView = useInView(as === "p" ? paragraphRef : spanRef, landingLenientInViewOnce);
   const shouldAnimate = reduced ? true : inView;
   const words = text.trim().split(/\s+/);
   const content = words.map((word, i) => (
@@ -123,7 +124,7 @@ type WaveRevealFadeUpProps = {
 export function WaveRevealFadeUp({ children, className, delay = 0 }: WaveRevealFadeUpProps) {
   const reduced = useReducedMotion();
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(rootRef, { once: true, amount: 0.2 });
+  const inView = useInView(rootRef, landingLenientInViewOnce);
   const shouldAnimate = reduced ? true : inView;
 
   return (

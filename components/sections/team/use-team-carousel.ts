@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useInView } from "framer-motion";
 
 import { EXPERTS_SECTION_ITEMS } from "@/components/constants/experts-section";
 import {
@@ -18,10 +17,13 @@ import {
 export function useTeamCarousel(isMobile: boolean) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
-  const sectionInView = useInView(sectionRef, {
-    once: true,
-    amount: isMobile ? 0.12 : 0.3,
-  });
+  /**
+   * Previously `useInView(sectionRef)`; on desktop the section `<ref>` often never flipped “in view”
+   * (layout / IO timing), which hid the headline and left stacked cards off-screen. Mobile branch
+   * did not hit the same path. We keep the prop for wave/cards but treat the block as ready to
+   * animate once it is mounted (scroll-based polish can use `whileInView` on children later).
+   */
+  const sectionInView = true;
 
   const [scrollPercent, setScrollPercent] = useState(0);
   const [trackWidth, setTrackWidth] = useState(0);
@@ -39,7 +41,10 @@ export function useTeamCarousel(isMobile: boolean) {
 
     const measure = () => {
       const node = trackRef.current;
-      if (!node) return;
+      if (!node) {
+        requestAnimationFrame(measure);
+        return;
+      }
       setTrackWidth(node.clientWidth);
       setHasMeasuredTrack(true);
     };
@@ -77,7 +82,7 @@ export function useTeamCarousel(isMobile: boolean) {
     });
   }, [isMobile, totalCards, trackWidth]);
 
-  const shouldSpreadCards = !isMobile && sectionInView && hasMeasuredTrack;
+  const shouldSpreadCards = !isMobile && hasMeasuredTrack;
 
   const handleTrackScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
     const node = event.currentTarget;

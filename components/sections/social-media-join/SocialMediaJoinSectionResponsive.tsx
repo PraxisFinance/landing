@@ -1,27 +1,20 @@
 "use client";
 
 import { SECTION_TEXT_SIZES } from "@/components/constants/text-sizes";
-import { useMobileViewport } from "@/components/providers/mobile-context";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { SocialMediaJoinSectionDesktop } from "@/components/sections/social-media-join/SocialMediaJoinSectionDesktop";
 import { SocialMediaJoinSectionMobile } from "@/components/sections/social-media-join/SocialMediaJoinSectionMobile";
 import { useSocialMediaJoinSection } from "@/components/sections/social-media-join/use-social-media-join-section";
-import { SectionViewportPlaceholder } from "@/components/viewport/viewport-skeletons";
 
 export type SocialMediaJoinSectionProps = {
   className?: string;
 };
 
-/** Social / Get started branches after viewport snapshot. */
+/** Social / Get started branches on `isMobile` (refs + in-view hooks attach to the real section). */
 export function SocialMediaJoinSectionResponsive({ className }: SocialMediaJoinSectionProps) {
-  const { isMobile, isViewportReady } = useMobileViewport();
+  const isMobile = useIsMobile();
   const smj = SECTION_TEXT_SIZES.socialMediaJoin;
-
-  const inViewAmount = !isViewportReady ? 0.35 : isMobile ? 0.15 : 0.35;
-  const { sectionRef, sectionInView } = useSocialMediaJoinSection(inViewAmount);
-
-  if (!isViewportReady) {
-    return <SectionViewportPlaceholder className={className} minHeightClass="min-h-[720px]" />;
-  }
+  const { sectionRef, sectionInView } = useSocialMediaJoinSection();
 
   const shared = {
     className,

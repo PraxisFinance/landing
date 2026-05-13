@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 
 import { ABOUT_SECTION_HEADLINE } from "@/components/constants/about-section";
+import { landingLenientMotionViewport } from "@/components/motion/lenient-in-view";
 
 export const ABOUT_WAVE_STAGGER = 0.045;
 export const ABOUT_WAVE_ITEM_DURATION = 0.48;
@@ -36,7 +37,7 @@ export function AboutHeadlineWave({ text, className }: { text: string; className
               className="mr-[0.3em] inline-block"
               initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, amount: 0.35 }}
+              viewport={landingLenientMotionViewport}
               transition={{
                 duration: ABOUT_WAVE_ITEM_DURATION,
                 delay: lineIndex * 0.32 + wordIndex * ABOUT_WAVE_STAGGER,

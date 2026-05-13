@@ -33,10 +33,10 @@ export function TeamSectionWaveText({
               key={`${word}-${wordIndex}`}
               className="mr-[0.3em] inline-block"
               initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
-              animate={start ? { opacity: 1, y: 0, filter: "blur(0px)" } : undefined}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{
-                duration: TEAM_WAVE_ITEM_DURATION,
-                delay: lineIndex * TEAM_WAVE_LINE_DELAY + wordIndex * TEAM_WAVE_STAGGER,
+                duration: start ? TEAM_WAVE_ITEM_DURATION : 0.01,
+                delay: start ? lineIndex * TEAM_WAVE_LINE_DELAY + wordIndex * TEAM_WAVE_STAGGER : 0,
               }}
             >
               {word}

@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
+import { landingLenientInView, landingLenientInViewOnce } from "@/components/motion/lenient-in-view";
 import {
   USER_FLOW_CARDS,
   USER_FLOW_SECTION_HEADLINE,
@@ -30,8 +31,8 @@ export function UserFlowSectionMobile({ className }: UserFlowSectionMobileProps)
   const scrollProgressRef = useRef(0);
   const sectionInViewRef = useRef(false);
   /** Reveal card stack when the section enters view (works for page scroll; not only wheel on the section). */
-  const sectionInViewForCards = useInView(sectionRef, { amount: 0.08, once: true, margin: "0px 0px -12% 0px" });
-  const sectionInView = useInView(sectionRef, { amount: 0.2 });
+  const sectionInViewForCards = useInView(sectionRef, landingLenientInViewOnce);
+  const sectionInView = useInView(sectionRef, landingLenientInView);
   const mobileFlowStepIndex = Math.min(
     MOBILE_FLOW_STEP_COUNT - 1,
     Math.round(scrollProgress * (MOBILE_FLOW_STEP_COUNT - 1))

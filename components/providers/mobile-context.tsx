@@ -1,14 +1,31 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useSyncExternalStore, type ReactNode } from "react";
 
 import { LANDING_MOBILE_MEDIA_QUERY } from "@/components/constants/responsive";
 
+function subscribeToMobileMediaQuery(onStoreChange: () => void) {
+  if (typeof window === "undefined") {
+    return () => undefined;
+  }
+  const mq = window.matchMedia(LANDING_MOBILE_MEDIA_QUERY);
+  mq.addEventListener("change", onStoreChange);
+  return () => mq.removeEventListener("change", onStoreChange);
+}
+
+function readMobileMediaQuery(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+  return window.matchMedia(LANDING_MOBILE_MEDIA_QUERY).matches;
+}
+
 type MobileContextValue = {
-  /** Reliable after `isViewportReady` is true (matches `LANDING_MOBILE_MEDIA_QUERY`). */
+  /**
+   * `true` when viewport width is at most 767px (below Tailwind `md`, 768px).
+   * Server snapshot is desktop (`false`); client reads `matchMedia` via `useSyncExternalStore`.
+   */
   isMobile: boolean;
-  /** False during SSR and until the first client `matchMedia` read (same microtask batch). */
-  isViewportReady: boolean;
 };
 
 const MobileContext = createContext<MobileContextValue | undefined>(undefined);
@@ -18,33 +35,12 @@ type MobileProviderProps = {
 };
 
 /**
- * Central viewport store for mobile vs desktop branches. Consumers that render **different trees**
- * should wait for `isViewportReady` (see `useMobileViewport`) and show a skeleton/placeholder until
- * then—otherwise the first paint assumes desktop (`isMobile === false`) before sync.
+ * Viewport flag for branching mobile vs desktop trees.
  */
 export function MobileProvider({ children }: MobileProviderProps) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isViewportReady, setViewportReady] = useState(false);
+  const isMobile = useSyncExternalStore(subscribeToMobileMediaQuery, readMobileMediaQuery, () => false);
 
-  useEffect(() => {
-    const mq = window.matchMedia(LANDING_MOBILE_MEDIA_QUERY);
-
-    const applyInitialViewport = () => {
-      setIsMobile(mq.matches);
-      setViewportReady(true);
-    };
-
-    queueMicrotask(applyInitialViewport);
-
-    const onChange = () => {
-      setIsMobile(mq.matches);
-    };
-
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  const value = useMemo(() => ({ isMobile, isViewportReady }), [isMobile, isViewportReady]);
+  const value = useMemo(() => ({ isMobile }), [isMobile]);
 
   return <MobileContext.Provider value={value}>{children}</MobileContext.Provider>;
 }
@@ -59,7 +55,6 @@ export function useMobileViewport(): MobileContextValue {
   return context;
 }
 
-/** Current mobile flag; safe once ancestors gated on `isViewportReady` before branching. */
 export function useIsMobile(): boolean {
   return useMobileViewport().isMobile;
 }

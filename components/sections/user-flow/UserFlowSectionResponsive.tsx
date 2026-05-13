@@ -1,21 +1,16 @@
 "use client";
 
-import { useMobileViewport } from "@/components/providers/mobile-context";
+import { useIsMobile } from "@/components/providers/mobile-context";
 import { UserFlowSectionDesktop } from "@/components/sections/user-flow/UserFlowSectionDesktop";
 import { UserFlowSectionMobile } from "@/components/sections/user-flow/UserFlowSectionMobile";
-import { SectionViewportPlaceholder } from "@/components/viewport/viewport-skeletons";
 
 export type UserFlowSectionProps = {
   className?: string;
 };
 
-/** User Flow branches after viewport snapshot. */
+/** User Flow branches on `isMobile`. */
 export function UserFlowSectionResponsive({ className }: UserFlowSectionProps) {
-  const { isMobile, isViewportReady } = useMobileViewport();
-
-  if (!isViewportReady) {
-    return <SectionViewportPlaceholder className={className} minHeightClass="min-h-[560px]" />;
-  }
+  const isMobile = useIsMobile();
 
   return isMobile ? (
     <UserFlowSectionMobile className={className} />

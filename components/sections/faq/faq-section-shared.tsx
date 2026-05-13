@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 
 import { FREQUENCY_QUESTIONS_HEADLINE } from "@/components/constants/frequency-questions-section";
+import { landingLenientMotionViewport } from "@/components/motion/lenient-in-view";
 import { waveRevealTiming } from "@/components/motion/wave-reveal";
 
 export type FAQSectionTextClasses = {
@@ -43,7 +44,7 @@ export function FAQSectionWaveText({
               className="mr-[0.3em] inline-block"
               initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, amount: 0.2, margin: "0px 0px -12% 0px" }}
+              viewport={landingLenientMotionViewport}
               transition={{
                 duration: FAQ_WAVE_ITEM_DURATION,
                 delay: lineIndex * FAQ_WAVE_LINE_DELAY + wordIndex * FAQ_WAVE_STAGGER,

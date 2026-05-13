@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useInView, useMotionValueEvent, useScroll } from "framer-motion";
 
+import { landingLenientInViewOnce } from "@/components/motion/lenient-in-view";
 import {
   USER_FLOW_CARDS,
   USER_FLOW_SECTION_HEADLINE,
@@ -36,7 +37,7 @@ export function UserFlowSectionDesktop({ className }: UserFlowSectionDesktopProp
   const sectionRef = useRef<HTMLElement | null>(null);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const sectionInView = useInView(sectionRef, { amount: 0.2, once: true });
+  const sectionInView = useInView(sectionRef, landingLenientInViewOnce);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],

@@ -29,7 +29,6 @@ export function TeamSectionDesktop({
   sectionInView,
   hasMeasuredTrack,
   stackOffsets,
-  shouldSpreadCards,
   handleTrackScroll,
   scrollTrackBy,
   canScrollPrev,
@@ -39,6 +38,9 @@ export function TeamSectionDesktop({
   cardBioTextClass,
   roleBadgeTextClass,
 }: TeamSectionDesktopProps) {
+  /** Without in-view + measure, stacked `x` keeps cards off-screen while `animate` stayed undefined. */
+  const useStackedInitial = sectionInView && hasMeasuredTrack;
+
   return (
     <section
       ref={sectionRef}
@@ -84,36 +86,38 @@ export function TeamSectionDesktop({
 
       <div className="w-full min-w-0">
         <TeamCarouselDesktop ref={trackRef} onScroll={handleTrackScroll} className="max-w-full">
-          {hasMeasuredTrack
-            ? EXPERTS_SECTION_ITEMS.map((expert, i) => (
-                <motion.div
-                  key={expert.name}
-                  initial={{ opacity: 1, x: stackOffsets[i].x, scale: stackOffsets[i].scale }}
-                  animate={shouldSpreadCards ? { opacity: 1, x: 0, scale: 1 } : undefined}
-                  transition={{
-                    duration: 1.2,
-                    delay: TEAM_STACK_START_DELAY + i * TEAM_STACK_STAGGER,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="shrink-0 will-change-transform"
-                  style={{ zIndex: EXPERTS_SECTION_ITEMS.length - i }}
-                >
-                  <TeamCard
-                    memberIndex={i}
-                    name={expert.name}
-                    role={expert.role}
-                    image={expert.image}
-                    bio={expert.bio}
-                    socials={expert.socials}
-                    priority={i < 4}
-                    compact={false}
-                    nameTextClassName={cardNameTextClass}
-                    bioTextClassName={cardBioTextClass}
-                    roleBadgeTextClassName={roleBadgeTextClass}
-                  />
-                </motion.div>
-              ))
-            : null}
+          {EXPERTS_SECTION_ITEMS.map((expert, i) => (
+            <motion.div
+              key={expert.name}
+              initial={
+                useStackedInitial
+                  ? { opacity: 1, x: stackOffsets[i].x, scale: stackOffsets[i].scale }
+                  : { opacity: 1, x: 0, scale: 1 }
+              }
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{
+                duration: useStackedInitial ? 1.2 : 0,
+                delay: useStackedInitial ? TEAM_STACK_START_DELAY + i * TEAM_STACK_STAGGER : 0,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="shrink-0 will-change-transform"
+              style={{ zIndex: EXPERTS_SECTION_ITEMS.length - i }}
+            >
+              <TeamCard
+                memberIndex={i}
+                name={expert.name}
+                role={expert.role}
+                image={expert.image}
+                bio={expert.bio}
+                socials={expert.socials}
+                priority={i < 4}
+                compact={false}
+                nameTextClassName={cardNameTextClass}
+                bioTextClassName={cardBioTextClass}
+                roleBadgeTextClassName={roleBadgeTextClass}
+              />
+            </motion.div>
+          ))}
         </TeamCarouselDesktop>
       </div>
     </section>
