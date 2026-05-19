@@ -15,7 +15,7 @@ const siteTitle = "Praxis Predictions";
 const siteDescription =
   "Praxis is the first prediction market where users trade outcomes with yield, not principal.";
 const previewImage = {
-  path: "/preview.png",
+  path: "/preview-v2.png",
   width: 1000,
   height: 1000,
   alt: "Praxis — prediction market with yield",
