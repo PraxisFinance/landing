@@ -11,11 +11,32 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteDescription =
+  "Praxis is the first prediction market where users trade outcomes with yield, not principal.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: "Praxis",
-  description:
-    "Praxis is the first prediction market where users trade outcomes with yield, not principal.",
+  description: siteDescription,
+  openGraph: {
+    title: "Praxis",
+    description: siteDescription,
+    type: "website",
+    images: [
+      {
+        url: "/preview.png",
+        width: 1000,
+        height: 1000,
+        alt: "Praxis — prediction market with yield",
+      },
+    ],
+  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: "Praxis",
+  //   description: siteDescription,
+  //   images: ["/preview.png"],
+  // },
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -33,7 +54,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistMono.variable} h-full font-sans antialiased`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${geistMono.variable} h-full font-sans antialiased`}
+      suppressHydrationWarning
+    >
       <head>
         {/* eslint-disable-next-line @next/next/no-css-tags -- Helvetica @font-face in public/fonts; link keeps relative url() working */}
         <link rel="stylesheet" href="/fonts/stylesheet.css" />
