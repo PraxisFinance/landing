@@ -11,32 +11,70 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteTitle = "Praxis Predictions";
 const siteDescription =
   "Praxis is the first prediction market where users trade outcomes with yield, not principal.";
+const previewImage = {
+  path: "/preview.png",
+  width: 1000,
+  height: 1000,
+  alt: "Praxis — prediction market with yield",
+} as const;
+
+function getPreviewImageUrl(): string {
+  return new URL(previewImage.path, getSiteUrl()).href;
+}
+
+function getWebSiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteTitle,
+    description: siteDescription,
+    url: getSiteUrl(),
+    image: {
+      "@type": "ImageObject",
+      url: getPreviewImageUrl(),
+      width: previewImage.width,
+      height: previewImage.height,
+    },
+  };
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
-  title: "Praxis Predictions",
+  title: siteTitle,
   description: siteDescription,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "Praxis Predictions",
+    title: siteTitle,
     description: siteDescription,
     type: "website",
     images: [
       {
-        url: "/preview.png",
-        width: 1000,
-        height: 1000,
-        alt: "Praxis — prediction market with yield",
+        url: previewImage.path,
+        width: previewImage.width,
+        height: previewImage.height,
+        alt: previewImage.alt,
       },
     ],
   },
-  // twitter: {
-  //   card: "summary_large_image",
-  //   title: "Praxis",
-  //   description: siteDescription,
-  //   images: ["/preview.png"],
-  // },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+    images: [previewImage.path],
+  },
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -60,6 +98,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(getWebSiteJsonLd()),
+          }}
+        />
         {/* eslint-disable-next-line @next/next/no-css-tags -- Helvetica @font-face in public/fonts; link keeps relative url() working */}
         <link rel="stylesheet" href="/fonts/stylesheet.css" />
         <link
