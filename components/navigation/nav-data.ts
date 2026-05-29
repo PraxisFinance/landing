@@ -110,8 +110,8 @@ export const navSections: NavSection[] = [
     label: "Development",
     items: [
       {
-        href: "#",
-        title: "Documentation (Soon)",
+        href: "https://praxis-4.gitbook.io",
+        title: "Documentation",
         description: "Architecture and more about product.",
         Icon: DocumentationIcon,
       },

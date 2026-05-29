@@ -14,6 +14,7 @@ export const LANDING_FOOTER_LINK_TARGETS: Record<string, string> = {
   FAQ: "#faqSection",
   "Web dApp": "#social-media-join",
   "Mobile App": "#social-media-join",
+  Documentation: "https://praxis-4.gitbook.io",
 };
 
 export const LANDING_FOOTER_SOCIAL_ICON_COMPONENTS = {
@@ -24,7 +25,7 @@ export const LANDING_FOOTER_SOCIAL_ICON_COMPONENTS = {
 
 export const handleLandingFooterAnchorClick: MouseEventHandler<HTMLAnchorElement> = (event) => {
   const href = event.currentTarget.getAttribute("href");
-  if (!href || !href.startsWith("#") || href === "#") {
+  if (!href?.startsWith("#") || href === "#") {
     return;
   }
 
