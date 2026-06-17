@@ -44,8 +44,8 @@ export type JoinGetStartedCommunityLink = {
 
 export const JOIN_GET_STARTED_COMMUNITY_LINKS: JoinGetStartedCommunityLink[] = [
   { label: "Twitter", href: "https://x.com/praxis_Base", icon: SocialXIcon },
-  { label: "Discord", href: "#", icon: SocialDiscordIcon },
-  { label: "Telegram", href: "#", icon: SocialTelegramIcon },
+  { label: "Discord", href: "https://discord.gg/AgeTK3am7T", icon: SocialDiscordIcon },
+  { label: "Telegram", href: "https://t.me/+HTfCXSYoG-U1MWUy", icon: SocialTelegramIcon },
   { label: "Reddit", href: "#", icon: RedditIcon },
 ];
 

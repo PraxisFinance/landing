@@ -318,22 +318,22 @@ export function SocialMediaJoinSectionMobile({
                     )}
                   >
                     {JOIN_GET_STARTED_COMMUNITY_LINKS.map((item) => {
-                      const isTwitter = item.label === "Twitter";
+                      const isLinkActive = item.href !== "#";
                       return (
                         <Button
                           key={item.label}
                           type="button"
                           variant="landing-dark-purple"
                           size="default"
-                          disabled={!isTwitter}
+                          disabled={!isLinkActive}
                           onClick={
-                            isTwitter
+                            isLinkActive
                               ? () => window.open(item.href, "_blank", "noopener,noreferrer")
                               : undefined
                           }
                           className={cn(
                             "h-10 w-full gap-2 rounded-lg px-3 text-xs font-semibold md:w-[140px]",
-                            !isTwitter &&
+                            !isLinkActive &&
                               "cursor-not-allowed bg-brand-dark-purple/45 text-white/70 hover:bg-brand-dark-purple/45"
                           )}
                           aria-label={item.label}

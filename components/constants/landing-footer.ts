@@ -32,6 +32,6 @@ export const LANDING_FOOTER_HOME_ARIA_LABEL = "Praxis, home";
 
 export const LANDING_FOOTER_SOCIAL_LINKS = [
   { href: "#", ariaLabel: "Praxis on X", kind: "x" },
-  { href: "#", ariaLabel: "Praxis on Telegram", kind: "telegram" },
-  { href: "#", ariaLabel: "Praxis on Discord", kind: "discord" },
+  { href: "https://t.me/+HTfCXSYoG-U1MWUy", ariaLabel: "Praxis on Telegram", kind: "telegram" },
+  { href: "https://discord.gg/AgeTK3am7T", ariaLabel: "Praxis on Discord", kind: "discord" },
 ] as const;
