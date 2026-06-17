@@ -49,7 +49,7 @@ export function SocialMediaCloudPanel({ links, revealDelay, className }: SocialM
         label={item.label}
         href={item.href}
         imageSrc={imageSrc}
-        disabled={item.label !== "Twitter"}
+        disabled={item.href === "#"}
         baseRotateDeg={floatConfig.rotate}
         floatDurationSec={floatConfig.duration}
         floatDelaySec={floatConfig.delay}
